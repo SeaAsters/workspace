@@ -1,0 +1,17 @@
+﻿# ===== 调研原始素材（腾讯各仓库 README/LICENSE 原文副本，属他人版权内容）=====
+# 本仓库只收录自主撰写的调研报告与分析结论
+# 素材可用 clone-repos.ps1 自行获取
+_research/
+
+# ===== 克隆产物（clone-repos.ps1 的落盘位置）=====
+agent/*/
+infer/*/
+out-of-scope/
+
+# ===== 系统 / 编辑器 =====
+Thumbs.db
+desktop.ini
+.DS_Store
+.vscode/
+.idea/
+*.swp
