@@ -1,4 +1,4 @@
-﻿# sample mask 增量更新（2026-09-29 → 2026-10-10）
+# sample mask 增量更新（2026-09-29 → 2026-10-10）
 
 > 基线：同目录 `sample-mask-prs.md` / `.json` / `.csv`（归档日期 2026-09-29，核心相关 30 条 + 边缘 8 条，共 38 条记录）
 > 本次：2026-10-10 用**同一组** GitHub Search 关键词重跑检索（sglang 122/3/104、vllm 79/10/106 命中，去重后 254 条 PR），逐条比对基线记录的 `state` / `merged_at` / `comments` / `updated_at`
