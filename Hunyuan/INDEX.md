@@ -16,12 +16,14 @@ D:\WorkSpace\workspace\Hunyuan\
 ├── clone-repos.ps1                       ← 按分类批量浅克隆脚本（需要时再跑）
 │
 ├── agent\                                ← Agent 方向交付物
-│   ├── 01-agent-frameworks-and-benchmarks.md   （框架 + 评测，7 个核心仓库）
-│   └── 04-embodied-and-agentic-3d.md           （具身智能 + Agentic 3D，7 个仓库）
+│   └── 2026-10-12\
+│       ├── 01-agent-frameworks-and-benchmarks.md   （框架 + 评测，7 个核心仓库）
+│       └── 04-embodied-and-agentic-3d.md           （具身智能 + Agentic 3D，7 个仓库）
 │
 ├── infer\                                ← 推理方向交付物
-│   ├── 02-inference-optimization-libs.md       （稀疏注意力 / 高效推理库，8 个）
-│   └── 03-model-release-deployment-matrix.md   （模型发布库部署矩阵，10 个重点 + 全量索引）
+│   └── 2026-10-12\
+│       ├── 02-inference-optimization-libs.md       （稀疏注意力 / 高效推理库，8 个）
+│       └── 03-model-release-deployment-matrix.md   （模型发布库部署矩阵，10 个重点 + 全量索引）
 │
 └── _research\                            ← 原始素材（可溯源，约 5.1 MB）
     ├── repos-classification.csv          ← 85 个仓库完整分类表（机器可读）
@@ -76,7 +78,7 @@ D:\WorkSpace\workspace\Hunyuan\
 
 ## 三、推理方向仓库（56 个）
 
-### 3.1 推理优化 / 高效注意力库（8 个）— 详见 [`infer/02-inference-optimization-libs.md`](infer/02-inference-optimization-libs.md)
+### 3.1 推理优化 / 高效注意力库（8 个）— 详见 [`infer/2026-10-12/02-inference-optimization-libs.md`](infer/2026-10-12/02-inference-optimization-libs.md)
 
 | 仓库                                                                                                    | Stars | 定位一句话                                                   |
 | ----------------------------------------------------------------------------------------------------- | ----- | ------------------------------------------------------- |
@@ -89,7 +91,7 @@ D:\WorkSpace\workspace\Hunyuan\
 | [FlashVDM](https://github.com/Tencent-Hunyuan/FlashVDM)                                               | 335   | Vecset 扩散模型快速形状生成（ICCV'25 Highlight）                    |
 | [DisCa](https://github.com/Tencent-Hunyuan/DisCa)                                                     | 25    | 蒸馏兼容的可学习特征缓存，加速视频 DiT                                   |
 
-### 3.2 模型发布库（48 个）— 详见 [`infer/03-model-release-deployment-matrix.md`](infer/03-model-release-deployment-matrix.md)
+### 3.2 模型发布库（48 个）— 详见 [`infer/2026-10-12/03-model-release-deployment-matrix.md`](infer/2026-10-12/03-model-release-deployment-matrix.md)
 
 按代次与模态分组：
 
@@ -224,10 +226,10 @@ pwsh -File clone-repos.ps1 -Category agent -Pull
 |---|---|---|
 | [`00-agent-vs-infer.md`](00-agent-vs-infer.md) | ⭐ **对比分析（建议先读）**：Agent 线在「定义怎么衡量能力」vs 推理线在「解决怎么把能力跑起来」；`UniRL` 的三个 agentic RL 设计、评测方法论三阶段演进、稀疏注意力双路线、量化/投机解码/部署形态收敛、两条线的唯一交汇点与后续深挖方向 | 全篇 |
 | [`INDEX.md`](INDEX.md) | 本文件：范围界定、85 仓库分类、许可证风险、跨方向发现、克隆指南 | — |
-| [`agent/01-agent-frameworks-and-benchmarks.md`](agent/01-agent-frameworks-and-benchmarks.md) | Agent 框架与能力评测深度分析：`UniRL`（agentic RL 一等路径）、`C3-Benchmark`、`VisualNeedle`、`RepoProbe`、`ExplorationBench`、`PlanningBench`、`Hyra-results` | 780 行 |
-| [`agent/04-embodied-and-agentic-3d.md`](agent/04-embodied-and-agentic-3d.md) | 具身智能与 Agentic 3D：`HY-Embodied` 系列 5 个 + `Hunyuan3D-WorldClaw` + `Hunyuan3D-Buffalo1.0`，含具身栈全景图与「与 LLM 工具调用型 Agent 的差异」 | 1,108 行 |
-| [`infer/02-inference-optimization-libs.md`](infer/02-inference-optimization-libs.md) | 推理优化与高效注意力库深度分析：`HiLS-Attention`、`flex-block-attn`、`Prism`、`Rosetta-inference`、`AuK`，含环境/命令/显存/性能原文摘录 | 747 行 |
-| [`infer/03-model-release-deployment-matrix.md`](infer/03-model-release-deployment-matrix.md) | 模型发布库推理框架支持矩阵（vLLM / SGLang / TensorRT-LLM / llama.cpp）、部署命令摘录、量化与投机解码专题、选型建议 | 1,691 行 |
+| [`agent/2026-10-12/01-agent-frameworks-and-benchmarks.md`](agent/2026-10-12/01-agent-frameworks-and-benchmarks.md) | Agent 框架与能力评测深度分析：`UniRL`（agentic RL 一等路径）、`C3-Benchmark`、`VisualNeedle`、`RepoProbe`、`ExplorationBench`、`PlanningBench`、`Hyra-results` | 780 行 |
+| [`agent/2026-10-12/04-embodied-and-agentic-3d.md`](agent/2026-10-12/04-embodied-and-agentic-3d.md) | 具身智能与 Agentic 3D：`HY-Embodied` 系列 5 个 + `Hunyuan3D-WorldClaw` + `Hunyuan3D-Buffalo1.0`，含具身栈全景图与「与 LLM 工具调用型 Agent 的差异」 | 1,108 行 |
+| [`infer/2026-10-12/02-inference-optimization-libs.md`](infer/2026-10-12/02-inference-optimization-libs.md) | 推理优化与高效注意力库深度分析：`HiLS-Attention`、`flex-block-attn`、`Prism`、`Rosetta-inference`、`AuK`，含环境/命令/显存/性能原文摘录 | 747 行 |
+| [`infer/2026-10-12/03-model-release-deployment-matrix.md`](infer/2026-10-12/03-model-release-deployment-matrix.md) | 模型发布库推理框架支持矩阵（vLLM / SGLang / TensorRT-LLM / llama.cpp）、部署命令摘录、量化与投机解码专题、选型建议 | 1,691 行 |
 | [`_research/repos-classification.csv`](_research/repos-classification.csv) | 85 仓库完整分类表（repo / category / subcategory / stars / license / 备注） | 85 行 |
 | [`_research/licenses.csv`](_research/licenses.csv) | 85 仓库许可证实读结果（license / license_file / **default branch**） | 85 行 |
 | `_research/readmes/` | 33 份仓库 README 原文快照 | — |
