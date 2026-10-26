@@ -1,6 +1,8 @@
 # 腾讯混元（Tencent-Hunyuan）开源仓库调研 · Agent 与推理方向
 
-本目录是对 GitHub 组织 [Tencent-Hunyuan](https://github.com/Tencent-Hunyuan) **全部 85 个公开仓库**的系统扫描，聚焦其中 **Agent** 与 **推理（infer）** 两条主线。
+本目录是对 GitHub 组织 [Tencent-Hunyuan](https://github.com/Tencent-Hunyuan) **全部 85 个公开仓库**（2026-10-12 基线）的系统扫描，聚焦其中 **Agent** 与 **推理（infer）** 两条主线。
+
+> **📌 增量更新**：2026-10-26 已完成第二次复扫，组织公开仓库 **85 → 90**。增量报告见 [`agent/2026-10-26/`](agent/2026-10-26/) 与 [`infer/2026-10-26/`](infer/2026-10-26/)，增量总览见本文件 [第八节](#八增量扫描2026-10-12--2026-10-26)。下文第一~七节保持 10-12 基线口径未变。
 
 > **说明**：本次交付为**调研报告**（不包含仓库克隆）。所有结论均基于各仓库 README / LICENSE 原文，关键数字与命令照抄原文并注明来源；原文未说明的一律标注 `README 未说明`。
 > 仓库在持续更新，命令与版本请以仓库当前 README 为准。
@@ -16,23 +18,28 @@ D:\WorkSpace\workspace\Hunyuan\
 ├── clone-repos.ps1                       ← 按分类批量浅克隆脚本（需要时再跑）
 │
 ├── agent\                                ← Agent 方向交付物
-│   └── 2026-10-12\
-│       ├── 01-agent-frameworks-and-benchmarks.md   （框架 + 评测，7 个核心仓库）
-│       └── 04-embodied-and-agentic-3d.md           （具身智能 + Agentic 3D，7 个仓库）
+│   ├── 2026-10-12\
+│   │   ├── 01-agent-frameworks-and-benchmarks.md   （框架 + 评测，7 个核心仓库）
+│   │   └── 04-embodied-and-agentic-3d.md           （具身智能 + Agentic 3D，7 个仓库）
+│   └── 2026-10-26\
+│       └── 05-agent-memory-and-delta.md            （增量：Hy-Memory 记忆框架 + WorkForge 环境合成 + 平台收缩）
 │
 ├── infer\                                ← 推理方向交付物
-│   └── 2026-10-12\
-│       ├── 02-inference-optimization-libs.md       （稀疏注意力 / 高效推理库，8 个）
-│       └── 03-model-release-deployment-matrix.md   （模型发布库部署矩阵，10 个重点 + 全量索引）
+│   ├── 2026-10-12\
+│   │   ├── 02-inference-optimization-libs.md       （稀疏注意力 / 高效推理库，8 个）
+│   │   └── 03-model-release-deployment-matrix.md   （模型发布库部署矩阵，10 个重点 + 全量索引）
+│   └── 2026-10-26\
+│       └── 06-infer-world-model-and-serving.md     （增量：Hy-Nomas 世界模型栈 + Hy-Memory GGUF/AuK 蒸馏 + 量化与部署）
 │
-└── _research\                            ← 原始素材（可溯源，约 5.1 MB）
-    ├── repos-classification.csv          ← 85 个仓库完整分类表（机器可读）
+└── _research\                            ← 原始素材（可溯源）
+    ├── repos-classification.csv          ← 85 个仓库完整分类表（2026-10-12 基线，机器可读）
     ├── licenses.csv                      ← 85 个仓库许可证实读结果（含 default branch）
-    ├── readmes\                          ← 33 份仓库 README 原文快照
-    └── extra\                            ← 68 份补充证据（LICENSE 原文 / HF 模型卡 / 子文档 / 脚本）
+    ├── readmes\                          ← 33 份仓库 README 原文快照（2026-10-12）
+    ├── extra\                            ← 68 份补充证据（LICENSE 原文 / HF 模型卡 / 子文档 / 脚本）
+    └── 2026-10-26\                       ← ⭐ 本次增量扫描的原始素材（90 仓库快照 / delta / commit feed / HF 卡 / arXiv XML / README diff / 采集脚本）
 ```
 
-> **阅读顺序建议**：先看 [`00-agent-vs-infer.md`](00-agent-vs-infer.md) 拿到全局结论与两条线的性格对比，再按需深入 `agent/` 与 `infer/` 的明细报告。
+> **阅读顺序建议**：先看 [`00-agent-vs-infer.md`](00-agent-vs-infer.md) 拿到全局结论与两条线的性格对比，再按需深入 `agent/` 与 `infer/` 的明细报告；**要看 2026-10-12 之后的进展，直接读两个 `2026-10-26/` 目录里的增量报告**。
 >
 > 所有报告结论均可回溯到 `_research\` 下的原始素材：README 快照、LICENSE 全文、HuggingFace 模型卡、仓库内子文档（如 `hy3_rl.md`、`hyocr_llama_cpp.md`）与实际脚本（如 `UniRL__train_agentic.py`、`hyocr_serve_dflash.sh`）。
 
@@ -42,14 +49,14 @@ D:\WorkSpace\workspace\Hunyuan\
 
 经与需求方确认，本次调研的口径为：
 
-| 方向 | 收录范围 | 仓库数 |
-|---|---|---|
-| **Agent** | Agent 框架 + Agent 能力评测 + 具身智能（Embodied，服务于物理世界 agent）+ 机器人通信协议 | **14** |
-| **Infer** | ① 推理优化/高效注意力库 ② **全部模型发布库**（含 vLLM / SGLang / TensorRT-LLM 部署路径与量化方案） | **56** |
-| 其余 | RL / RLVR 后训练、扩散模型训练算法、代码/上下文评测基准、奖励模型、论文项目页等 | 15 |
-| **合计** | | **85** |
+| 方向 | 收录范围 | 仓库数（10-12 基线） | 仓库数（10-26 复扫） |
+|---|---|---|---|
+| **Agent** | Agent 框架 + Agent 能力评测 + 具身智能（Embodied，服务于物理世界 agent）+ 机器人通信协议 + **Agent 记忆框架** | **14** | **15**（+`Hy-Memory`） |
+| **Infer** | ① 推理优化/高效注意力库 ② **全部模型发布库**（含 vLLM / SGLang / TensorRT-LLM 部署路径与量化方案） ③ **世界模型推理栈** | **56** | **59**（+`Hy-Nomas`、`HYDRA`、`OmniCapBench`） |
+| 其余 | RL / RLVR 后训练、扩散模型训练算法、代码/上下文评测基准、奖励模型、安全评测、论文项目页等 | 15 | 16（+`DiagSafe`） |
+| **合计** | | **85** | **90** |
 
-> 分类明细见 [`_research/repos-classification.csv`](_research/repos-classification.csv)。
+> 分类明细见 [`_research/repos-classification.csv`](_research/repos-classification.csv)（基线 85 行）；10-26 复扫的组织全量快照见 [`_research/2026-10-26/org-repos-2026-10-26.csv`](_research/2026-10-26/org-repos-2026-10-26.csv)（90 行）。
 
 ---
 
@@ -230,7 +237,33 @@ pwsh -File clone-repos.ps1 -Category agent -Pull
 | [`agent/2026-10-12/04-embodied-and-agentic-3d.md`](agent/2026-10-12/04-embodied-and-agentic-3d.md) | 具身智能与 Agentic 3D：`HY-Embodied` 系列 5 个 + `Hunyuan3D-WorldClaw` + `Hunyuan3D-Buffalo1.0`，含具身栈全景图与「与 LLM 工具调用型 Agent 的差异」 | 1,108 行 |
 | [`infer/2026-10-12/02-inference-optimization-libs.md`](infer/2026-10-12/02-inference-optimization-libs.md) | 推理优化与高效注意力库深度分析：`HiLS-Attention`、`flex-block-attn`、`Prism`、`Rosetta-inference`、`AuK`，含环境/命令/显存/性能原文摘录 | 747 行 |
 | [`infer/2026-10-12/03-model-release-deployment-matrix.md`](infer/2026-10-12/03-model-release-deployment-matrix.md) | 模型发布库推理框架支持矩阵（vLLM / SGLang / TensorRT-LLM / llama.cpp）、部署命令摘录、量化与投机解码专题、选型建议 | 1,691 行 |
+| [`agent/2026-10-26/05-agent-memory-and-delta.md`](agent/2026-10-26/05-agent-memory-and-delta.md) | ⭐ **增量（Agent）**：`Hy-Memory`/Hy Memory 2.0 三层开源（SDK 架构/scene 路由/记忆写入模型/框架层基准）、`WorkForge` 可验证环境合成、`UniRL v0.2.0` 打版、元器/QClaw 退场与 WorkBuddy×企微落地、公开信息时间线 | ~500 行 |
+| [`infer/2026-10-26/06-infer-world-model-and-serving.md`](infer/2026-10-26/06-infer-world-model-and-serving.md) | ⭐ **增量（推理）**：`Hy-Nomas` 世界模型推理栈（54 层 MMDiT/8 步蒸馏/单卡 4090 四件套/serving 拓扑）、`Hy-Memory` vLLM+GGUF 量化配方、`AuK` 4 步蒸馏管线、DSpine/HYDRA/OmniCapBench、量化与部署信号修订 | ~450 行 |
 | [`_research/repos-classification.csv`](_research/repos-classification.csv) | 85 仓库完整分类表（repo / category / subcategory / stars / license / 备注） | 85 行 |
 | [`_research/licenses.csv`](_research/licenses.csv) | 85 仓库许可证实读结果（license / license_file / **default branch**） | 85 行 |
-| `_research/readmes/` | 33 份仓库 README 原文快照 | — |
+| `_research/readmes/` | 33 份仓库 README 原文快照（2026-10-12） | — |
 | `_research/extra/` | 68 份补充证据（LICENSE 原文、HF 模型卡、子文档、评测脚本） | — |
+| [`_research/2026-10-26/`](_research/2026-10-26/) | 本次增量扫描素材：90 仓库快照、delta 表、11 个仓库 commit feed、HF 模型清单与模型卡、arXiv XML、README diff、星标变化、5 个采集脚本 | — |
+
+---
+
+## 八、增量扫描（2026-10-12 → 2026-10-26）
+
+**复扫结论**：组织公开仓库 **85 → 90**（+5）；期间被推送的既有仓库 **6 个**；HF `tencent` 组织新增模型 **8 个**；窗口内混元署名 arXiv 论文 **2 篇**（另有 1 篇不进仓库的 WorkForge）。两条线的增量极不对称：
+
+| 方向 | 窗口内最重要的三件事 | 详见 |
+|---|---|---|
+| **Agent** | ① `Hy-Memory`（1,282★）把记忆做成"模型 + SDK + MemHub"三层开源；② `WorkForge` 用真实文件 workspace 合成 **16.7K 可验证环境**（GDPVal 45.5→73.6）；③ 平台收缩：元器 11-09 停服、QClaw 12-24 停运，出口收敛到 WorkBuddy + 企业微信 + 腾讯云 ADP | [`agent/2026-10-26/05-...`](agent/2026-10-26/05-agent-memory-and-delta.md) |
+| **Infer** | ① `Hy-Nomas` 交互式视频世界模型：54 层双流 MMDiT + 持久 KV cache + **8 步蒸馏 720×1280@24FPS**，单卡 4090 与 8 卡标准两条路径；② `Hy-Memory` 的 **vLLM v0.31.0** 部署 + **GGUF imatrix/MoE 混合精度 6 档**（8.03 GB 只掉约 1.5 分）；③ `AuK` 开源 **4 步蒸馏训练链**（NFE=4/CFG=0 即 AuK-Flash） | [`infer/2026-10-26/06-...`](infer/2026-10-26/06-infer-world-model-and-serving.md) |
+
+**本轮需要修订的 10-12 结论**：
+
+1. **"框架稀缺"** → 缺口收窄为"**运行时框架仍稀缺**"；记忆层（Hy-Memory）与环境层（WorkForge）已补。
+2. **"投机解码默认开"** → 需分线：LLM 侧继续成立；**生成模型（视频/世界模型）的默认加速是少步蒸馏 + 量化**。
+3. **"量化收敛到 AngelSlim"** → 已成分轨：LLM 走 AngelSlim；扩散/世界模型走仓库内自研 W8/FP8；记忆模型走 llama.cpp imatrix + MoE 混合精度。
+4. **"评测向可验证演进"** → 被同窗口的 `DiagSafe`（prompt-level rubric）、`OmniCapBench`（不报总分、局部字段比对）、`WorkForge`（事实锚点派生双验证器）进一步强化。
+
+**本轮踩到的两个坑（写给下一次扫描）**：
+
+- ⚠️ **时间错位**：网传"混元世界模型 1.1（WorldMirror）2026-10-22 开源"实为 **2025-10** 旧闻（HF `createdAt` 2025-10-16、IT之家原文 2025-10-22），源头是内容农场把旧发布写成新发布。
+- ⚠️ **公众号正文不可读**：`mp.weixin.qq.com` 全量返回验证码页，`r.jina.ai` 代理亦失败；本目录所有公众号条目**只作"存在性"证据**，正文内容一律以模型卡/仓库/证券时报等可读源为准。
