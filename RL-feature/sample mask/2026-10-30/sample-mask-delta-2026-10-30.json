@@ -1,0 +1,3629 @@
+{
+ "repository": "sgl-project/sglang",
+ "repositories": [
+  "sgl-project/sglang"
+ ],
+ "topic": "sampling",
+ "window_semantics": "UTC [2026-10-23T02:05:41Z, cutoff)",
+ "start_utc": "2026-10-23T02:05:41Z",
+ "end_utc_exclusive": "2026-10-30T03:05:52Z",
+ "cutoff_utc": "2026-10-30T03:05:52Z",
+ "main_sha": "0f3f619850f222b4f238ff3d336926e99a2a5c56",
+ "main_shas": {
+  "sgl-project/sglang": "0f3f619850f222b4f238ff3d336926e99a2a5c56"
+ },
+ "main_observed_utc": "2026-10-30T03:05:52Z",
+ "baseline": "sglang 2026-09-29/10-10/10-16/10-23 归档；采样 mask 仅跟踪 SGLang",
+ "record_count": 9,
+ "classification_counts": {
+  "前期补漏续跟": 2,
+  "旧PR变化": 5,
+  "本期新建": 2
+ },
+ "records": [
+  {
+   "repository": "sgl-project/sglang",
+   "number": 43517,
+   "kind": "pr",
+   "title": "[Feat] [NPU] sampling: Add sampling-mask support for Ascend",
+   "url": "https://github.com/sgl-project/sglang/pull/43517",
+   "topic": "sampling",
+   "priority": "P0",
+   "classification": "前期补漏续跟",
+   "activity": "持续迭代 + LGTM",
+   "created_at": "2026-10-10T07:57:17Z",
+   "period_end_state": "open",
+   "current_state": "open",
+   "current_state_fetched_separately": true,
+   "merged_at": null,
+   "closed_at": null,
+   "base_ref": "main",
+   "head_sha": "22ca97cc6352e6f5b89a777c5b5086783b0cb84b",
+   "merged_by": null,
+   "additions": 567,
+   "deletions": 37,
+   "draft": false,
+   "labels": [
+    "npu"
+   ],
+   "event_types": {
+    "head_ref_force_pushed": 2,
+    "commented": 1
+   },
+   "events": [
+    {
+     "date": "2026-10-24T06:50:13Z",
+     "type": "head_ref_force_pushed",
+     "url": "https://api.github.com/repos/sgl-project/sglang/issues/events/34115416391",
+     "body": null,
+     "sha": "06e7ff61ca6b7e69c0c7f0632f7688e16f98a176",
+     "actor": "SeaAsters"
+    },
+    {
+     "date": "2026-10-24T07:22:00Z",
+     "type": "head_ref_force_pushed",
+     "url": "https://api.github.com/repos/sgl-project/sglang/issues/events/34116559587",
+     "body": null,
+     "sha": "c1cc2213dbf61da1f8dffc0b2dd329fcc5363a8d",
+     "actor": "SeaAsters"
+    },
+    {
+     "date": "2026-10-26T01:32:12Z",
+     "type": "commented",
+     "url": "https://github.com/sgl-project/sglang/pull/43517#issuecomment-6406244984",
+     "body": "LGTM",
+     "sha": null,
+     "actor": "floatlibai"
+    }
+   ],
+   "commits": [
+    {
+     "sha": "e0e3fd807bf506d1e890a6526a9b5ae6926c9945",
+     "subject": "[PATCH 01/12] [Sampling] Support sampling masks with the Ascend",
+     "date": "2026-09-30T17:40:34Z"
+    },
+    {
+     "sha": "ced29930f5bd9e450f37d6e1661532551770ebd8",
+     "subject": "[PATCH 02/12] [NPU] Derive the Ascend sampling-mask request inside",
+     "date": "Thu, 8 Oct 2026 11:58:15 +0800"
+    },
+    {
+     "sha": "d9d61887838218f38e684a4caa0b9dbf2bf0cdfe",
+     "subject": "[PATCH 03/12] [NPU] Name the sampling-mask flag and trim the capture",
+     "date": "Thu, 8 Oct 2026 12:40:42 +0800"
+    },
+    {
+     "sha": "6dcc99d9f15720e364caf8447ba977ccef761044",
+     "subject": "[PATCH 04/12] [NPU] Read output_ids from the top level in the",
+     "date": "Thu, 8 Oct 2026 12:56:40 +0800"
+    },
+    {
+     "sha": "4febe4302117198d6b07cf131425170ab4be315f",
+     "subject": "[PATCH 05/12] [NPU] Use the exported support as-is in the Ascend",
+     "date": "2026-10-10T15:12:47Z"
+    },
+    {
+     "sha": "b08f0e2fc2807f2f35c5ab33fe1d8bc07668551b",
+     "subject": "[PATCH 06/12] [NPU] Handle min-p and cutoff ties in sampling masks",
+     "date": "2026-10-19T13:19:46Z"
+    },
+    {
+     "sha": "13e72b46aab1a2502e71179ba25e272a8c981f4f",
+     "subject": "[PATCH 07/12] Refine Ascend sampling mask capture and tests",
+     "date": "2026-10-19T16:12:29Z"
+    },
+    {
+     "sha": "e5aa76d4580b5aa2cfebc1d8378b6a4a257056a0",
+     "subject": "[PATCH 08/12] Expand Ascend sampling mask regression coverage",
+     "date": "2026-10-19T17:32:38Z"
+    },
+    {
+     "sha": "2acb16f1d2b6647dca1f11ded4bc410f6cc91cd3",
+     "subject": "[PATCH 09/12] Refine Ascend sampling mask buffer reuse and reference",
+     "date": "2026-10-22T19:23:22Z"
+    },
+    {
+     "sha": "1cd3123faad690c1ce2bc3ac2c8ca9ef4580af88",
+     "subject": "[PATCH 10/12] Move Ascend sampling mask reference outside registered",
+     "date": "2026-10-22T20:10:51Z"
+    },
+    {
+     "sha": "c1cc2213dbf61da1f8dffc0b2dd329fcc5363a8d",
+     "subject": "[PATCH 11/12] Reorganize Ascend sampling-mask tests and retain",
+     "date": "2026-10-24T14:20:33Z"
+    },
+    {
+     "sha": "22ca97cc6352e6f5b89a777c5b5086783b0cb84b",
+     "subject": "[PATCH 12/12] [NPU] Unify Ascend sampler returns and refine",
+     "date": "2026-10-29T13:07:33Z"
+    }
+   ],
+   "changed_files_current_head": [
+    "python/sglang/srt/layers/sampler.py",
+    "python/sglang/srt/managers/scheduler.py",
+    "test/registered/npu/basic_function/backends/test_npu_sampling_mask.py",
+    "test/registered/sampling/test_sampling_mask.py",
+    "test/registered/npu/rl/sampling_mask_reference.py",
+    "test/registered/npu/rl/test_npu_sampling_mask.py",
+    "test/registered/npu/rl/test_npu_sampling_mask_bf16_models.py",
+    "test/registered/unit/sampling/test_ascend_sampler.py",
+    "test/registered/npu/basic_function/backends/test_npu_sampling_mask_backend.py",
+    "test/registered/npu/rl/sampling_mask/test_npu_sampling_mask.py"
+   ],
+   "analysis_current_design": "Ascend 侧 sampling mask 支持仍为 open（base main，head 22ca97cc63）。本期新增 10/24 提交 c1cc2213db（重排 Ascend mask 测试并保留参考实现）与 10/29 提交 22ca97cc63（[NPU] Unify Ascend sampler returns），10/24 两次 force-push 重写分支；10/26 floatlibai 给出 LGTM。测试已重组为 test/registered/npu/basic_function/backends/ 与 npu/rl/sampling_mask/ 两处。",
+   "npu": "缺失：官方 main 仍在 scheduler 中以『ascend 采样后端直接从 logits 采样、不构造 top-k/top-p support』为由拒绝 return_sampling_mask，helper 也只返回 token ids。本条未合入前不能宣称 Ascend 已支持。",
+   "validation": "作者侧为 NPU/CPU mock 验证。验收需覆盖 top_k=1025 回退、min_p、greedy、support/selected 两模式、混合 opted-in 行、seeded mask on/off 与连续图重放。",
+   "evidence": "本 JSON 的 events / commits / changed_files_current_head 为结构化证据；扫描脚本与说明见仓库内 RL-feature/_scan-2026-10-30/README.md，原始 patch 与 API 缓存只保留在本地工作区（未入库）。"
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 38565,
+   "kind": "pr",
+   "title": "[Fix] sampling: deterministic top-p / top-k renorm when tp_size > 1 (TP rank divergence in DFlash/DSpark)",
+   "url": "https://github.com/sgl-project/sglang/pull/38565",
+   "topic": "sampling",
+   "priority": "P0",
+   "classification": "旧PR变化",
+   "activity": "冲突修复 + 重命名 + 新提交",
+   "created_at": "2026-09-08T21:08:36Z",
+   "period_end_state": "open",
+   "current_state": "open",
+   "current_state_fetched_separately": true,
+   "merged_at": null,
+   "closed_at": null,
+   "base_ref": "main",
+   "head_sha": "b8d466800811eb5e5070656d13e3cf7cc9b2249c",
+   "merged_by": null,
+   "additions": 237,
+   "deletions": 15,
+   "draft": false,
+   "labels": [
+    "sgl-kernel",
+    "run-ci",
+    "jit-kernel"
+   ],
+   "event_types": {
+    "commented": 2,
+    "head_ref_force_pushed": 1,
+    "renamed": 1
+   },
+   "events": [
+    {
+     "date": "2026-10-29T06:52:09Z",
+     "type": "commented",
+     "url": "https://github.com/sgl-project/sglang/pull/38565#issuecomment-6490046104",
+     "body": "@claude review",
+     "sha": null,
+     "actor": "Fridge003"
+    },
+    {
+     "date": "2026-10-29T08:12:27Z",
+     "type": "commented",
+     "url": "https://github.com/sgl-project/sglang/pull/38565#issuecomment-6491485788",
+     "body": "Please fix conflicts",
+     "sha": null,
+     "actor": "Fridge003"
+    },
+    {
+     "date": "2026-10-30T00:15:19Z",
+     "type": "head_ref_force_pushed",
+     "url": "https://api.github.com/repos/sgl-project/sglang/issues/events/34644960176",
+     "body": null,
+     "sha": "c33aeb0b181036bc23f82a4e49a050716bc5985d",
+     "actor": "gilfordting"
+    },
+    {
+     "date": "2026-10-30T00:16:12Z",
+     "type": "renamed",
+     "url": "https://api.github.com/repos/sgl-project/sglang/issues/events/34645006568",
+     "body": null,
+     "sha": null,
+     "actor": "gilfordting"
+    }
+   ],
+   "commits": [
+    {
+     "sha": "c33aeb0b181036bc23f82a4e49a050716bc5985d",
+     "subject": "[PATCH 1/2] [Fix] sampling: deterministic top-p / top-k renorm when",
+     "date": "2026-10-30T00:02:48Z"
+    },
+    {
+     "sha": "b8d466800811eb5e5070656d13e3cf7cc9b2249c",
+     "subject": "[PATCH 2/2] [Test] sampling: Publish a runtime config in the",
+     "date": "2026-10-30T01:09:51Z"
+    }
+   ],
+   "changed_files_current_head": [
+    "python/sglang/kernels/ops/sampling/renorm.py",
+    "python/sglang/srt/layers/sampler.py",
+    "python/sglang/srt/layers/sampling_renorm.py",
+    "python/sglang/srt/speculative/dflash_utils.py",
+    "python/sglang/srt/speculative/eagle_utils.py",
+    "python/sglang/srt/speculative/spec_tp_sync.py",
+    "test/registered/kernels/ops/sampling/test_renorm.py",
+    "test/registered/unit/sampling/test_renorm_policy.py",
+    "test/registered/sampling/test_sampling_mask.py"
+   ],
+   "analysis_current_design": "确定性 top-p/top-k 归一化 PR 本期继续收敛：10/29 评论要求修冲突并请 claude review，10/30 两次 force-push，新增 c33aeb0b18 与 b8d4668008（[Test] sampling: Publish a runtime config），标题由 attn_tp_size>1 改为 tp_size>1，并新增 kernels/ops/sampling/renorm.py 与 tests/registered/sampling/test_sampling_mask.py 触点。",
+   "npu": "需实测：不要移植 FlashInfer CUDA kernel 到 NPU；应在 Ascend 实际 renorm 算子上检查跨 rank 位级一致性、共享随机数与 token 决策，并与 #41916 的过滤语义一起验收。",
+   "validation": "作者早前报告 H100/B200 上 fast 版本挂起、deterministic 版本完成；本期未复测。需限制 top_p<1，跟踪 target_logits→target_probs→accept_len/bonus→KV 提交的首个分歧。",
+   "evidence": "本 JSON 的 events / commits / changed_files_current_head 为结构化证据；扫描脚本与说明见仓库内 RL-feature/_scan-2026-10-30/README.md，原始 patch 与 API 缓存只保留在本地工作区（未入库）。"
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 41916,
+   "kind": "pr",
+   "title": "[Fix] sampling: Make top-k/top-p filtering consistent across sampling paths",
+   "url": "https://github.com/sgl-project/sglang/pull/41916",
+   "topic": "sampling",
+   "priority": "P0",
+   "classification": "旧PR变化",
+   "activity": "合 main + 后续修复提交",
+   "created_at": "2026-09-30T17:10:50Z",
+   "period_end_state": "open",
+   "current_state": "open",
+   "current_state_fetched_separately": true,
+   "merged_at": null,
+   "closed_at": null,
+   "base_ref": "main",
+   "head_sha": "e84984ce7c57de82f5f9fa085d3098bfa5a11127",
+   "merged_by": null,
+   "additions": 226,
+   "deletions": 44,
+   "draft": false,
+   "labels": [
+    "quant",
+    "speculative-decoding",
+    "run-ci",
+    "bypass-fail-fast"
+   ],
+   "event_types": {
+    "cross-referenced": 3,
+    "commented": 4
+   },
+   "events": [
+    {
+     "date": "2026-10-23T15:12:01Z",
+     "type": "cross-referenced",
+     "url": null,
+     "body": null,
+     "sha": null,
+     "actor": "nbommi19"
+    },
+    {
+     "date": "2026-10-24T00:08:38Z",
+     "type": "cross-referenced",
+     "url": null,
+     "body": null,
+     "sha": null,
+     "actor": "jianc99"
+    },
+    {
+     "date": "2026-10-24T00:14:47Z",
+     "type": "cross-referenced",
+     "url": null,
+     "body": null,
+     "sha": null,
+     "actor": "jianc99"
+    },
+    {
+     "date": "2026-10-28T00:05:01Z",
+     "type": "commented",
+     "url": "https://github.com/sgl-project/sglang/pull/41916#issuecomment-6456829274",
+     "body": "codex cmt\n\nI will push `c49d5a0950c4c6055ba388e7d83958e7a1178849` to merge `main` at `655059819cda56f4c0feb5e3f09056caa6907bc7`, preserving both the PR's joint top-p/top-k filtering helper and upstream's compact verify support selector; all applicable pre-commit checks for the seven PR files passed, and AST comparisons confirmed that both conflicting helpers retain their respective source implementations.\n\nThe previous [PR Test (Base) run #40246528506, attempt 1](https://github.com/sgl-project/sglang/actions/runs/40246528506) completed successfully on `5036eba4f9c9ae638e65df035ae821394781d954`; that result predates this merge, GPU tests have not been rerun for the new commit, and `run-ci` has been removed as requested.",
+     "sha": null,
+     "actor": "guapisolo"
+    },
+    {
+     "date": "2026-10-28T07:53:46Z",
+     "type": "commented",
+     "url": "https://github.com/sgl-project/sglang/pull/41916#issuecomment-6463688523",
+     "body": "@Qiaolin-Yu will help review this",
+     "sha": null,
+     "actor": "guapisolo"
+    },
+    {
+     "date": "2026-10-30T00:20:02Z",
+     "type": "commented",
+     "url": "https://github.com/sgl-project/sglang/pull/41916#issuecomment-6511720343",
+     "body": "/rerun-test test/registered/e2e/models/test_transformers_backend_eval.py\n",
+     "sha": null,
+     "actor": "guapisolo"
+    },
+    {
+     "date": "2026-10-30T00:20:26Z",
+     "type": "commented",
+     "url": "https://github.com/sgl-project/sglang/pull/41916#issuecomment-6511726125",
+     "body": "🚀 `1-gpu-5090` (1 test): ✅ [View workflow run](https://github.com/sgl-project/sglang/actions/runs/40979071193) <!--rrt:0:done-->\n```\ncd test/ && python3 registered/e2e/models/test_transformers_backend_eval.py\n```",
+     "sha": null,
+     "actor": "github-actions[bot]"
+    }
+   ],
+   "commits": [
+    {
+     "sha": "98d8264ea54d456692d8f7d28896439b428af284",
+     "subject": "[PATCH 01/13] Fix FlashInfer min-p filter ordering",
+     "date": "2026-08-21T13:04:26Z"
+    },
+    {
+     "sha": "19b987d3bf68b2d382705af82e1245b90f69a678",
+     "subject": "[PATCH 02/13] Fix speculative sampling filter ordering",
+     "date": "2026-08-21T13:33:48Z"
+    },
+    {
+     "sha": "a6a9034a551826956dde064c8d816d01e4a1da85",
+     "subject": "[PATCH 03/13] Fix DFlash joint sampling filters",
+     "date": "2026-08-21T13:48:54Z"
+    },
+    {
+     "sha": "8f31f64624d786bf0bd2eb19eae38e334fca79b0",
+     "subject": "[PATCH 04/13] Reject unsupported speculative min-p requests",
+     "date": "2026-08-24T09:24:04Z"
+    },
+    {
+     "sha": "e9a056ce5b8da39fe73ec55990cb3753a2720649",
+     "subject": "[PATCH 05/13] Adapt sampling filter tests to current CI layout",
+     "date": "2026-09-16T15:25:29Z"
+    },
+    {
+     "sha": "599a7bd14f6670b5fd491cc1fd9e4dab5b1a1dcf",
+     "subject": "[PATCH 06/13] Fix UNO joint sampling filter semantics",
+     "date": "2026-09-30T13:55:21Z"
+    },
+    {
+     "sha": "50e6ca6b73cc49214b5e9e28068b187ac3d7de2f",
+     "subject": "[PATCH 07/13] Consolidate sampling regressions and use production",
+     "date": "2026-10-14T13:14:03Z"
+    },
+    {
+     "sha": "3d63a0ade8e167c118971c154ef314a0254f0b1b",
+     "subject": "[PATCH 08/13] Clarify joint sampling filter comments",
+     "date": "2026-10-19T19:40:41Z"
+    },
+    {
+     "sha": "c71e432288582122c682b9fd0a8fd0c2fb4bf202",
+     "subject": "[PATCH 09/13] Fix contig post-quant import in masked quantization",
+     "date": "2026-10-20T10:58:37Z"
+    },
+    {
+     "sha": "b94a95d5e805e0ee214c6d355a3a6cc79dd5e073",
+     "subject": "[PATCH 10/13] [Perf] sampling: Fuse top-p rescaling for unseeded",
+     "date": "2026-10-21T16:17:55Z"
+    },
+    {
+     "sha": "c55b455da88dc9ff85533d7850a2a3878c6823e0",
+     "subject": "[PATCH 11/13] [Fix] sampling: Bind CUDA predicate in speculative",
+     "date": "2026-10-21T16:48:14Z"
+    },
+    {
+     "sha": "3d1e9fddf39ce0c56f31c489735db69a11a20af5",
+     "subject": "[PATCH 12/13] [Fix] mem_cache: Build an empty KVLayerRouter from",
+     "date": "2026-10-29T16:20:04Z"
+    },
+    {
+     "sha": "cb72322eabfd3a8aa21d2eed0edcc10f313bbcb0",
+     "subject": "[PATCH 13/13] [Fix] Pass request pools to dummy tree caches",
+     "date": "2026-10-29T16:20:04Z"
+    }
+   ],
+   "changed_files_current_head": [
+    "python/sglang/srt/layers/sampler.py",
+    "test/registered/sampling/test_flashinfer_min_p.py",
+    "python/sglang/srt/managers/scheduler.py",
+    "python/sglang/srt/speculative/eagle_utils.py",
+    "test/registered/spec/eagle/test_eagle_sampling_filters.py",
+    "python/sglang/srt/speculative/dflash_utils.py",
+    "test/registered/spec/dflash/test_dflash_sampling_filters.py",
+    "python/sglang/srt/speculative/uno_utils.py",
+    "test/registered/kernels/ops/speculative/test_dflash_sampling_filters.py",
+    "test/registered/kernels/ops/speculative/test_eagle_sampling_filters.py",
+    "test/registered/kernels/ops/sampling/test_flashinfer_min_p.py",
+    "test/registered/kernels/ops/speculative/test_speculative_sampling.py",
+    "test/registered/sampling/test_sampling_mask.py",
+    "test/registered/kernels/ops/quantization/test_per_token_group_quant.py",
+    "python/sglang/srt/mem_cache/kv/router.py",
+    "test/registered/unit/mem_cache/test_kv_layer_router_parts.py",
+    "python/sglang/benchmark/one_batch.py",
+    "test/manual/test_forward_split_prefill.py"
+   ],
+   "analysis_current_design": "top-k/top-p 过滤一致性 PR 本期把 main 合入分支（c49d5a09，2026-10-28）并追加 3d1e9fddf3、cb72322eab（dummy tree cache / KVLayerRouter 修复），10/28 起由 guapisolo 接手评审协调，10/30 重跑 e2e 测试。语义方向仍是『保留 top-p nucleus 再与 top-k support 相交』，不是 #41955 的 top_k_first 默认切换。",
+   "npu": "需实测：Ascend fused helper 与 torch fallback 的过滤顺序需逐分布比对；先定语义再迁移 kernel，不能据 PR open 状态宣称默认策略已改变。",
+   "validation": "作者早前报告五路径 18 passed + 6 subtests、seeded 位级比较与 CUDA Graph 验证；本期为冲突合并与重跑，未提供新的 Ascend 数据。",
+   "evidence": "本 JSON 的 events / commits / changed_files_current_head 为结构化证据；扫描脚本与说明见仓库内 RL-feature/_scan-2026-10-30/README.md，原始 patch 与 API 缓存只保留在本地工作区（未入库）。"
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 46080,
+   "kind": "pr",
+   "title": "[Perf] DFLASH: Verify top-k sampled batches on the all-gathered top-k support (opt-in)",
+   "url": "https://github.com/sgl-project/sglang/pull/46080",
+   "topic": "sampling",
+   "priority": "P1",
+   "classification": "本期新建",
+   "activity": "新建（无本期评审事件）",
+   "created_at": "2026-10-23T15:11:59Z",
+   "period_end_state": "open",
+   "current_state": "open",
+   "current_state_fetched_separately": true,
+   "merged_at": null,
+   "closed_at": null,
+   "base_ref": "main",
+   "head_sha": "a43baa6f83f136a5b4f7d07dc31a452e82598c82",
+   "merged_by": null,
+   "additions": 930,
+   "deletions": 8,
+   "draft": false,
+   "labels": [
+    "jit-kernel"
+   ],
+   "event_types": {},
+   "events": [],
+   "commits": [
+    {
+     "sha": "22f36afe91911f41bdcce15272a0d79208c4e6b1",
+     "subject": "[PATCH 1/3] [Perf] DFLASH: Verify top-k sampled batches on the",
+     "date": "2026-10-23T04:45:13Z"
+    },
+    {
+     "sha": "5581b95cc904c93f55f1e12a33f670d0288e92f9",
+     "subject": "[PATCH 2/3] Hand each simulated rank a contiguous shard in the DFLASH",
+     "date": "2026-10-23T05:16:31Z"
+    },
+    {
+     "sha": "a43baa6f83f136a5b4f7d07dc31a452e82598c82",
+     "subject": "[PATCH 3/3] Set the sparse-verify flag on the DFLASH prewarm test's",
+     "date": "2026-10-23T10:10:30Z"
+    }
+   ],
+   "changed_files_current_head": [
+    "python/sglang/kernels/ops/speculative/__init__.py",
+    "python/sglang/kernels/ops/speculative/dflash_sparse_verify.py",
+    "python/sglang/srt/environ.py",
+    "python/sglang/srt/speculative/dflash_worker_v2.py",
+    "test/registered/kernels/ops/speculative/test_dflash_sparse_verify.py",
+    "test/registered/unit/spec/test_dflash_logits.py",
+    "test/registered/unit/model_executor/runner_utils/test_graph_pool_borrow.py"
+   ],
+   "analysis_current_design": "DFLASH 在 TP>1 + softcap lm_head 下，对采样批次改为在 all-gather 的 top-k support 上做 verify（opt-in，新增 kernels/ops/speculative/dflash_sparse_verify.py 与 env 开关）。本期 3 个提交均在 10/23 推送，PR 级时间线无本期评审事件，属新建未评审状态。",
+   "npu": "需实测：稀疏 verify 只在 support 上重算概率，Ascend 需确认 support 与实际采样 support 完全一致，否则会改变 support 语义。",
+   "validation": "作者附 test_dflash_sparse_verify.py 与 graph pool borrow 测试；NPU 需覆盖 top_k 边界与 support 一致性。",
+   "evidence": "本 JSON 的 events / commits / changed_files_current_head 为结构化证据；扫描脚本与说明见仓库内 RL-feature/_scan-2026-10-30/README.md，原始 patch 与 API 缓存只保留在本地工作区（未入库）。"
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 46186,
+   "kind": "pr",
+   "title": "[Perf] spec: radix top-k for speculative verify target probabilities",
+   "url": "https://github.com/sgl-project/sglang/pull/46186",
+   "topic": "sampling",
+   "priority": "P1",
+   "classification": "本期新建",
+   "activity": "新建 + 交叉引用",
+   "created_at": "2026-10-24T00:14:46Z",
+   "period_end_state": "open",
+   "current_state": "open",
+   "current_state_fetched_separately": true,
+   "merged_at": null,
+   "closed_at": null,
+   "base_ref": "main",
+   "head_sha": "837aa2162d010ca5130f38f7db2d8f9cd61a1208",
+   "merged_by": null,
+   "additions": 277,
+   "deletions": 39,
+   "draft": false,
+   "labels": [
+    "jit-kernel"
+   ],
+   "event_types": {
+    "cross-referenced": 2
+   },
+   "events": [
+    {
+     "date": "2026-10-24T00:15:28Z",
+     "type": "cross-referenced",
+     "url": null,
+     "body": null,
+     "sha": null,
+     "actor": "jianc99"
+    },
+    {
+     "date": "2026-10-24T00:15:50Z",
+     "type": "cross-referenced",
+     "url": null,
+     "body": null,
+     "sha": null,
+     "actor": "jianc99"
+    }
+   ],
+   "commits": [
+    {
+     "sha": "837aa2162d010ca5130f38f7db2d8f9cd61a1208",
+     "subject": "[PATCH] [Perf] spec: radix top-k for speculative verify target",
+     "date": "2026-10-23T17:13:24Z"
+    }
+   ],
+   "changed_files_current_head": [
+    "python/sglang/kernels/ops/sampling/topk.py",
+    "python/sglang/srt/models/dflash.py",
+    "python/sglang/srt/speculative/dflash_utils.py",
+    "test/registered/kernels/ops/sampling/test_verify_target_probs.py",
+    "test/registered/unit/spec/test_dflash_logits.py"
+   ],
+   "analysis_current_design": "把 spec verify 的目标概率构造改为 radix top-k（touches kernels/ops/sampling/topk.py、dflash_utils.py），与 sampling-mask 捕获共用 build_speculative_verify_target_probs 路径。本期仅有 2 次 cross-reference（10/24）。",
+   "npu": "需实测：radix top-k 的分块与归约在 Ascend 上需与 torch 版逐位或按容差比对，否则 support/mask 行会偏移。",
+   "validation": "作者称组件 3/3，附 test_verify_target_probs.py；本期未复测。",
+   "evidence": "本 JSON 的 events / commits / changed_files_current_head 为结构化证据；扫描脚本与说明见仓库内 RL-feature/_scan-2026-10-30/README.md，原始 patch 与 API 缓存只保留在本地工作区（未入库）。"
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 39934,
+   "kind": "pr",
+   "title": "[Test] [NPU] parameter: Add sampling mask max tokens e2e test",
+   "url": "https://github.com/sgl-project/sglang/pull/39934",
+   "topic": "sampling",
+   "priority": "P2",
+   "classification": "前期补漏续跟",
+   "activity": "修 CI + 重命名 + 新提交",
+   "created_at": "2026-09-17T07:52:31Z",
+   "period_end_state": "open",
+   "current_state": "open",
+   "current_state_fetched_separately": true,
+   "merged_at": null,
+   "closed_at": null,
+   "base_ref": "main",
+   "head_sha": "34b628dd280fe621045894121acf5540da5bfbb6",
+   "merged_by": null,
+   "additions": 266,
+   "deletions": 0,
+   "draft": false,
+   "labels": [
+    "npu"
+   ],
+   "event_types": {
+    "commented": 1,
+    "renamed": 1
+   },
+   "events": [
+    {
+     "date": "2026-10-27T06:07:30Z",
+     "type": "commented",
+     "url": "https://github.com/sgl-project/sglang/pull/39934#issuecomment-6435068494",
+     "body": "<!-- pr-check-comment runs=40458850500,40458854039 -->\nRequired checks failed on c0b9a7c; this PR cannot be merged until they pass.\n\n**PR title** ([run](https://github.com/sgl-project/sglang/actions/runs/40458850500))\n> PR title must use \"[Type] scope: title\" or \"[Type] [Hardware] scope: title\". Type must be one of: Feat, Fix, Refactor, Perf, Doc, Test, CI, Chore. Scope is required and may be any module or model name, with unrestricted letter case (letters, numbers, dots, underscores, slashes, or hyphens). Hardware is optional; use a single tag without spaces. Use uppercase hardware tags (AMD, NVIDIA, NPU, MI300X), except for exactly these four spellings: Intel, Apple, Huawei, Ascend. Reverts must use GitHub's default format: Revert \"original title\". Use one space between fields and after the colon, with a non-empty title and no leading or trailing whitespace. Examples: \"[Fix] attention:…",
+     "sha": null,
+     "actor": "github-actions[bot]"
+    },
+    {
+     "date": "2026-10-27T08:16:20Z",
+     "type": "renamed",
+     "url": "https://api.github.com/repos/sgl-project/sglang/issues/events/34343964103",
+     "body": null,
+     "sha": null,
+     "actor": "wl55721"
+    }
+   ],
+   "commits": [
+    {
+     "sha": "42330a1c88aa0bb7cce3ccf5996fca5a0428b68d",
+     "subject": "[PATCH 1/5] test(npu): add e2e test for --sampling-mask-max-tokens",
+     "date": "2026-09-17T09:33:00Z"
+    },
+    {
+     "sha": "bc7d1ab42ec5df4a981e33d91887ebfdffa3e929",
+     "subject": "[PATCH 2/5] test(npu): add PD disaggregation sampling mask cases for",
+     "date": "2026-09-17T09:42:49Z"
+    },
+    {
+     "sha": "9524a15f7b4f88f4564f29ad0fab1f29dffe2bcd",
+     "subject": "[PATCH 3/5] fix(npu): add --mini-lb to PD sampling mask test",
+     "date": "2026-09-17T11:27:27Z"
+    },
+    {
+     "sha": "c0b9a7ce52e3f2b6cccdd643b62386d3876c99a6",
+     "subject": "[PATCH 4/5] fix",
+     "date": "2026-10-27T14:03:26Z"
+    },
+    {
+     "sha": "34b628dd280fe621045894121acf5540da5bfbb6",
+     "subject": "[PATCH 5/5] fix",
+     "date": "2026-10-27T16:26:33Z"
+    }
+   ],
+   "changed_files_current_head": [
+    "test/registered/npu/basic_function/parameter/test_npu_sampling_mask_max_tokens.py"
+   ],
+   "analysis_current_design": "NPU 侧 --sampling-mask-max-tokens 的 e2e 回归测试（单文件，+266）。本期 10/27 两个 fix 提交、一次 bot 检查失败与一次重命名，仍 open。",
+   "npu": "直接是 NPU 测试补齐：覆盖 top_k 上限触发 abort 的行为，是 #43517 合入前的验收护栏之一。",
+   "validation": "作者侧测试未通过最新 CI；本期未复测。",
+   "evidence": "本 JSON 的 events / commits / changed_files_current_head 为结构化证据；扫描脚本与说明见仓库内 RL-feature/_scan-2026-10-30/README.md，原始 patch 与 API 缓存只保留在本地工作区（未入库）。"
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 41205,
+   "kind": "pr",
+   "title": "[Sampling] Write /generate sampling masks from numpy rows",
+   "url": "https://github.com/sgl-project/sglang/pull/41205",
+   "topic": "sampling",
+   "priority": "P2",
+   "classification": "旧PR变化",
+   "activity": "关闭（stale draft）",
+   "created_at": "2026-09-25T02:32:48Z",
+   "period_end_state": "closed",
+   "current_state": "closed",
+   "current_state_fetched_separately": true,
+   "merged_at": null,
+   "closed_at": "2026-10-24T01:24:49Z",
+   "base_ref": "main",
+   "head_sha": "00a17d977017878d197777905bdc19d7ad74fb33",
+   "merged_by": null,
+   "additions": 227,
+   "deletions": 13,
+   "draft": true,
+   "labels": [],
+   "event_types": {
+    "commented": 1,
+    "closed": 1
+   },
+   "events": [
+    {
+     "date": "2026-10-24T01:24:49Z",
+     "type": "commented",
+     "url": "https://github.com/sgl-project/sglang/pull/41205#issuecomment-6378132039",
+     "body": "Thanks @nanjiangwill. Closing this because it is still a draft and has not been updated in 28 days.\n\nReopen it if the work is still relevant.\n\nSome directories moved recently, so an older branch may need retargeting:\n`sgl-kernel/` -> `python/sglang/kernels/aot/`, `python/sglang/jit_kernel/`\n-> `python/sglang/kernels/jit/`, `docs/` -> `docs/docs/` (`.mdx`),\n`bench_serving.py` -> `benchmark/serving.py`, `test/srt/` -> `test/registered/`.",
+     "sha": null,
+     "actor": "github-actions[bot]"
+    },
+    {
+     "date": "2026-10-24T01:24:49Z",
+     "type": "closed",
+     "url": "https://api.github.com/repos/sgl-project/sglang/issues/events/34104559894",
+     "body": null,
+     "sha": null,
+     "actor": "github-actions[bot]"
+    }
+   ],
+   "commits": [
+    {
+     "sha": "558afe7dbc9ae662843845237b28551e98cb5abd",
+     "subject": "[PATCH 1/2] [Observability] Log and export numpy arrays as lists",
+     "date": "2026-09-25T02:25:59Z"
+    },
+    {
+     "sha": "00a17d977017878d197777905bdc19d7ad74fb33",
+     "subject": "[PATCH 2/2] [Sampling] Write /generate sampling masks from numpy rows",
+     "date": "2026-09-25T02:26:00Z"
+    }
+   ],
+   "changed_files_current_head": [
+    "python/sglang/srt/observability/request_metrics_exporter.py",
+    "python/sglang/srt/utils/log_utils.py",
+    "python/sglang/srt/utils/request_logger.py",
+    "test/registered/unit/observability/test_request_metrics_exporter.py",
+    "test/registered/unit/utils/test_request_logger.py",
+    "python/sglang/srt/entrypoints/http_server.py",
+    "python/sglang/srt/managers/io_struct.py",
+    "python/sglang/srt/managers/tokenizer_manager.py",
+    "python/sglang/srt/sampling/sampling_mask.py",
+    "test/registered/unit/managers/test_output_streamer_customized_info.py",
+    "test/registered/unit/managers/test_tokenizer_manager_rid_cleanup.py"
+   ],
+   "analysis_current_design": "本期被 bot 以『仍是 draft 且 28 天未更新』关闭（2026-10-24T01:24:49Z），未合入。其思路（/generate 直接从 numpy 行写 sampling mask，避免逐元素 Python list 构造）仍是 mask 返回路径的性能参考。",
+   "npu": "需实测：与 #43517 的 host 物化路径相关，但关闭状态不代表能力可用。",
+   "validation": "关闭评论为唯一本期事件。",
+   "evidence": "本 JSON 的 events / commits / changed_files_current_head 为结构化证据；扫描脚本与说明见仓库内 RL-feature/_scan-2026-10-30/README.md，原始 patch 与 API 缓存只保留在本地工作区（未入库）。"
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 42647,
+   "kind": "pr",
+   "title": "[Feat] RL: Add radix transfer plugins",
+   "url": "https://github.com/sgl-project/sglang/pull/42647",
+   "topic": "sampling",
+   "priority": "P1",
+   "classification": "旧PR变化",
+   "activity": "合入 sglang-miles",
+   "created_at": "2026-10-05T20:12:42Z",
+   "period_end_state": "merged",
+   "current_state": "closed",
+   "current_state_fetched_separately": true,
+   "merged_at": "2026-10-23T06:17:53Z",
+   "closed_at": "2026-10-23T06:17:53Z",
+   "base_ref": "sglang-miles",
+   "head_sha": "c577937f1730e5c51344f1a15569480ab8027860",
+   "merged_by": "guapisolo",
+   "additions": 2395,
+   "deletions": 46,
+   "draft": false,
+   "labels": [
+    "documentation",
+    "dependencies"
+   ],
+   "event_types": {
+    "merged": 1,
+    "closed": 1,
+    "cross-referenced": 4,
+    "referenced": 11
+   },
+   "events": [
+    {
+     "date": "2026-10-23T06:17:53Z",
+     "type": "merged",
+     "url": "https://api.github.com/repos/sgl-project/sglang/issues/events/34024036975",
+     "body": null,
+     "sha": "ed6f19e6e9f359030fecc37ce9852e6428907d33",
+     "actor": "guapisolo"
+    },
+    {
+     "date": "2026-10-23T06:17:53Z",
+     "type": "closed",
+     "url": "https://api.github.com/repos/sgl-project/sglang/issues/events/34024037166",
+     "body": null,
+     "sha": null,
+     "actor": "guapisolo"
+    },
+    {
+     "date": "2026-10-23T06:31:10Z",
+     "type": "cross-referenced",
+     "url": null,
+     "body": null,
+     "sha": null,
+     "actor": "guapisolo"
+    },
+    {
+     "date": "2026-10-23T08:37:31Z",
+     "type": "referenced",
+     "url": "https://api.github.com/repos/sgl-project/sglang/issues/events/34033233157",
+     "body": null,
+     "sha": "7a0aad79d7aeae63d0065d6ac63b8ea6b3647c2d",
+     "actor": "guapisolo"
+    },
+    {
+     "date": "2026-10-23T19:14:44Z",
+     "type": "referenced",
+     "url": "https://api.github.com/repos/sgl-project/sglang/issues/events/34083968664",
+     "body": null,
+     "sha": "f886a69d377f321251c9c365992d09ef8d496065",
+     "actor": "guapisolo"
+    },
+    {
+     "date": "2026-10-23T19:14:44Z",
+     "type": "referenced",
+     "url": "https://api.github.com/repos/sgl-project/sglang/issues/events/34083968810",
+     "body": null,
+     "sha": "991c9820f17e9007d6c71aab828d65f555ca4a87",
+     "actor": "guapisolo"
+    },
+    {
+     "date": "2026-10-24T02:17:58Z",
+     "type": "cross-referenced",
+     "url": null,
+     "body": null,
+     "sha": null,
+     "actor": "bingxche"
+    },
+    {
+     "date": "2026-10-24T11:12:11Z",
+     "type": "cross-referenced",
+     "url": null,
+     "body": null,
+     "sha": null,
+     "actor": "guapisolo"
+    },
+    {
+     "date": "2026-10-25T02:19:29Z",
+     "type": "cross-referenced",
+     "url": null,
+     "body": null,
+     "sha": null,
+     "actor": "bingxche"
+    },
+    {
+     "date": "2026-10-27T05:00:04Z",
+     "type": "referenced",
+     "url": "https://api.github.com/repos/sgl-project/sglang/issues/events/34332105224",
+     "body": null,
+     "sha": "7dc694f3859e20cbbc1875dc8c7971551afa1bfa",
+     "actor": "guapisolo"
+    },
+    {
+     "date": "2026-10-27T05:00:05Z",
+     "type": "referenced",
+     "url": "https://api.github.com/repos/sgl-project/sglang/issues/events/34332105389",
+     "body": null,
+     "sha": "4661dcb87b01aab79e4dc891c97e5a12484c4be9",
+     "actor": "guapisolo"
+    },
+    {
+     "date": "2026-10-27T05:48:37Z",
+     "type": "referenced",
+     "url": "https://api.github.com/repos/sgl-project/sglang/issues/events/34334791428",
+     "body": null,
+     "sha": "fab63cb943636d703d12a712da4b431182543870",
+     "actor": "guapisolo"
+    },
+    {
+     "date": "2026-10-27T05:48:37Z",
+     "type": "referenced",
+     "url": "https://api.github.com/repos/sgl-project/sglang/issues/events/34334791483",
+     "body": null,
+     "sha": "bf62e67901ed4816d45e6c503917eef53d65927f",
+     "actor": "guapisolo"
+    },
+    {
+     "date": "2026-10-27T18:03:27Z",
+     "type": "referenced",
+     "url": "https://api.github.com/repos/sgl-project/sglang/issues/events/34397088054",
+     "body": null,
+     "sha": "179b7ff5951eb55b257c7c12e087701c99600201",
+     "actor": "guapisolo"
+    },
+    {
+     "date": "2026-10-27T18:03:27Z",
+     "type": "referenced",
+     "url": "https://api.github.com/repos/sgl-project/sglang/issues/events/34397088169",
+     "body": null,
+     "sha": "837503f8ae6be5121734db1aad05e32289dd8882",
+     "actor": "guapisolo"
+    },
+    {
+     "date": "2026-10-27T19:56:05Z",
+     "type": "referenced",
+     "url": "https://api.github.com/repos/sgl-project/sglang/issues/events/34406612984",
+     "body": null,
+     "sha": "c18a490c4515de560cd0212793f9b6d39ebbffd0",
+     "actor": "guapisolo"
+    },
+    {
+     "date": "2026-10-27T19:56:05Z",
+     "type": "referenced",
+     "url": "https://api.github.com/repos/sgl-project/sglang/issues/events/34406613065",
+     "body": null,
+     "sha": "49050536ed45573b2bf9c55d0091cbc326291a57",
+     "actor": "guapisolo"
+    }
+   ],
+   "commits": [
+    {
+     "sha": "0c1978910c3f9edf45ad171c818c6ff0d9858b7b",
+     "subject": "[PATCH 1/6] [RL] Return replay outputs through the",
+     "date": "2026-10-17T13:20:38Z"
+    },
+    {
+     "sha": "f378094c9c9938aeef831d88772347720176e2d8",
+     "subject": "[PATCH 2/6] [RL] Keep sampled-token logprobs in meta_info with the",
+     "date": "2026-10-19T21:51:34Z"
+    },
+    {
+     "sha": "34470a3e11811ac180fc3666380c4af52f3d474b",
+     "subject": "[PATCH 3/6] [RL] Add OutputStore.read_many: chunked reads into",
+     "date": "2026-10-20T15:26:58Z"
+    },
+    {
+     "sha": "f396edb143e23affcaac8797fc6637d51820a236",
+     "subject": "[PATCH 4/6] [RL] Output store: optional package import, no mask row",
+     "date": "2026-10-21T14:03:17Z"
+    },
+    {
+     "sha": "f21c0cd45d3e62d9883e7057b5623d871a19ac84",
+     "subject": "[PATCH 5/6] [RL] Output store: one output sequence per request, close",
+     "date": "2026-10-21T15:38:19Z"
+    },
+    {
+     "sha": "c577937f1730e5c51344f1a15569480ab8027860",
+     "subject": "[PATCH 6/6] [RL] Output store: copy read fields with numpy, off the",
+     "date": "2026-10-21T22:47:42Z"
+    }
+   ],
+   "changed_files_current_head": [
+    "python/sglang/srt/arg_groups/fields/exec_.py",
+    "python/sglang/srt/entrypoints/openai/protocol.py",
+    "python/sglang/srt/entrypoints/openai/serving_chat.py",
+    "python/sglang/srt/managers/detokenizer_manager.py",
+    "python/sglang/srt/managers/io_struct.py",
+    "python/sglang/srt/managers/multi_tokenizer_mixin.py",
+    "python/sglang/srt/managers/output_store.py",
+    "python/sglang/srt/managers/tokenizer_manager.py",
+    "radix_transfer_plugins/pyproject.toml",
+    "radix_transfer_plugins/radix_transfer_plugins/__init__.py",
+    "radix_transfer_plugins/radix_transfer_plugins/backend.py",
+    "radix_transfer_plugins/radix_transfer_plugins/backends/__init__.py",
+    "radix_transfer_plugins/radix_transfer_plugins/backends/mooncake.py",
+    "radix_transfer_plugins/radix_transfer_plugins/codec.py",
+    "radix_transfer_plugins/radix_transfer_plugins/schema.py",
+    "radix_transfer_plugins/radix_transfer_plugins/stashes/__init__.py",
+    "radix_transfer_plugins/radix_transfer_plugins/stashes/token_output.py",
+    "radix_transfer_plugins/radix_transfer_plugins/store.py",
+    "radix_transfer_plugins/tests/conftest.py",
+    "radix_transfer_plugins/tests/test_mooncake_backend.py",
+    "radix_transfer_plugins/tests/test_store.py",
+    "test/registered/unit/entrypoints/openai/test_serving_chat.py",
+    "test/registered/unit/managers/test_multi_tokenizer_mixin.py",
+    "test/registered/unit/managers/test_output_store.py",
+    "test/registered/unit/managers/test_sampling_mask_validation.py",
+    "test/registered/unit/managers/test_tokenizer_manager_rid_cleanup.py",
+    "python/sglang/srt/sampling/sampling_mask.py",
+    "test/registered/sampling/test_sampling_mask.py",
+    ".github/workflows/_pr-test-stage-cpu.yml",
+    "docs/docs/advanced_features/server_arguments.mdx",
+    "python/sglang/srt/managers/scheduler_components/batch_result_processor.py",
+    "test/registered/unit/managers/test_batch_result_processor_hidden_states.py",
+    "python/sglang/srt/entrypoints/engine.py"
+   ],
+   "analysis_current_design": "radix transfer plugins 于 2026-10-23T06:17:53Z 合入 base 分支 sglang-miles（非 main），把 sampling masks / routed experts / indexer top-k 从 inline meta_info 改为共享 OutputStore 引用，selected logprobs 仍留在 meta_info。",
+   "npu": "缺失/需实测：框架与 host 侧逻辑可复用，但 Ascend 输出需先接通 #43517，再核对 store 引用对齐、buffer 拷贝所有权与真实 NPU→host→Mooncake 路径。",
+   "validation": "作者侧为 macOS fake Mooncake 与 CPU 测试；本期未复测，也未运行真实 Mooncake。",
+   "evidence": "本 JSON 的 events / commits / changed_files_current_head 为结构化证据；扫描脚本与说明见仓库内 RL-feature/_scan-2026-10-30/README.md，原始 patch 与 API 缓存只保留在本地工作区（未入库）。"
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 43047,
+   "kind": "pr",
+   "title": "[sglang-miles] Return sampling masks for chain EAGLE/NEXTN decoding",
+   "url": "https://github.com/sgl-project/sglang/pull/43047",
+   "topic": "sampling",
+   "priority": "P2",
+   "classification": "旧PR变化",
+   "activity": "无本期事件",
+   "created_at": "2026-10-08T03:44:51Z",
+   "period_end_state": "open",
+   "current_state": "open",
+   "current_state_fetched_separately": true,
+   "merged_at": null,
+   "closed_at": null,
+   "base_ref": "sglang-miles",
+   "head_sha": "0363eeae5b8b89fd4bf001b392b72cb478118578",
+   "merged_by": null,
+   "additions": 15060,
+   "deletions": 2083,
+   "draft": true,
+   "labels": null,
+   "event_types": {},
+   "events": [],
+   "commits": [
+    {
+     "sha": "d7ff74b9847ab51c98b6c34a73defe5b3e5ca16c",
+     "subject": "[PATCH 01/44] [Cherry-pick to release/v0.5.21] [Fix] Restore deferred",
+     "date": "2026-09-29T17:30:38Z"
+    },
+    {
+     "sha": "e00930c5489053f26d86b179cee0d087f846acbb",
+     "subject": "[PATCH 02/44] [Cherry-pick to release/v0.5.21] [Test] Demote PD test",
+     "date": "2026-09-29T19:44:12Z"
+    },
+    {
+     "sha": "2beb575082d41030c8a9e7552b1bbc3d472e487c",
+     "subject": "[PATCH 03/44] [1/32] [sglang-miles] True on-policy training and",
+     "date": "2026-02-10T20:28:00Z"
+    },
+    {
+     "sha": "31d10bfd1040835978b92d751a031d2582b9a401",
+     "subject": "[PATCH 04/44] [2/32] [sglang-miles] R3 draft isolation and graph",
+     "date": "2026-02-11T23:14:29Z"
+    },
+    {
+     "sha": "ea1fa7ea4b85674a41bb1ed46df9163d5039c056",
+     "subject": "[PATCH 05/44] [3/32] [sglang-miles] PD disaggregation for RL (#18646)",
+     "date": "2026-02-11T23:58:12Z"
+    },
+    {
+     "sha": "6a24ca3b768c39961abcc9bbef5d652f55c3f83a",
+     "subject": "[PATCH 06/44] [4/32] [sglang-miles] MTP related fix (#18647)",
+     "date": "2026-02-12T00:15:26Z"
+    },
+    {
+     "sha": "1b05a82e9990d80886dfdf6ddc46b87799655390",
+     "subject": "[PATCH 07/44] [5/32] [sglang-miles] VLM training multimodal fallback",
+     "date": "2026-02-13T06:29:45Z"
+    },
+    {
+     "sha": "4a4cbe7aa79b6ffa236c631cb69ae2dd95d1679b",
+     "subject": "[PATCH 08/44] [6/32] [sglang-miles] Allow a ragged final merged FP8",
+     "date": "2026-04-12T07:06:14Z"
+    },
+    {
+     "sha": "01957d9104373ffb16bdedfc2b90ce96542b4252",
+     "subject": "[PATCH 09/44] [7/32] [sglang-miles] R3 support on PD disaggregation",
+     "date": "2026-04-16T00:04:51Z"
+    },
+    {
+     "sha": "91f1fbed04692b10f0dd362c226a2d54612fcd34",
+     "subject": "[PATCH 10/44] [8/32] [sglang-miles] Add KimiK2 raw tool call id",
+     "date": "2026-05-13T18:09:12Z"
+    },
+    {
+     "sha": "f6df9fcb9105a3147134e25cfaadf8ec27fe45bc",
+     "subject": "[PATCH 11/44] [9/32] [sglang-miles] Fix GLM4 MoE Lite shared expert",
+     "date": "2026-08-22T12:41:21Z"
+    },
+    {
+     "sha": "0584e0eeb4ef29a1500e3e8f8083f63fa7b94897",
+     "subject": "[PATCH 12/44] [10/32] [sglang-miles] MoE LoRA support and",
+     "date": "2026-05-23T21:53:23Z"
+    },
+    {
+     "sha": "d8744423fd751b22d73c8cfdf890c1209e7bea40",
+     "subject": "[PATCH 13/44] [11/32] [sglang-miles] DeepSeek V4 RL fixes (#27131,",
+     "date": "2026-05-29T19:38:35Z"
+    },
+    {
+     "sha": "18ce4146b61b7b0d17cadb1bc81ec18c6201744c",
+     "subject": "[PATCH 14/44] [12/32] [sglang-miles] Streamed LoRA updates, upsert",
+     "date": "Thu, 4 Jun 2026 07:05:15 +0000"
+    },
+    {
+     "sha": "2b83564e74e8f77a88241b8f6de944a6cd53b6aa",
+     "subject": "[PATCH 15/44] [13/32] [sglang-miles] P2P weight mapping and scoped",
+     "date": "2026-03-24T05:05:43Z"
+    },
+    {
+     "sha": "4a7bc4a36b219af6ac78e5ea18b070a765fe1cbf",
+     "subject": "[PATCH 16/44] [14/32] [sglang-miles] rollout indexer replay: raw",
+     "date": "2026-08-22T12:43:45Z"
+    },
+    {
+     "sha": "5e5043295ee5778d0a42946514a073ccf47f6f38",
+     "subject": "[PATCH 17/44] [15/32] [sglang-miles] Exclude shared skip-topk indexer",
+     "date": "2026-06-25T22:54:58Z"
+    },
+    {
+     "sha": "47fbef9d2b90d4f10c339db116945ffcda8a1861",
+     "subject": "[PATCH 18/44] [16/32] [sglang-miles] Fix stale _attn_sink_local cache",
+     "date": "Thu, 2 Jul 2026 08:26:50 +0000"
+    },
+    {
+     "sha": "ebee922531e0708d189ee3cf2592713190e47323",
+     "subject": "[PATCH 19/44] [17/32] [sglang-miles] Support Qwen3.5 GDN LoRA targets",
+     "date": "Wed, 8 Jul 2026 08:07:23 +0000"
+    },
+    {
+     "sha": "0e6fcdc0ae71fc8aba81f07b45c1da37f5a565b6",
+     "subject": "[PATCH 20/44] [18/32] [sglang-miles] Add /pull_weights: engine-side",
+     "date": "Tue, 7 Jul 2026 08:13:19 +0000"
+    },
+    {
+     "sha": "e6360f024052d2b05636f262ba6e86ad294a003c",
+     "subject": "[PATCH 21/44] [19/32] [sglang-miles] Nemotron hybrid metadata and",
+     "date": "Tue, 4 Aug 2026 05:05:18 +0000"
+    },
+    {
+     "sha": "d2fc909aae8d9b0f8bc866e89f588cdf3cbdabb5",
+     "subject": "[PATCH 22/44] [20/32] [sglang-miles] RDT/NIXL weight sync for Ray",
+     "date": "Tue, 9 Jun 2026 23:16:35 +0000"
+    },
+    {
+     "sha": "d1b0ae27571d67476f06cf4ffba16ea319fb4158",
+     "subject": "[PATCH 23/44] [21/32] [sglang-miles] args: drop DeepseekV4 from the",
+     "date": "2026-08-26T18:08:33Z"
+    },
+    {
+     "sha": "0946f89221260cf91cd75967a465545b3d7eb781",
+     "subject": "[PATCH 24/44] [22/32] [sglang-miles] Add SGLANG_DISABLE_MULTIMEM_AG",
+     "date": "2026-08-23T21:25:49Z"
+    },
+    {
+     "sha": "4312f178c1ca6e6034397de993d11d7f537fab58",
+     "subject": "[PATCH 25/44] [23/32] [sglang-miles] Extract Anthropic conversion",
+     "date": "2026-08-11T19:49:39Z"
+    },
+    {
+     "sha": "9e1f55033abd381aa7e6abfe9be3a68cc1eabef7",
+     "subject": "[PATCH 26/44] [24/32] [sglang-miles] Exclude derived sincos and MRoPE",
+     "date": "Wed, 2 Sep 2026 20:04:49 +0000"
+    },
+    {
+     "sha": "4f88adb3578d9dc1d9115d7d043c7102c59b79fd",
+     "subject": "[PATCH 27/44] [25/32] [sglang-miles] fix(qwen3_5): let the GDN gated",
+     "date": "Fri, 4 Sep 2026 07:27:39 +0000"
+    },
+    {
+     "sha": "2ac868be27b133e47f1c6a2a661167d1b496c11a",
+     "subject": "[PATCH 28/44] [26/32] [sglang-miles] Compare MXFP4 Marlin experts in",
+     "date": "2026-09-17T21:19:48Z"
+    },
+    {
+     "sha": "1139a6d77a85caaac29615936e1d303d16980623",
+     "subject": "[PATCH 29/44] [27/32] [sglang-miles] Kimi K3 LoRA, fused shared",
+     "date": "Thu, 3 Sep 2026 00:12:11 +0000"
+    },
+    {
+     "sha": "97586dc5938a4ae06e4b506483b84f00a5d64fda",
+     "subject": "[PATCH 30/44] [28/32] [sglang-miles] Resolve HF LoRA targets through",
+     "date": "2026-09-18T21:56:09Z"
+    },
+    {
+     "sha": "9a459031679238b053feb1be78d86eb3d06f2295",
+     "subject": "[PATCH 31/44] [29/32] [sglang-miles] Flush and synchronize hybrid",
+     "date": "2026-09-23T01:45:37Z"
+    },
+    {
+     "sha": "aea827bec6be81a7d510bdc5b8105b0221b2a085",
+     "subject": "[PATCH 32/44] [30/32] [sglang-miles] H3 rollout trajectories,",
+     "date": "2026-08-20T02:20:03Z"
+    },
+    {
+     "sha": "8035002c4ed0360579004791378e5b7d1740503b",
+     "subject": "[PATCH 33/44] [31/32] [sglang-miles] MiMo colocated RL loaders,",
+     "date": "2026-09-21T22:40:43Z"
+    },
+    {
+     "sha": "6c94e57f9ff5b84ba9746f5983ff13ce7e84c68b",
+     "subject": "[PATCH 34/44] [32/32] [sglang-miles] fix: initialize Inkling safely",
+     "date": "2026-08-30T07:14:35Z"
+    },
+    {
+     "sha": "2b7313dc21a57251f568553247d36d78e585a614",
+     "subject": "[PATCH 35/44] [sglang-miles] Allocate packed weight receive buffers",
+     "date": "Fri, 2 Oct 2026 16:25:36 -0700"
+    },
+    {
+     "sha": "258bc1a8d928925dc82654470240417e9ab09d77",
+     "subject": "[PATCH 36/44] [sglang-miles] Fix Kimi-K3 weight reloads after graph",
+     "date": "Sat, 3 Oct 2026 13:27:01 -0400"
+    },
+    {
+     "sha": "48214466d9297be79771bb02e5353a26634b35ff",
+     "subject": "[PATCH 37/44] [cherrypick from #42332] [diffusion] fix: report the",
+     "date": "Sun, 4 Oct 2026 13:05:34 -0700"
+    },
+    {
+     "sha": "f19dcfb124ec33442029eb5fe8c4c6cf5950af30",
+     "subject": "[PATCH 38/44] [sglang-miles] [diffusion] fix: give the scheduler its",
+     "date": "Sun, 4 Oct 2026 13:06:38 -0700"
+    },
+    {
+     "sha": "b84bec5761a6cdc8b1df86b9b89ead80a7a9bb02",
+     "subject": "[PATCH 39/44] [sglang-miles] Fix the bf16 triton MoE path and mhc_pre",
+     "date": "Wed, 7 Oct 2026 15:10:31 -0700"
+    },
+    {
+     "sha": "d186cc8dfa3327d433abb25a8a72a9bd43471f6a",
+     "subject": "[PATCH 40/44] [sglang-miles] Return sampling masks for chain",
+     "date": "Thu, 8 Oct 2026 01:46:59 +0000"
+    },
+    {
+     "sha": "527061ea60ee83642113e19f1d3d3f209e81d5a2",
+     "subject": "[PATCH 41/44] Remove documentation changes from sampling-mask PR",
+     "date": "Thu, 8 Oct 2026 02:18:49 +0000"
+    },
+    {
+     "sha": "003ddbce039cd49b05c84568b7b357031366abf7",
+     "subject": "[PATCH 42/44] Simplify speculative mask handling and reuse existing",
+     "date": "Thu, 8 Oct 2026 02:22:02 +0000"
+    },
+    {
+     "sha": "784cdc5882f67faf4f0b905734c8e81a7bdd8979",
+     "subject": "[PATCH 43/44] Preserve speculative sampling behavior when returning",
+     "date": "Thu, 8 Oct 2026 03:29:18 +0000"
+    },
+    {
+     "sha": "0363eeae5b8b89fd4bf001b392b72cb478118578",
+     "subject": "[PATCH 44/44] Trim mask-only diff and consolidate capture regressions",
+     "date": "Thu, 8 Oct 2026 03:32:22 +0000"
+    }
+   ],
+   "changed_files_current_head": [
+    "python/pyproject.toml",
+    "python/pyproject_cpu.toml",
+    "python/pyproject_npu.toml",
+    "python/pyproject_other.toml",
+    "python/pyproject_xpu.toml",
+    "python/sglang/srt/debug_utils/dumper.py",
+    "test/registered/accuracy/models/test_vlms_mmmu_eval.py",
+    "python/sglang/test/server_fixtures/disaggregation_fixture.py",
+    "python/sglang/srt/arg_groups/attention_hook.py",
+    "python/sglang/srt/arg_groups/choices.py",
+    "python/sglang/srt/arg_groups/fields/exec_.py",
+    "python/sglang/srt/arg_groups/overrides.py",
+    "python/sglang/srt/distributed/communication_op.py",
+    "python/sglang/srt/distributed/parallel_state.py",
+    "python/sglang/srt/layers/activation.py",
+    "python/sglang/srt/layers/attention/vision.py",
+    "python/sglang/srt/layers/layer_boundary/exit.py",
+    "python/sglang/srt/layers/layer_boundary/factories.py",
+    "python/sglang/srt/layers/layernorm.py",
+    "python/sglang/srt/layers/linear.py",
+    "python/sglang/srt/layers/logits_processor.py",
+    "python/sglang/srt/layers/moe/moe_runner/triton_utils/fused_moe.py",
+    "python/sglang/srt/layers/on_policy_utils.py",
+    "python/sglang/srt/layers/rotary_embedding/base.py",
+    "python/sglang/srt/layers/sampler.py",
+    "python/sglang/srt/model_executor/forward_batch_info.py",
+    "python/sglang/srt/model_executor/model_runner.py",
+    "python/sglang/srt/model_executor/runner/decode_cuda_graph_runner.py",
+    "python/sglang/srt/models/qwen2.py",
+    "python/sglang/srt/models/qwen2_moe.py",
+    "python/sglang/srt/models/qwen3.py",
+    "python/sglang/srt/models/qwen3_moe.py",
+    "python/sglang/srt/models/qwen3_vl.py",
+    "python/sglang/srt/models/sdar.py",
+    "python/sglang/srt/models/sdar_moe.py",
+    "python/sglang/srt/models/step3p5.py",
+    "python/sglang/srt/models/utils.py",
+    "python/sglang/srt/multimodal/processors/base_processor.py",
+    "python/sglang/srt/tp_invariant_ops/__init__.py",
+    "python/sglang/srt/tp_invariant_ops/tp_invariant_ops.py",
+    "python/sglang/srt/true_on_policy/__init__.py",
+    "python/sglang/srt/true_on_policy/config.py",
+    "python/sglang/srt/true_on_policy/contracts.py",
+    "python/sglang/srt/true_on_policy/schema.py",
+    "test/manual/layers/test_layernorm.py",
+    "test/registered/e2e/true_on_policy/test_tp_invariant_ops.py",
+    "test/registered/unit/true_on_policy/test_dense_deterministic_math.py",
+    "test/registered/unit/true_on_policy/test_on_policy_wiring.py",
+    "python/sglang/srt/layers/dp_attention.py",
+    "python/sglang/srt/layers/moe/topk.py",
+    "python/sglang/srt/model_executor/runner/prefill_cuda_graph_runner.py",
+    "python/sglang/srt/state_capturer/base.py",
+    "python/sglang/srt/managers/schedule_batch.py",
+    "python/sglang/srt/speculative/eagle_draft_cuda_graph_runner.py",
+    "python/sglang/srt/speculative/eagle_worker_v2.py",
+    "python/sglang/srt/multimodal/processors/qwen_vl.py",
+    "python/sglang/srt/layers/quantization/fp8.py",
+    "python/sglang/srt/disaggregation/prefill.py",
+    "sgl-model-gateway/bindings/python/pyproject.toml",
+    "sgl-model-gateway/bindings/python/src/sglang_router/mini_lb.py",
+    "python/sglang/srt/entrypoints/openai/serving_chat.py",
+    "python/sglang/srt/function_call/core_types.py",
+    "python/sglang/srt/function_call/function_call_parser.py",
+    "python/sglang/srt/function_call/kimik2_detector.py",
+    "python/sglang/srt/models/glm4_moe_lite.py",
+    "python/sglang/kernels/ops/moe/virtual_experts.py",
+    "python/sglang/srt/configs/model_config.py",
+    "python/sglang/srt/lora/backend/base_backend.py",
+    "python/sglang/srt/lora/layers.py",
+    "python/sglang/srt/lora/lora_manager.py",
+    "python/sglang/srt/lora/lora_moe_runners.py",
+    "python/sglang/srt/lora/mem_pool.py",
+    "python/sglang/srt/layers/deep_gemm_wrapper/compile_utils.py",
+    "python/sglang/srt/models/deepseek_v4.py",
+    "python/sglang/srt/entrypoints/EngineBase.py",
+    "python/sglang/srt/entrypoints/engine.py",
+    "python/sglang/srt/entrypoints/http_server.py",
+    "python/sglang/srt/entrypoints/http_server_engine.py",
+    "python/sglang/srt/lora/lora_registry.py",
+    "python/sglang/srt/managers/io_struct.py",
+    "python/sglang/srt/managers/scheduler.py",
+    "python/sglang/srt/managers/scheduler_components/weight_updater.py",
+    "python/sglang/srt/managers/tokenizer_control_mixin.py",
+    "python/sglang/srt/managers/tokenizer_manager.py",
+    "python/sglang/srt/managers/tp_worker.py",
+    "test/registered/rl/test_lora_load_from_tensor.py",
+    "test/registered/unit/lora/test_lora_lease.py",
+    "test/registered/unit/lora/test_lora_staged_publication.py",
+    "test/registered/unit/lora/test_lora_stream_update.py",
+    "test/registered/unit/lora/test_lora_upsert.py",
+    "test/registered/unit/managers/test_abort_request_prefix.py",
+    "test/registered/unit/managers/test_lora_update_result_merge.py",
+    "test/registered/unit/managers/test_msgpack_ipc_roundtrip.py",
+    "python/sglang/srt/entrypoints/engine_info_bootstrap_server.py",
+    "python/sglang/srt/model_executor/model_runner_components/remote_instance_weight_transporter.py",
+    "python/sglang/srt/model_loader/parameter_mapper.py",
+    "python/sglang/srt/models/deepseek_common/deepseek_weight_loader.py",
+    "python/sglang/srt/models/deepseek_nextn.py",
+    "python/sglang/srt/models/deepseek_v2.py",
+    "python/sglang/srt/models/glm4.py",
+    "python/sglang/srt/models/glm4_moe.py",
+    "python/sglang/srt/models/glm4_moe_nextn.py",
+    "python/sglang/srt/models/llama.py",
+    "test/registered/e2e/disaggregation/test_parallelism_context_integration.py",
+    "test/srt/models/test_params_mapping.py",
+    "python/sglang/srt/layers/attention/dsa/dsa_indexer.py",
+    "python/sglang/srt/layers/attention/dsa/dsa_indexer_metadata.py",
+    "python/sglang/srt/layers/attention/dsa/dsa_topk_backend.py",
+    "python/sglang/srt/managers/detokenizer_manager.py",
+    "python/sglang/srt/managers/multi_tokenizer_mixin.py",
+    "python/sglang/srt/managers/scheduler_components/output_streamer.py",
+    "python/sglang/srt/models/deepseek_v4_dspark.py",
+    "python/sglang/srt/models/deepseek_v4_nextn.py",
+    "python/sglang/srt/lora/lora.py",
+    "python/sglang/srt/lora/utils.py",
+    "python/sglang/srt/models/qwen3_5.py",
+    "python/sglang/srt/utils/common.py",
+    "python/sglang/srt/arg_groups/fields/model.py",
+    "python/sglang/srt/weight_sync/local_checkpoint.py",
+    "python/sglang/srt/layers/attention/mamba/mamba2_metadata.py",
+    "python/sglang/srt/models/nemotron_h.py",
+    "python/sglang/srt/arg_groups/pipeline.py",
+    "python/sglang/srt/arg_groups/serving_hook.py",
+    "python/sglang/srt/ray/__init__.py",
+    "python/sglang/srt/ray/engine.py",
+    "python/sglang/srt/ray/http_server.py",
+    "python/sglang/srt/ray/scheduler_actor.py",
+    "python/sglang/srt/server_args.py",
+    "python/sglang/srt/distributed/device_communicators/triton_symm_mem_ag.py",
+    "python/sglang/srt/environ.py",
+    "python/sglang/srt/entrypoints/anthropic/serving.py",
+    "python/sglang/srt/entrypoints/anthropic/utils.py",
+    "test/registered/unit/entrypoints/anthropic/test_utils.py",
+    "python/sglang/srt/layers/rotary_embedding/mrope.py",
+    "python/sglang/srt/models/kimi_k25.py",
+    "python/sglang/srt/models/kimi_k3_vl.py",
+    "python/sglang/srt/models/minicpmv.py",
+    "python/sglang/srt/layers/quantization/marlin_utils.py",
+    "python/sglang/srt/utils/weight_checker.py",
+    "python/sglang/srt/utils/weight_checker_comparator.py",
+    "python/sglang/test/test_marlin_utils.py",
+    "test/registered/e2e/rl/test_weight_checker_mxfp4_marlin.py",
+    "python/sglang/kernels/ops/moe/fused_moe_lora_kernel.py",
+    "python/sglang/srt/arg_groups/field_order.py",
+    "python/sglang/srt/arg_groups/fields/lora.py",
+    "python/sglang/srt/layers/moe/fused_moe_triton/fused_marlin_moe.py",
+    "python/sglang/srt/layers/quantization/marlin_utils_fp4.py",
+    "python/sglang/srt/layers/quantization/mxfp4.py",
+    "python/sglang/srt/lora/lora_moe_runner_marlin.py",
+    "python/sglang/srt/models/kimi_k3.py",
+    "test/registered/e2e/rl/test_mxfp4_marlin_inplace_reload.py",
+    "test/registered/kernels/ops/moe/test_moe_wna16_marlin.py",
+    "test/registered/lora/test_virtual_experts_kernels.py",
+    "test/registered/unit/lora/test_mem_pool_ep_unit.py",
+    "test/registered/unit/lora/test_uno_inactive_lora_batch.py",
+    "python/sglang/srt/arg_groups/model_overrides/qwen3_moe.py",
+    "python/sglang/srt/models/inkling.py",
+    "python/sglang/srt/layers/attention/qsa/mqa.py",
+    "python/sglang/srt/layers/quantization/unquant.py",
+    "test/registered/unit/managers/test_release_memory_flush_order.py",
+    "python/sglang/multimodal_gen/configs/sample/minimax_h3.py",
+    "python/sglang/multimodal_gen/runtime/entrypoints/post_training/io_struct.py",
+    "python/sglang/multimodal_gen/runtime/entrypoints/post_training/request_timing.py",
+    "python/sglang/multimodal_gen/runtime/entrypoints/post_training/rollout_api.py",
+    "python/sglang/multimodal_gen/runtime/entrypoints/post_training/utils.py",
+    "python/sglang/multimodal_gen/runtime/pipelines_core/lora/pipeline.py",
+    "python/sglang/multimodal_gen/runtime/pipelines_core/stages/model_specific_stages/minimax_h3/denoise_loop.py",
+    "python/sglang/multimodal_gen/runtime/pipelines_core/stages/model_specific_stages/minimax_h3/minimax_h3_rollout.py",
+    "python/sglang/multimodal_gen/runtime/pipelines_core/stages/model_specific_stages/minimax_h3/stages/denoising.py",
+    "python/sglang/multimodal_gen/runtime/post_training/rl_dataclasses.py",
+    "python/sglang/multimodal_gen/runtime/post_training/rollout_denoising_mixin.py",
+    "python/sglang/multimodal_gen/runtime/post_training/weights_updater.py",
+    "python/sglang/multimodal_gen/test/unit/test_fused_lora_compose.py",
+    "python/sglang/multimodal_gen/test/unit/test_msgpack_splice.py",
+    "python/sglang/multimodal_gen/test/unit/test_rollout_api.py",
+    "benchmark/kernels/fused_moe_triton/benchmark_sglang_fused_moe_triton.py",
+    "python/sglang/srt/arg_groups/parallel_hook.py",
+    "python/sglang/srt/layers/quantization/mxfp4_marlin_moe.py",
+    "python/sglang/srt/mem_cache/index_key_cache.py",
+    "python/sglang/srt/mem_cache/kv_cache_configurator.py",
+    "python/sglang/srt/mem_cache/swa_memory_pool.py",
+    "python/sglang/srt/models/afmoe.py",
+    "python/sglang/srt/models/bailing_moe.py",
+    "python/sglang/srt/models/bailing_moe_linear.py",
+    "python/sglang/srt/models/dbrx.py",
+    "python/sglang/srt/models/deepseek.py",
+    "python/sglang/srt/models/ernie45_moe_vl.py",
+    "python/sglang/srt/models/exaone_moe.py",
+    "python/sglang/srt/models/granitemoe.py",
+    "python/sglang/srt/models/hunyuan_v3.py",
+    "python/sglang/srt/models/kimi_linear.py",
+    "python/sglang/srt/models/llada2.py",
+    "python/sglang/srt/models/llama4.py",
+    "python/sglang/srt/models/mimo_v2.py",
+    "python/sglang/srt/models/minimax_m2.py",
+    "python/sglang/srt/models/mixtral.py",
+    "python/sglang/srt/models/olmoe.py",
+    "python/sglang/srt/models/phimoe.py",
+    "python/sglang/srt/models/xverse_moe.py",
+    "test/registered/moe/test_triton_fused_moe.py",
+    "test/registered/unit/models/test_mimo_v2_fused_qkv_loader.py",
+    "python/sglang/srt/models/inkling_common/attn.py",
+    "python/sglang/srt/model_executor/model_runner_components/weight_updater.py",
+    "python/sglang/srt/weight_sync/tensor_bucket.py",
+    "test/registered/rl/test_tensor_bucket.py",
+    "python/sglang/multimodal_gen/runtime/launch_server.py",
+    "python/sglang/multimodal_gen/runtime/managers/gpu_worker.py",
+    "python/sglang/multimodal_gen/runtime/managers/scheduler.py",
+    "python/sglang/multimodal_gen/runtime/server_args/server_args.py",
+    "python/sglang/multimodal_gen/runtime/entrypoints/diffusion_generator.py",
+    "python/sglang/multimodal_gen/test/unit/test_ipc_array.py",
+    "python/sglang/kernels/ops/layernorm/mhc.py",
+    "docs/docs/advanced_features/speculative_decoding.mdx",
+    "python/sglang/srt/managers/scheduler_components/batch_result_processor.py",
+    "python/sglang/srt/managers/utils.py",
+    "python/sglang/srt/speculative/eagle_utils.py",
+    "python/sglang/srt/speculative/spec_sampling_mask.py",
+    "test/registered/sampling/test_sampling_mask.py",
+    "test/registered/unit/managers/test_auxiliary_output.py",
+    "test/registered/unit/managers/test_batch_result_processor_hidden_states.py",
+    "test/registered/unit/managers/test_output_streamer_customized_info.py",
+    "test/registered/unit/spec/test_spec_sampling_mask.py"
+   ],
+   "analysis_current_design": "[sglang-miles] Return sampling masks for chain EAGLE/NEXTN decoding 仍为 draft，base 为 sglang-miles，分支相对 main 有 218 文件（含整分支 diff）。本期时间线无实质事件，仅作为 branch 背景列出。",
+   "npu": "不适用：目标分支不是 main，不能据此判断 main 或 Ascend 能力。",
+   "validation": "无本期验证证据。",
+   "evidence": "本 JSON 的 events / commits / changed_files_current_head 为结构化证据；扫描脚本与说明见仓库内 RL-feature/_scan-2026-10-30/README.md，原始 patch 与 API 缓存只保留在本地工作区（未入库）。"
+  }
+ ],
+ "non_substantive_followup": [
+  {
+   "number": 41955,
+   "title": "[Sampling] Default to top_k_first and expose filtering order",
+   "state": "open",
+   "note": "目标分支 sampling-top-k-first，不能当 main 独立落地"
+  },
+  {
+   "number": 41957,
+   "title": "[Perf] Fuse compact top_k_first probability construction",
+   "state": "open",
+   "note": "同属 top_k_first 分支线，本期仅背景"
+  },
+  {
+   "number": 43346,
+   "title": "[Sampler] Sort only the max(top_k) leading columns in the torch sampler",
+   "state": "merged",
+   "note": "本期无实质事件"
+  },
+  {
+   "number": 46481,
+   "title": "[Chore] ci: Update test est_time values",
+   "state": "merged",
+   "note": "唯一触及 test_sampling_mask.py 的 main 提交，仅时序"
+  }
+ ],
+ "limitations": [
+  "当前 diff 与正文只描述采集时 head，不是完整源码快照",
+  "force-push 可能移除旧提交；patch/commits 只反映当前 head 可达提交，timeline 保留可见事件",
+  "评论中的测试与性能数字均为作者报告，本次未运行 GPU/NPU 或模型测试",
+  "相关度由主代理判断，完整候选与排除记录见本 JSON 的 candidate_decisions",
+  "main 在本窗口内没有 sampling-mask 功能合入；唯一触及 mask 测试文件的 main 提交仅调整 CI est_time"
+ ],
+ "scan_coverage": {
+  "baseline_prs": 143,
+  "baseline_with_window_activity": 9,
+  "candidate_total": 18,
+  "candidate_prs": 18,
+  "candidate_issues": 0,
+  "featured_records": 9,
+  "discovered_items": 1563,
+  "discovered_prs": 1460,
+  "discovered_issues": 103,
+  "search_queries": 25,
+  "per_repository": {
+   "sgl-project/sglang": {
+    "baseline_prs": 143,
+    "baseline_with_window_activity": 9,
+    "candidate_total": 18,
+    "discovered_items": 1563,
+    "discovered_prs": 1460,
+    "discovered_issues": 103,
+    "search_queries": 25,
+    "commits_scanned_in_window": 552,
+    "main_sha": "0f3f619850f222b4f238ff3d336926e99a2a5c56"
+   }
+  }
+ },
+ "query_indexes": [
+  {
+   "kind": "issues_search",
+   "repo": "sgl-project/sglang",
+   "query": "repo:sgl-project/sglang \"hidden states\" updated:>=2026-10-23",
+   "total": 116,
+   "returned": 116,
+   "cutoff_utc": "2026-10-23T02:05:41Z"
+  },
+  {
+   "kind": "issues_search",
+   "repo": "sgl-project/sglang",
+   "query": "repo:sgl-project/sglang \"hidden state\" updated:>=2026-10-23",
+   "total": 57,
+   "returned": 57,
+   "cutoff_utc": "2026-10-23T02:05:41Z"
+  },
+  {
+   "kind": "issues_search",
+   "repo": "sgl-project/sglang",
+   "query": "repo:sgl-project/sglang \"hidden-state\" updated:>=2026-10-23",
+   "total": 57,
+   "returned": 57,
+   "cutoff_utc": "2026-10-23T02:05:41Z"
+  },
+  {
+   "kind": "issues_search",
+   "repo": "sgl-project/sglang",
+   "query": "repo:sgl-project/sglang hidden_states updated:>=2026-10-23",
+   "total": 38,
+   "returned": 38,
+   "cutoff_utc": "2026-10-23T02:05:41Z"
+  },
+  {
+   "kind": "issues_search",
+   "repo": "sgl-project/sglang",
+   "query": "repo:sgl-project/sglang return_hidden_states updated:>=2026-10-23",
+   "total": 1,
+   "returned": 1,
+   "cutoff_utc": "2026-10-23T02:05:41Z"
+  },
+  {
+   "kind": "issues_search",
+   "repo": "sgl-project/sglang",
+   "query": "repo:sgl-project/sglang aux_hidden_states updated:>=2026-10-23",
+   "total": 1,
+   "returned": 1,
+   "cutoff_utc": "2026-10-23T02:05:41Z"
+  },
+  {
+   "kind": "issues_search",
+   "repo": "sgl-project/sglang",
+   "query": "repo:sgl-project/sglang extract_hidden_states updated:>=2026-10-23",
+   "total": 0,
+   "returned": 0,
+   "cutoff_utc": "2026-10-23T02:05:41Z"
+  },
+  {
+   "kind": "issues_search",
+   "repo": "sgl-project/sglang",
+   "query": "repo:sgl-project/sglang \"aux hidden\" updated:>=2026-10-23",
+   "total": 17,
+   "returned": 17,
+   "cutoff_utc": "2026-10-23T02:05:41Z"
+  },
+  {
+   "kind": "issues_search",
+   "repo": "sgl-project/sglang",
+   "query": "repo:sgl-project/sglang \"forward observer\" updated:>=2026-10-23",
+   "total": 4,
+   "returned": 4,
+   "cutoff_utc": "2026-10-23T02:05:41Z"
+  },
+  {
+   "kind": "issues_search",
+   "repo": "sgl-project/sglang",
+   "query": "repo:sgl-project/sglang \"sampling mask\" updated:>=2026-10-23",
+   "total": 29,
+   "returned": 29,
+   "cutoff_utc": "2026-10-23T02:05:41Z"
+  },
+  {
+   "kind": "issues_search",
+   "repo": "sgl-project/sglang",
+   "query": "repo:sgl-project/sglang sampling_mask updated:>=2026-10-23",
+   "total": 1,
+   "returned": 1,
+   "cutoff_utc": "2026-10-23T02:05:41Z"
+  },
+  {
+   "kind": "issues_search",
+   "repo": "sgl-project/sglang",
+   "query": "repo:sgl-project/sglang \"sample mask\" updated:>=2026-10-23",
+   "total": 26,
+   "returned": 26,
+   "cutoff_utc": "2026-10-23T02:05:41Z"
+  },
+  {
+   "kind": "issues_search",
+   "repo": "sgl-project/sglang",
+   "query": "repo:sgl-project/sglang sample_mask updated:>=2026-10-23",
+   "total": 0,
+   "returned": 0,
+   "cutoff_utc": "2026-10-23T02:05:41Z"
+  },
+  {
+   "kind": "issues_search",
+   "repo": "sgl-project/sglang",
+   "query": "repo:sgl-project/sglang return_sampling_mask updated:>=2026-10-23",
+   "total": 2,
+   "returned": 2,
+   "cutoff_utc": "2026-10-23T02:05:41Z"
+  },
+  {
+   "kind": "issues_search",
+   "repo": "sgl-project/sglang",
+   "query": "repo:sgl-project/sglang \"top-p mask\" updated:>=2026-10-23",
+   "total": 2,
+   "returned": 2,
+   "cutoff_utc": "2026-10-23T02:05:41Z"
+  },
+  {
+   "kind": "issues_search",
+   "repo": "sgl-project/sglang",
+   "query": "repo:sgl-project/sglang \"top-k mask\" updated:>=2026-10-23",
+   "total": 19,
+   "returned": 19,
+   "cutoff_utc": "2026-10-23T02:05:41Z"
+  },
+  {
+   "kind": "issues_search",
+   "repo": "sgl-project/sglang",
+   "query": "repo:sgl-project/sglang \"mask capture\" updated:>=2026-10-23",
+   "total": 17,
+   "returned": 17,
+   "cutoff_utc": "2026-10-23T02:05:41Z"
+  },
+  {
+   "kind": "issues_search",
+   "repo": "sgl-project/sglang",
+   "query": "repo:sgl-project/sglang label:\"RFC\" updated:>=2026-10-23",
+   "total": 1,
+   "returned": 1,
+   "cutoff_utc": "2026-10-23T02:05:41Z"
+  },
+  {
+   "kind": "issues_search",
+   "repo": "sgl-project/sglang",
+   "query": "repo:sgl-project/sglang label:\"rfc\" updated:>=2026-10-23",
+   "total": 1,
+   "returned": 1,
+   "cutoff_utc": "2026-10-23T02:05:41Z"
+  },
+  {
+   "kind": "issues_search",
+   "repo": "sgl-project/sglang",
+   "query": "repo:sgl-project/sglang is:pr created:2026-10-23..2026-10-26",
+   "total": 704,
+   "returned": 704,
+   "cutoff_utc": "2026-10-23T02:05:41Z"
+  },
+  {
+   "kind": "issues_search",
+   "repo": "sgl-project/sglang",
+   "query": "repo:sgl-project/sglang is:issue created:2026-10-23..2026-10-26",
+   "total": 48,
+   "returned": 48,
+   "cutoff_utc": "2026-10-23T02:05:41Z"
+  },
+  {
+   "kind": "issues_search",
+   "repo": "sgl-project/sglang",
+   "query": "repo:sgl-project/sglang is:pr created:2026-10-26..2026-10-29",
+   "total": 808,
+   "returned": 808,
+   "cutoff_utc": "2026-10-23T02:05:41Z"
+  },
+  {
+   "kind": "issues_search",
+   "repo": "sgl-project/sglang",
+   "query": "repo:sgl-project/sglang is:issue created:2026-10-26..2026-10-29",
+   "total": 58,
+   "returned": 58,
+   "cutoff_utc": "2026-10-23T02:05:41Z"
+  },
+  {
+   "kind": "issues_search",
+   "repo": "sgl-project/sglang",
+   "query": "repo:sgl-project/sglang is:pr created:2026-10-29..2026-10-31",
+   "total": 194,
+   "returned": 194,
+   "cutoff_utc": "2026-10-23T02:05:41Z"
+  },
+  {
+   "kind": "issues_search",
+   "repo": "sgl-project/sglang",
+   "query": "repo:sgl-project/sglang is:issue created:2026-10-29..2026-10-31",
+   "total": 13,
+   "returned": 13,
+   "cutoff_utc": "2026-10-23T02:05:41Z"
+  },
+  {
+   "kind": "local_git_commit_scan",
+   "repo": "sglang",
+   "window_start": "2026-10-23T02:05:41Z",
+   "head_sha": "0f3f619850f222b4f238ff3d336926e99a2a5c56",
+   "commits_in_window": 552,
+   "keyword_matched_commits": [
+    "283080803030",
+    "1b16e2aa6a9f",
+    "4a58dc983825",
+    "e732f5d41e9d",
+    "fb40bdcff3b5",
+    "a9bf8c76a011",
+    "6623ea445a28",
+    "d0f517168dff",
+    "79e5c4bb9b43"
+   ]
+  }
+ ],
+ "tracked_baseline_audit": [
+  {
+   "repository": "sgl-project/sglang",
+   "number": 2820,
+   "title": "[draft] Adding hidden state support",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": null,
+   "updated_at": "2025-01-09T21:47:26Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 3364,
+   "title": "[Feat] return hidden states",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": "2025-02-10T23:54:37Z",
+   "updated_at": "2025-02-24T23:36:33Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 3688,
+   "title": "split ReplicatedLinear used in MLA prefill computing along hidden_states[0] to save duplicated computing on all devices",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": null,
+   "updated_at": "2025-05-30T08:30:30Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 3897,
+   "title": "Add return hidden state in the native API ",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": "2025-02-27T06:06:54Z",
+   "updated_at": "2025-03-01T16:38:39Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 3985,
+   "title": "Move return_hidden_states to the generate input",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": "2025-03-02T01:51:29Z",
+   "updated_at": "2025-03-02T17:27:27Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 4074,
+   "title": "Add examples for returning hidden states when using the server",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": "2025-03-05T03:31:51Z",
+   "updated_at": "2025-03-05T03:42:20Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 4269,
+   "title": "Fix the output of hidden states after HTTP requests",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": "2025-03-13T21:54:07Z",
+   "updated_at": "2025-03-13T22:57:58Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 6128,
+   "title": "Openai hidden states",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": null,
+   "updated_at": "2025-05-08T19:41:07Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 6137,
+   "title": "Implement `return_hidden_states` for the OpenAI API",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": "2025-05-19T05:30:26Z",
+   "updated_at": "2025-05-19T05:30:26Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 6426,
+   "title": "Fix ci test_openai_server oom caused by return_hidden_states feature",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": null,
+   "updated_at": "2025-05-20T03:08:42Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 6440,
+   "title": "Revert \"Implement `return_hidden_states` for the OpenAI API (#6137)\"",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": "2025-05-20T01:21:30Z",
+   "updated_at": "2025-05-20T21:03:18Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 6551,
+   "title": "[FIX] fix wrong indexing for hidden states when prefix-cache take effect ",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": null,
+   "updated_at": "2025-09-03T11:54:29Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 6605,
+   "title": "Add return_hidden_states for async generate",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": null,
+   "updated_at": "2026-06-10T03:42:59Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 6716,
+   "title": "Open AI API hidden states",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": "2025-06-10T21:37:29Z",
+   "updated_at": "2025-09-14T08:28:51Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 7242,
+   "title": "[PD] Transfer hidden states for mtp when disaggregation",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": "2025-06-19T18:22:48Z",
+   "updated_at": "2025-06-19T18:22:48Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 7329,
+   "title": "[OAI Server Refactor] [ChatCompletions & Completions] Support Return Hidden State",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": "2025-06-21T02:18:53Z",
+   "updated_at": "2025-06-21T02:18:53Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 7507,
+   "title": "feat: add return hidden_states at async generation",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": "2025-06-25T09:10:10Z",
+   "updated_at": "2025-06-25T09:10:10Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 7516,
+   "title": "[PD][Spec] Fix hidden state transfer for spec decode",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": "2025-06-25T07:42:07Z",
+   "updated_at": "2025-06-25T08:27:38Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 7705,
+   "title": "saving hidden_states.clone()",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": "2025-07-05T03:07:42Z",
+   "updated_at": "2025-07-05T03:07:44Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 8214,
+   "title": "feature: return hidden states for customized number of layers to support EAGLE3 offline training",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": null,
+   "updated_at": "2025-07-21T07:33:41Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 8511,
+   "title": "Bug: apply final_hidden_states*=self.routed_scaling_factor at MoE lay…",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": "2025-08-01T07:07:41Z",
+   "updated_at": "2025-08-01T07:07:41Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 8875,
+   "title": "[bugfix] Fix storage of hidden states with \"layernorm before all gather\"",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": null,
+   "updated_at": "2025-08-06T20:29:11Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 9005,
+   "title": "Fuse two kernels of hidden states padding into quantization kernel",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": "2025-08-12T08:20:13Z",
+   "updated_at": "2025-08-12T08:20:14Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 9976,
+   "title": "[BugFix] Fix incorrect hidden_states_tensor in pd disaggregation + eagle",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": "2025-09-17T17:37:14Z",
+   "updated_at": "2025-09-17T17:37:15Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 10228,
+   "title": "Add self.capture_aux_hidden_states For GLM-4.5V",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": "2025-09-14T06:31:55Z",
+   "updated_at": "2025-09-14T06:31:56Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 10546,
+   "title": "Remove duplicate capture_aux_hidden_states assignment",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": null,
+   "updated_at": "2025-11-29T08:08:45Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 10547,
+   "title": "Bug: hidden_states shape mismatch in pd disaggregation when eagle3 is enabled",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": null,
+   "updated_at": "2025-09-17T11:17:53Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 10801,
+   "title": "[PD] Improve eagle acceptance rate by transferring draft model hidden states",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": "2025-10-20T03:52:18Z",
+   "updated_at": "2025-10-20T03:52:19Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 12183,
+   "title": "Option to enable auxiliary hidden capture mode.",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": null,
+   "updated_at": "2026-08-11T08:08:33Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 12798,
+   "title": "Support capturing aux_hidden_states for minimax m2.",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": "2025-11-08T09:54:22Z",
+   "updated_at": "2025-11-14T18:20:02Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 13590,
+   "title": "[Bugfix] Fix hidden state size in EAGLE PD disaggregation buffers",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": "2025-11-21T07:32:41Z",
+   "updated_at": "2026-04-20T09:06:22Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 13868,
+   "title": "[Feature] Add aux and last hidden state dumping for EAGLE",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": null,
+   "updated_at": "2026-06-11T02:51:06Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 14563,
+   "title": "[Spec] Fix hidden_states size mismatch in STANDALONE speculative decoding",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": null,
+   "updated_at": "2026-01-09T09:24:01Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 15485,
+   "title": "Clean `hidden_states_before_norm`",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": "2025-12-20T01:38:46Z",
+   "updated_at": "2025-12-20T01:38:48Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 15614,
+   "title": "fix: main block return hidden states before norm for MiMo v2 flash",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "open",
+   "merged_at": null,
+   "updated_at": "2025-12-25T16:34:18Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 16480,
+   "title": "Bugfix: EagleDraftWorker has not attribute \"eagle_use_aux_hidden_state\"",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": "2026-01-12T12:14:36Z",
+   "updated_at": "2026-01-12T12:14:51Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 16776,
+   "title": "[Fix] Speedup when return_hidden_states=True",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": null,
+   "updated_at": "2026-01-17T12:03:23Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 18500,
+   "title": "[Flashinfer Autotune] Fix FlashInfer FP4 MoE autotuning crash by removing incorrect flatten on hidden_states_scale",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": "2026-02-12T05:31:27Z",
+   "updated_at": "2026-08-25T16:16:15Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 18542,
+   "title": "fix: fixed aux hidden state index out of range when using eagle3 with nsa cp",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": null,
+   "updated_at": "2026-06-12T03:03:42Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 19643,
+   "title": "[BUG] Support tuple hidden_states from fused MXFP4/FP8 quantization",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": "2026-03-03T04:39:06Z",
+   "updated_at": "2026-03-03T21:59:57Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 20834,
+   "title": "[Bugfix] Fix PP proxy tensor corruption with TP+MoE+A2A (skip allgather on scattered hidden states)",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": null,
+   "updated_at": "2026-08-25T01:31:56Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 21424,
+   "title": "[Bugfix] Fix self.hidden_states → buffers.hidden_states in multi-layer eagle CUDA graph runner",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": null,
+   "updated_at": "2026-04-06T21:16:13Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 21434,
+   "title": "[spec decoding] avoid capturing hidden_states when not needed",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": null,
+   "updated_at": "2026-09-14T05:47:33Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 22427,
+   "title": "[Score API] Add return_pooled_hidden_states to Scoring API for SequenceClassification / RewardModel",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": "2026-04-15T21:58:56Z",
+   "updated_at": "2026-04-15T21:58:57Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 22836,
+   "title": "[Speculative] Fix Eagle3/DFLASH aux hidden state capture during CUDA graph init",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": "2026-04-15T21:04:55Z",
+   "updated_at": "2026-04-15T21:04:57Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 23190,
+   "title": "[NPU] add split_qkv_tp_rmsnorm_rope ops for minimax2 & fix eagle3 hidden states capture in dp attn mode",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": "2026-04-30T00:51:23Z",
+   "updated_at": "2026-04-30T00:51:23Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 24780,
+   "title": "[Spec] Introduce `EagleDraftExtendInput`; eliminate hidden_states phase-shift",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": null,
+   "updated_at": "2026-06-14T00:20:16Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 24926,
+   "title": "spec: centralize EagleDraft{,Extend}Input.hidden_states shape",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": "2026-05-11T05:49:20Z",
+   "updated_at": "2026-05-11T05:49:23Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 24939,
+   "title": "spec: Optional spec_info.hidden_states; STANDALONE skips capture",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": "2026-05-12T11:05:42Z",
+   "updated_at": "2026-05-12T11:50:41Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 25037,
+   "title": "spec: STANDALONE skips hidden_states end-to-end (Optional schema + None-safe consumers)",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": "2026-05-12T19:27:22Z",
+   "updated_at": "2026-05-12T19:27:24Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 25155,
+   "title": "[perf] avoid hidden states d2h when return_hidden_states=false",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": "2026-05-14T06:47:18Z",
+   "updated_at": "2026-05-14T06:47:20Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 25343,
+   "title": "[RFC] Pluggable hidden-states transport for spec-training callback (colocate)",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": null,
+   "updated_at": "2026-09-04T01:17:20Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 25651,
+   "title": "[AMD] Guard Qwen3.5 layers against empty hidden states",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": null,
+   "updated_at": "2026-09-05T01:18:54Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 26150,
+   "title": "[Fix] NGRAM spec decode: use `is not None` for hidden_states tensor check",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": null,
+   "updated_at": "2026-06-17T07:08:29Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 26217,
+   "title": "[Fix] Generalize spec-V1 hidden_states slicing to all V1 algorithms (stacked on #26150)",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": null,
+   "updated_at": "2026-09-06T01:23:39Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 26315,
+   "title": "[Fix] Generalize spec-V2 hidden_states slicing (stacked on #26217)",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": null,
+   "updated_at": "2026-09-12T01:18:11Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 26652,
+   "title": "Add EAGLE3 + return_hidden_states regression test",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": null,
+   "updated_at": "2026-09-08T01:21:18Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 26779,
+   "title": "[core] Compute dimensions/return_pooled_hidden_states in ForwardBatch.init_new",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": "2026-05-31T00:38:01Z",
+   "updated_at": "2026-05-31T01:21:11Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 27408,
+   "title": "Return top-p/top-k sampling mask/nucleas",
+   "baseline_topics": [
+    "sampling_mask"
+   ],
+   "state": "closed",
+   "merged_at": "2026-07-13T22:58:52Z",
+   "updated_at": "2026-07-13T22:58:52Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 27540,
+   "title": "[gemma4] Compute RMSNorm in fp32 to fix deep-layer hidden-state divergence vs HF",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": null,
+   "updated_at": "2026-06-12T18:58:13Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 28032,
+   "title": "[Spec] Centralize dummy verify-input capture; add `carries_draft_hidden_states`",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": "2026-06-12T21:23:29Z",
+   "updated_at": "2026-06-12T21:23:31Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 28261,
+   "title": "[Bugfix]Fix Qwen3-VL DFlash aux hidden state capture setup",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": null,
+   "updated_at": "2026-09-16T01:22:33Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 28496,
+   "title": "[Spec] Fix return_hidden_states under spec V2 (issue #26163)",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": "2026-06-17T23:21:37Z",
+   "updated_at": "2026-06-17T23:21:39Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 28498,
+   "title": "[Spec] Add NGRAM hidden_states regression test (stacked on #28496)",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": null,
+   "updated_at": "2026-09-14T05:47:27Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 28526,
+   "title": "[NPU] Quantize bfloat16 hidden_states before npu_grouped_matmul in W4…",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": null,
+   "updated_at": "2026-08-26T01:57:05Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 28577,
+   "title": "[Test] Fold EAGLE `return_hidden_states` regression into spec triton suite",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": "2026-06-17T23:42:03Z",
+   "updated_at": "2026-06-17T23:42:05Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 28956,
+   "title": "Pack aux hidden states into a preallocated buffer",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": "2026-07-28T11:37:18Z",
+   "updated_at": "2026-07-28T11:37:18Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 29015,
+   "title": "Fix EAGLE hidden-state sizing and text prefill CUDA graphs",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": null,
+   "updated_at": "2026-06-24T21:42:09Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 29018,
+   "title": "Fix Eagle draft hidden state shape handling",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": null,
+   "updated_at": "2026-06-24T21:42:07Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 30177,
+   "title": "[Feature] Support return_hidden_states=\"last\"",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": "2026-08-02T07:09:33Z",
+   "updated_at": "2026-08-02T07:09:33Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 31157,
+   "title": "Extract spec aux-hidden-state resolution into a module",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": "2026-07-14T07:59:35Z",
+   "updated_at": "2026-07-14T08:00:50Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 31870,
+   "title": "[lora] Fix WAR race: never write MoE runner output into hidden_states in place",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": "2026-07-24T07:58:55Z",
+   "updated_at": "2026-07-24T07:58:55Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 32057,
+   "title": "[Fix] Preserve caller-owned hidden_states in DeepGemm standard pre-permute",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": null,
+   "updated_at": "2026-10-28T01:09:47Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 32103,
+   "title": "fix(hidden_states): keep prefill offset aligned for non-requesting reqs to stop cross-request leak",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": null,
+   "updated_at": "2026-09-23T01:22:25Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 32108,
+   "title": "Cherry-pick sampling mask support to sglang-miles",
+   "baseline_topics": [
+    "sampling_mask"
+   ],
+   "state": "closed",
+   "merged_at": "2026-07-22T21:10:56Z",
+   "updated_at": "2026-07-22T21:10:57Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 32334,
+   "title": "[Speculative Decoding] Fix GPT-OSS EAGLE3 hidden states",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": "2026-07-31T18:58:49Z",
+   "updated_at": "2026-07-31T18:58:50Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 32410,
+   "title": "Fix flaky test_sampling_mask: mask length can legitimately be top_k + 1",
+   "baseline_topics": [
+    "sampling_mask"
+   ],
+   "state": "closed",
+   "merged_at": "2026-07-25T23:05:58Z",
+   "updated_at": "2026-07-25T23:06:51Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 32422,
+   "title": "[DSpark PD 1/3] Add hidden-state transfer primitives and draft injection",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": null,
+   "updated_at": "2026-08-06T21:31:28Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 32423,
+   "title": "[DSpark PD 2/3] Integrate hidden-state bootstrap into PD scheduling",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": null,
+   "updated_at": "2026-10-09T01:33:56Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 32424,
+   "title": "[DSpark PD 3/3] Implement streaming hidden-state transfer for Mooncake",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": null,
+   "updated_at": "2026-10-09T01:34:27Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 32680,
+   "title": "[Fix] Capture Eagle3/DFlash aux hidden states inside the two-batch-overlap region",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": null,
+   "updated_at": "2026-07-29T20:02:41Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 33444,
+   "title": "[Spec] Fuse aux hidden state capture and support DFLASH with breakable/full prefill CUDA graphs",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "open",
+   "merged_at": null,
+   "updated_at": "2026-08-05T23:14:45Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 33513,
+   "title": "[bugfix] all reduce hidden_states from mlp in last decoder layer for Qwen3NextModel",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "open",
+   "merged_at": null,
+   "updated_at": "2026-08-04T08:28:22Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 33593,
+   "title": "[RL] Expose top-p-only sampling masks",
+   "baseline_topics": [
+    "sampling_mask"
+   ],
+   "state": "closed",
+   "merged_at": "2026-08-14T23:40:28Z",
+   "updated_at": "2026-08-14T23:46:36Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 34037,
+   "title": "[Sampling] Add explicit bounded sampling-mask mode",
+   "baseline_topics": [
+    "sampling_mask"
+   ],
+   "state": "closed",
+   "merged_at": null,
+   "updated_at": "2026-08-20T23:30:43Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 34201,
+   "title": "[RL, Spec] Introduce top-p mask capture for spec and add DFlash/DSpark impl",
+   "baseline_topics": [
+    "sampling_mask"
+   ],
+   "state": "closed",
+   "merged_at": "2026-09-30T20:32:27Z",
+   "updated_at": "2026-09-30T20:32:27Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 34771,
+   "title": "[Spec] Wire DFLASH aux-hidden capture into the Qwen3.5 text-only wrapper",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": "2026-08-15T00:10:10Z",
+   "updated_at": "2026-08-15T00:10:10Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 35205,
+   "title": "[Sampling] Restore finite top-k requirement for sampling masks",
+   "baseline_topics": [
+    "sampling_mask"
+   ],
+   "state": "closed",
+   "merged_at": "2026-08-20T23:55:26Z",
+   "updated_at": "2026-08-20T23:59:53Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 35697,
+   "title": "[Bug] Seeded sampling changes token when a batchmate enables top-k/top-p",
+   "baseline_topics": [
+    "sampling"
+   ],
+   "state": "open",
+   "merged_at": null,
+   "updated_at": "2026-08-20T11:41:47Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 35966,
+   "title": "[Sampling] Capture masks from sampler support",
+   "baseline_topics": [
+    "sampling_mask"
+   ],
+   "state": "closed",
+   "merged_at": null,
+   "updated_at": "2026-08-27T05:56:11Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 36518,
+   "title": "[Sampling] Defer sampling-mask materialization off the decode hot path",
+   "baseline_topics": [
+    "sampling_mask"
+   ],
+   "state": "closed",
+   "merged_at": null,
+   "updated_at": "2026-08-26T16:21:02Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 36540,
+   "title": "Avoid sampling-mask synchronization in decode",
+   "baseline_topics": [
+    "sampling_mask"
+   ],
+   "state": "closed",
+   "merged_at": null,
+   "updated_at": "2026-09-16T15:14:08Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 36629,
+   "title": "[Sampling] Support sampling masks with overlap scheduling",
+   "baseline_topics": [
+    "sampling_mask"
+   ],
+   "state": "closed",
+   "merged_at": null,
+   "updated_at": "2026-08-27T05:54:39Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 36630,
+   "title": "[Sampling] Capture masks from sampler support",
+   "baseline_topics": [
+    "sampling_mask"
+   ],
+   "state": "closed",
+   "merged_at": "2026-09-03T00:13:29Z",
+   "updated_at": "2026-09-15T20:57:14Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 36631,
+   "title": "[Sampling] Support sampling masks with overlap scheduling",
+   "baseline_topics": [
+    "sampling_mask"
+   ],
+   "state": "closed",
+   "merged_at": "2026-09-10T21:52:44Z",
+   "updated_at": "2026-09-15T20:57:18Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 36708,
+   "title": "[DFLASH] Support GLM-5.3-Flash hidden-state capture",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": "2026-08-27T18:23:30Z",
+   "updated_at": "2026-08-27T18:23:30Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 36755,
+   "title": "Fix DFLASH aux hidden-state capture on mHC models",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": "2026-08-28T00:24:34Z",
+   "updated_at": "2026-08-28T00:24:34Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 37531,
+   "title": "[Spec][Fix] Fall back to eager DFlash sampler above graph batch limit",
+   "baseline_topics": [
+    "sampling_mask"
+   ],
+   "state": "open",
+   "merged_at": null,
+   "updated_at": "2026-09-29T03:02:59Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 37873,
+   "title": "[Test] Allow top-k cutoff ties in `test_sampling_mask_matches_topk_logprobs`",
+   "baseline_topics": [
+    "sampling_mask"
+   ],
+   "state": "closed",
+   "merged_at": "2026-09-03T21:13:27Z",
+   "updated_at": "2026-09-03T21:13:29Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 37989,
+   "title": "[Docs] Document --retraction-policy, --return-hidden-states-mode, --language-model-only",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": "2026-09-04T21:26:28Z",
+   "updated_at": "2026-09-07T08:27:28Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 38279,
+   "title": "[Sampling] Allow sampling-mask replay with DisallowedTokensLogitsProcessor",
+   "baseline_topics": [
+    "sampling_mask"
+   ],
+   "state": "closed",
+   "merged_at": "2026-09-07T06:56:17Z",
+   "updated_at": "2026-09-15T20:57:06Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 38565,
+   "title": "[Fix] sampling: deterministic top-p / top-k renorm when tp_size > 1 (TP rank divergence in DFlash/DSpark)",
+   "baseline_topics": [
+    "sampling_mask"
+   ],
+   "state": "open",
+   "merged_at": null,
+   "updated_at": "2026-10-30T01:10:55Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 38642,
+   "title": "[DFLASH] Support Qwen4-Exp hidden-state capture",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "open",
+   "merged_at": null,
+   "updated_at": "2026-10-08T02:56:59Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 39161,
+   "title": "[Bugfix] Preserve complete Gemma speculative hidden-state captures",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": null,
+   "updated_at": "2026-09-12T06:24:33Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 39286,
+   "title": "[Bugfix] Fix Gemma auxiliary hidden-state captures",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "open",
+   "merged_at": null,
+   "updated_at": "2026-09-13T08:31:40Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 39290,
+   "title": "[DeepSeek-V4] Forward auxiliary hidden states across PP stages",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": null,
+   "updated_at": "2026-10-13T01:38:29Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 39443,
+   "title": "[sglang-miles] Backport sampling, session, and PD fixes",
+   "baseline_topics": [
+    "sampling_mask"
+   ],
+   "state": "closed",
+   "merged_at": null,
+   "updated_at": "2026-09-17T16:33:34Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 39644,
+   "title": "[Spec][PP] Reject EAGLE3/DFLASH aux hidden-state capture under pipeline parallelism",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": null,
+   "updated_at": "2026-09-29T04:02:22Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 39776,
+   "title": "[NPU][Bugfix][MiMo-V2.5-Pro] Capture post-final-norm hidden state for the final DFlash aux layer",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": null,
+   "updated_at": "2026-09-18T06:30:24Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 39934,
+   "title": "[Test] [NPU] parameter: Add sampling mask max tokens e2e test",
+   "baseline_topics": [
+    "sampling_mask"
+   ],
+   "state": "open",
+   "merged_at": null,
+   "updated_at": "2026-10-27T08:31:19Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 40332,
+   "title": "fix: transfer native hidden states from prefill to decode",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": null,
+   "updated_at": "2026-09-19T17:07:09Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 40801,
+   "title": "[Fix] Capture complete Nemotron auxiliary hidden states",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": "2026-09-23T21:39:50Z",
+   "updated_at": "2026-09-23T21:41:06Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 40888,
+   "title": "fix(mimo-vl): keep multimodal features when capturing aux hidden states, and correct vision preprocessing",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": "2026-10-06T14:15:15Z",
+   "updated_at": "2026-10-06T14:15:15Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 40932,
+   "title": "[Sampling] Add selected/support sampling logprob modes",
+   "baseline_topics": [
+    "sampling_mask"
+   ],
+   "state": "closed",
+   "merged_at": "2026-09-24T04:38:20Z",
+   "updated_at": "2026-09-24T06:12:11Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 40953,
+   "title": "[PD] Transfer EAGLE draft probabilities for rejection sampling",
+   "baseline_topics": [
+    "sampling_mask"
+   ],
+   "state": "closed",
+   "merged_at": null,
+   "updated_at": "2026-10-22T01:23:46Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 40986,
+   "title": "[Sampling] Stream sampling masks as per-request arrays",
+   "baseline_topics": [
+    "sampling_mask"
+   ],
+   "state": "closed",
+   "merged_at": "2026-09-25T19:20:26Z",
+   "updated_at": "2026-09-25T19:23:19Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 41047,
+   "title": "[cherrypick from #40932] [Sampling] Add selected/support sampling logprob modes",
+   "baseline_topics": [
+    "sampling_mask"
+   ],
+   "state": "closed",
+   "merged_at": "2026-09-24T05:43:51Z",
+   "updated_at": "2026-09-24T06:12:19Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 41080,
+   "title": "[Fix] Complete the deferred FFN all-reduce before deepstack addition and aux hidden-state capture",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": "2026-09-24T19:14:39Z",
+   "updated_at": "2026-09-24T19:15:58Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 41205,
+   "title": "[Sampling] Write /generate sampling masks from numpy rows",
+   "baseline_topics": [
+    "sampling_mask"
+   ],
+   "state": "closed",
+   "merged_at": null,
+   "updated_at": "2026-10-24T01:24:49Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 41235,
+   "title": "[PD] Keep the sampling mask of a replayed rebootstrap token",
+   "baseline_topics": [
+    "sampling_mask"
+   ],
+   "state": "closed",
+   "merged_at": "2026-09-28T19:02:28Z",
+   "updated_at": "2026-09-28T19:03:06Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 41270,
+   "title": "[cherrypick from #40986] [Sampling] Stream sampling masks as per-request arrays",
+   "baseline_topics": [
+    "sampling_mask"
+   ],
+   "state": "closed",
+   "merged_at": "2026-09-26T13:40:36Z",
+   "updated_at": "2026-09-27T00:08:03Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 41271,
+   "title": "[cherrypick from #41235] [PD] Keep the sampling mask of a replayed rebootstrap token",
+   "baseline_topics": [
+    "sampling_mask"
+   ],
+   "state": "closed",
+   "merged_at": "2026-09-26T13:48:31Z",
+   "updated_at": "2026-09-26T13:48:31Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 41448,
+   "title": "[AMD][DeepSeek-V4.1] Fix server crash on prompt-logprob and hidden-state requests under decoder SWA bounded replay",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": null,
+   "updated_at": "2026-10-17T08:33:53Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 41916,
+   "title": "[Fix] sampling: Make top-k/top-p filtering consistent across sampling paths",
+   "baseline_topics": [
+    "sampling_mask"
+   ],
+   "state": "open",
+   "merged_at": null,
+   "updated_at": "2026-10-30T00:23:25Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 41954,
+   "title": "[Sampling] Align regular decoding with `top_k_first`",
+   "baseline_topics": [
+    "sampling_mask"
+   ],
+   "state": "closed",
+   "merged_at": null,
+   "updated_at": "2026-09-30T23:28:56Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 41955,
+   "title": "[Sampling] Default to `top_k_first` and expose filtering order",
+   "baseline_topics": [
+    "sampling_mask"
+   ],
+   "state": "open",
+   "merged_at": null,
+   "updated_at": "2026-10-02T23:17:51Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 41957,
+   "title": "[Perf] Fuse compact `top_k_first` probability construction",
+   "baseline_topics": [
+    "sampling_mask"
+   ],
+   "state": "open",
+   "merged_at": null,
+   "updated_at": "2026-09-30T23:57:11Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 42352,
+   "title": "[RL] Return replay outputs through a Mooncake output store",
+   "baseline_topics": [
+    "sampling"
+   ],
+   "state": "closed",
+   "merged_at": null,
+   "updated_at": "2026-10-03T06:29:45Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 42647,
+   "title": "[Feat] RL: Add radix transfer plugins",
+   "baseline_topics": [
+    "sampling"
+   ],
+   "state": "closed",
+   "merged_at": "2026-10-23T06:17:53Z",
+   "updated_at": "2026-10-23T06:17:55Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 42802,
+   "title": "[Speculative] Capture reusable verification sampling in CUDA graphs",
+   "baseline_topics": [
+    "sampling_mask"
+   ],
+   "state": "open",
+   "merged_at": null,
+   "updated_at": "2026-10-06T20:42:48Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 43044,
+   "title": "[sglang-miles] Return sampling masks for chain EAGLE/NEXTN decoding",
+   "baseline_topics": [
+    "sampling_mask"
+   ],
+   "state": "closed",
+   "merged_at": null,
+   "updated_at": "2026-10-08T03:44:00Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 43047,
+   "title": "[sglang-miles] Return sampling masks for chain EAGLE/NEXTN decoding",
+   "baseline_topics": [
+    "sampling_mask"
+   ],
+   "state": "open",
+   "merged_at": null,
+   "updated_at": "2026-10-17T00:28:52Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 43346,
+   "title": "[Sampler] Sort only the max(top_k) leading columns in the torch sampler",
+   "baseline_topics": [
+    "sampling_mask"
+   ],
+   "state": "closed",
+   "merged_at": "2026-10-11T08:01:00Z",
+   "updated_at": "2026-10-11T08:01:00Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 43449,
+   "title": "[Feat] spec: Capture aux hidden states on the target without a speculative draft",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": "2026-10-26T23:18:44Z",
+   "updated_at": "2026-10-26T23:18:45Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 43450,
+   "title": "[Feat] scheduler: Add forward observer and deferred responses for plugins",
+   "baseline_topics": [
+    "sampling"
+   ],
+   "state": "closed",
+   "merged_at": "2026-10-27T20:37:13Z",
+   "updated_at": "2026-10-27T20:37:13Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 43502,
+   "title": "[Fix] DSv4.1: Size the encoder-replay SWA pool by the DSpark draft's stages, and keep more prefix tails",
+   "baseline_topics": [
+    "sampling"
+   ],
+   "state": "merged",
+   "merged_at": "2026-10-15T05:04:59Z",
+   "updated_at": "2026-10-10T06:23:19Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 43517,
+   "title": "[Feat] [NPU] sampling: Add sampling-mask support for Ascend",
+   "baseline_topics": [
+    "sampling"
+   ],
+   "state": "open",
+   "merged_at": null,
+   "updated_at": "2026-10-29T06:30:56Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 43744,
+   "title": "[Feat] spec: Add aux hidden-state capture for Granite and GraniteMoe targets",
+   "baseline_topics": [
+    "sampling"
+   ],
+   "state": "open",
+   "merged_at": null,
+   "updated_at": "2026-10-12T02:18:27Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 43854,
+   "title": "Fix autograd retention in CUDA graph capture tail hooks",
+   "baseline_topics": [
+    "sampling"
+   ],
+   "state": "merged",
+   "merged_at": "2026-10-12T19:31:19Z",
+   "updated_at": "2026-10-12T12:13:04Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 44568,
+   "title": "[Perf] [NVIDIA] scheduler: Pageable host staging and inline hidden-state/DSpark readback under Confidential Computing",
+   "baseline_topics": [
+    "sampling"
+   ],
+   "state": "merged",
+   "merged_at": "2026-10-16T00:48:50Z",
+   "updated_at": "2026-10-15T19:44:32Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 44850,
+   "title": "[Fix] deepseek-v4.1: Serve prompt-logprob requests under decoder SWA bounded replay",
+   "baseline_topics": [
+    "sampling"
+   ],
+   "state": "merged",
+   "merged_at": "2026-10-17T08:25:34Z",
+   "updated_at": "2026-10-17T04:28:29Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 45096,
+   "title": "[Perf] DSv4/DSv4.1: Skip the pre_hc_head CP gather when DSpark captures aux hidden states",
+   "baseline_topics": [
+    "sampling"
+   ],
+   "state": "open",
+   "merged_at": null,
+   "updated_at": "2026-10-19T05:25:08Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 45142,
+   "title": "[Fix] qwen4_exp: Capture DFlash aux hidden states on Qwen3.8-Flash-Next",
+   "baseline_topics": [
+    "sampling"
+   ],
+   "state": "open",
+   "merged_at": null,
+   "updated_at": "2026-10-19T08:58:17Z",
+   "in_window_activity": false
+  }
+ ],
+ "candidate_decisions": [
+  {
+   "repository": "sgl-project/sglang",
+   "number": 47366,
+   "kind": "pr",
+   "title": "[Fix] disaggregation: Keep output ids during a PD rebootstrap instead of popping and replaying the last one",
+   "decision": "背景/边缘/无实质活动",
+   "reason": "按实际代码相关性和本期事件筛选；不将通用模型内部 hidden 张量使用、池化/嵌入任务、仅引用或纯 CI/时序调整计为输出接口新增",
+   "url": "https://github.com/sgl-project/sglang/pull/47366",
+   "state": "open",
+   "updated_at": "2026-10-30T02:11:41Z"
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 47147,
+   "kind": "pr",
+   "title": "[Fix] layernorm: Keep weightless RMSNorm's weight as a buffer so it survives memory release",
+   "decision": "背景/边缘/无实质活动",
+   "reason": "按实际代码相关性和本期事件筛选；不将通用模型内部 hidden 张量使用、池化/嵌入任务、仅引用或纯 CI/时序调整计为输出接口新增",
+   "url": "https://github.com/sgl-project/sglang/pull/47147",
+   "state": "open",
+   "updated_at": "2026-10-28T22:22:17Z"
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 47072,
+   "kind": "pr",
+   "title": "[Feat] scheduler: Add typed per-token and per-request customized_info values",
+   "decision": "背景/边缘/无实质活动",
+   "reason": "按实际代码相关性和本期事件筛选；不将通用模型内部 hidden 张量使用、池化/嵌入任务、仅引用或纯 CI/时序调整计为输出接口新增",
+   "url": "https://github.com/sgl-project/sglang/pull/47072",
+   "state": "closed",
+   "updated_at": "2026-10-29T18:01:37Z"
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 46232,
+   "kind": "pr",
+   "title": "[Perf] dsv41: Run MegaGate routing in prefill",
+   "decision": "背景/边缘/无实质活动",
+   "reason": "按实际代码相关性和本期事件筛选；不将通用模型内部 hidden 张量使用、池化/嵌入任务、仅引用或纯 CI/时序调整计为输出接口新增",
+   "url": "https://github.com/sgl-project/sglang/pull/46232",
+   "state": "closed",
+   "updated_at": "2026-10-24T03:33:21Z"
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 46186,
+   "kind": "pr",
+   "title": "[Perf] spec: radix top-k for speculative verify target probabilities",
+   "decision": "纳入主代理核心判断",
+   "reason": "按实际代码相关性和本期事件筛选；不将通用模型内部 hidden 张量使用、池化/嵌入任务、仅引用或纯 CI/时序调整计为输出接口新增",
+   "url": "https://github.com/sgl-project/sglang/pull/46186",
+   "state": "open",
+   "updated_at": "2026-10-24T00:15:36Z"
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 46110,
+   "kind": "pr",
+   "title": "[Perf] diffusion: Cut LTX-2.3 per-block elementwise work (contiguous AdaLN values, gate-folded masks, vectorized head gate)",
+   "decision": "背景/边缘/无实质活动",
+   "reason": "按实际代码相关性和本期事件筛选；不将通用模型内部 hidden 张量使用、池化/嵌入任务、仅引用或纯 CI/时序调整计为输出接口新增",
+   "url": "https://github.com/sgl-project/sglang/pull/46110",
+   "state": "closed",
+   "updated_at": "2026-10-27T12:04:00Z"
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 46080,
+   "kind": "pr",
+   "title": "[Perf] DFLASH: Verify top-k sampled batches on the all-gathered top-k support (opt-in)",
+   "decision": "纳入主代理核心判断",
+   "reason": "按实际代码相关性和本期事件筛选；不将通用模型内部 hidden 张量使用、池化/嵌入任务、仅引用或纯 CI/时序调整计为输出接口新增",
+   "url": "https://github.com/sgl-project/sglang/pull/46080",
+   "state": "open",
+   "updated_at": "2026-10-27T09:30:28Z"
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 46049,
+   "kind": "pr",
+   "title": "[Fix] grammar: Give grammar accept failures an error status",
+   "decision": "背景/边缘/无实质活动",
+   "reason": "按实际代码相关性和本期事件筛选；不将通用模型内部 hidden 张量使用、池化/嵌入任务、仅引用或纯 CI/时序调整计为输出接口新增",
+   "url": "https://github.com/sgl-project/sglang/pull/46049",
+   "state": "closed",
+   "updated_at": "2026-10-26T09:48:45Z"
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 43898,
+   "kind": "pr",
+   "title": "[Scheduler] Run the pipeline micro-batch ring on the in-flight step queue",
+   "decision": "背景/边缘/无实质活动",
+   "reason": "按实际代码相关性和本期事件筛选；不将通用模型内部 hidden 张量使用、池化/嵌入任务、仅引用或纯 CI/时序调整计为输出接口新增",
+   "url": "https://github.com/sgl-project/sglang/pull/43898",
+   "state": "open",
+   "updated_at": "2026-10-30T00:33:38Z"
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 43896,
+   "kind": "pr",
+   "title": "[Refactor] scheduler: Write every request finish state through Req methods",
+   "decision": "背景/边缘/无实质活动",
+   "reason": "按实际代码相关性和本期事件筛选；不将通用模型内部 hidden 张量使用、池化/嵌入任务、仅引用或纯 CI/时序调整计为输出接口新增",
+   "url": "https://github.com/sgl-project/sglang/pull/43896",
+   "state": "closed",
+   "updated_at": "2026-10-30T00:29:30Z"
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 43517,
+   "kind": "pr",
+   "title": "[Feat] [NPU] sampling: Add sampling-mask support for Ascend",
+   "decision": "纳入主代理核心判断",
+   "reason": "按实际代码相关性和本期事件筛选；不将通用模型内部 hidden 张量使用、池化/嵌入任务、仅引用或纯 CI/时序调整计为输出接口新增",
+   "url": "https://github.com/sgl-project/sglang/pull/43517",
+   "state": "open",
+   "updated_at": "2026-10-29T06:30:56Z"
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 42647,
+   "kind": "pr",
+   "title": "[Feat] RL: Add radix transfer plugins",
+   "decision": "纳入主代理核心判断",
+   "reason": "按实际代码相关性和本期事件筛选；不将通用模型内部 hidden 张量使用、池化/嵌入任务、仅引用或纯 CI/时序调整计为输出接口新增",
+   "url": "https://github.com/sgl-project/sglang/pull/42647",
+   "state": "closed",
+   "updated_at": "2026-10-23T06:17:55Z"
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 41230,
+   "kind": "pr",
+   "title": "[Fix] [Apple] mlx: reject output logprobs without sampling",
+   "decision": "背景/边缘/无实质活动",
+   "reason": "按实际代码相关性和本期事件筛选；不将通用模型内部 hidden 张量使用、池化/嵌入任务、仅引用或纯 CI/时序调整计为输出接口新增",
+   "url": "https://github.com/sgl-project/sglang/pull/41230",
+   "state": "open",
+   "updated_at": "2026-10-23T14:37:33Z"
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 41205,
+   "kind": "pr",
+   "title": "[Sampling] Write /generate sampling masks from numpy rows",
+   "decision": "纳入主代理核心判断",
+   "reason": "按实际代码相关性和本期事件筛选；不将通用模型内部 hidden 张量使用、池化/嵌入任务、仅引用或纯 CI/时序调整计为输出接口新增",
+   "url": "https://github.com/sgl-project/sglang/pull/41205",
+   "state": "closed",
+   "updated_at": "2026-10-24T01:24:49Z"
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 41111,
+   "kind": "pr",
+   "title": "Sampler: gather sampled-token logprobs before log",
+   "decision": "背景/边缘/无实质活动",
+   "reason": "按实际代码相关性和本期事件筛选；不将通用模型内部 hidden 张量使用、池化/嵌入任务、仅引用或纯 CI/时序调整计为输出接口新增",
+   "url": "https://github.com/sgl-project/sglang/pull/41111",
+   "state": "closed",
+   "updated_at": "2026-10-23T01:27:56Z"
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 41050,
+   "kind": "pr",
+   "title": "Fuse temperature scaling and softmax in the flashinfer sampler path",
+   "decision": "背景/边缘/无实质活动",
+   "reason": "按实际代码相关性和本期事件筛选；不将通用模型内部 hidden 张量使用、池化/嵌入任务、仅引用或纯 CI/时序调整计为输出接口新增",
+   "url": "https://github.com/sgl-project/sglang/pull/41050",
+   "state": "closed",
+   "updated_at": "2026-10-23T01:28:06Z"
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 39934,
+   "kind": "pr",
+   "title": "[Test] [NPU] parameter: Add sampling mask max tokens e2e test",
+   "decision": "纳入主代理核心判断",
+   "reason": "按实际代码相关性和本期事件筛选；不将通用模型内部 hidden 张量使用、池化/嵌入任务、仅引用或纯 CI/时序调整计为输出接口新增",
+   "url": "https://github.com/sgl-project/sglang/pull/39934",
+   "state": "open",
+   "updated_at": "2026-10-27T08:31:19Z"
+  },
+  {
+   "repository": "sgl-project/sglang",
+   "number": 35268,
+   "kind": "pr",
+   "title": "[Perf] Avoid full-logits all-gather for TP greedy sampling",
+   "decision": "背景/边缘/无实质活动",
+   "reason": "按实际代码相关性和本期事件筛选；不将通用模型内部 hidden 张量使用、池化/嵌入任务、仅引用或纯 CI/时序调整计为输出接口新增",
+   "url": "https://github.com/sgl-project/sglang/pull/35268",
+   "state": "closed",
+   "updated_at": "2026-10-29T01:13:15Z"
+  }
+ ]
+}

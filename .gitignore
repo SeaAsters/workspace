@@ -1,2 +1,14 @@
 # 本地检索/生成草稿（含 API 请求过程数据，不纳入仓库）
 .gh/
+
+# RL-feature 扫描工作区：只入库脚本与说明，大体积可再生成产物留在本地
+RL-feature/_scan-*/raw/
+RL-feature/_scan-*/repos/
+RL-feature/_scan-*/discovery.json
+RL-feature/_scan-*/discovery-ascend.json
+RL-feature/_scan-*/candidates.json
+RL-feature/_scan-*/deepdive.json
+RL-feature/_scan-*/commits-*.json
+RL-feature/_scan-*/__pycache__/
+RL-feature/_scan-*/*.log
+RL-feature/_scan-*/*.err
