@@ -8,12 +8,12 @@
 
 ## 0. 结论速览
 
-| 问题 | 结论 |
-|---|---|
-| issue 描述的功能在 vllm-ascend 上能生效吗？ | **能生效。** 3 个 endpoint 全部返回 `200` 且数据正确 |
-| 按 issue/README 里给的命令能直接跑起来吗？ | **不能。** 会 `RuntimeError: Failed to infer device type` 启动失败 |
-| 需要改什么？ | `VLLM_PLUGINS` 白名单里必须**加上 `ascend`**（否则 Ascend 平台插件被一起过滤掉） |
-| 有功能缺口吗？ | 有 1 处：`kv-cache` 的 `groups` 恒为空，原因是 vLLM 侧 #48121 未落地，**与 Ascend 无关** |
+| 问题                              | 结论                                                                    |
+| ------------------------------- | --------------------------------------------------------------------- |
+| issue 描述的功能在 vllm-ascend 上能生效吗？ | **能生效。** 3 个 endpoint 全部返回 `200` 且数据正确                                |
+| 按 issue/README 里给的命令能直接跑起来吗？    | **不能。** 会 `RuntimeError: Failed to infer device type` 启动失败            |
+| 需要改什么？                          | `VLLM_PLUGINS` 白名单里必须**加上 `ascend`**（否则 Ascend 平台插件被一起过滤掉）            |
+| 有功能缺口吗？                         | 有 1 处：`kv-cache` 的 `groups` 恒为空，原因是 vLLM 侧 #48121 未落地，**与 Ascend 无关** |
 
 一句话：**功能可用，但启用方式是"vLLM 通用 + Ascend 特有白名单"的组合，issue 里的一行式启用命令在 NPU 上不成立。**
 
@@ -21,19 +21,19 @@
 
 ## 1. 验证环境
 
-| 项 | 值 |
-|---|---|
-| 容器镜像 | `quay.nju.edu.cn/ascend/vllm-ascend:nightly-main-a3` |
-| vLLM | `0.31.0+empty`（源码树 `/vllm-workspace/vllm`） |
-| vllm-ascend | `0.19.1rc2.dev3033+g4e6eac4e4`（源码树 `/vllm-workspace/vllm-ascend`） |
-| torch / torch_npu | `2.10.0+cpu` / `2.10.0.post7` |
-| CANN | `9.2.0` |
-| Python | `3.12.13` |
-| 硬件 | 8 颗物理 NPU × 2 die = **16 个 vLLM 逻辑设备**（A3 按 16 算） |
-| 本次使用 | `ASCEND_RT_VISIBLE_DEVICES=8,9`（NPU4 的两颗 die，验证时为空闲） |
-| 权重 | `/mnt/weight/Qwen3-30B-A3B`（`Qwen3MoeForCausalLM`，48 层，128 experts，top-8） |
-| 并行 | `--tensor-parallel-size 2` |
-| 插件包 | `llm-d-api-extensions-vllm 0.1.0`（从 `llm-d/llm-d-api-extensions` 源码 `pip install --no-deps .`） |
+| 项                 | 值                                                                                              |
+| ----------------- | ---------------------------------------------------------------------------------------------- |
+| 容器镜像              | `quay.nju.edu.cn/ascend/vllm-ascend:nightly-main-a3`                                           |
+| vLLM              | `0.31.0+empty`（源码树 `/vllm-workspace/vllm`）                                                     |
+| vllm-ascend       | `0.19.1rc2.dev3033+g4e6eac4e4`（源码树 `/vllm-workspace/vllm-ascend`）                              |
+| torch / torch_npu | `2.10.0+cpu` / `2.10.0.post7`                                                                  |
+| CANN              | `9.2.0`                                                                                        |
+| Python            | `3.12.13`                                                                                      |
+| 硬件                | 8 颗物理 NPU × 2 die = **16 个 vLLM 逻辑设备**（A3 按 16 算）                                              |
+| 本次使用              | `ASCEND_RT_VISIBLE_DEVICES=8,9`（NPU4 的两颗 die，验证时为空闲）                                           |
+| 权重                | `/mnt/weight/Qwen3-30B-A3B`（`Qwen3MoeForCausalLM`，48 层，128 experts，top-8）                      |
+| 并行                | `--tensor-parallel-size 2`                                                                     |
+| 插件包               | `llm-d-api-extensions-vllm 0.1.0`（从 `llm-d/llm-d-api-extensions` 源码 `pip install --no-deps .`） |
 
 > 注意：该 issue 的交付物**不是 vLLM 内核代码**，而是外部 pip 包 `llm-d-api-extensions-vllm`，通过 vLLM 的 endpoint plugin 框架接入。所以"能否生效"实际上取决于两件事：① 容器里的 vLLM 有没有 endpoint plugin 框架；② Ascend 平台能否被这套框架容纳。
 
