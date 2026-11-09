@@ -5,8 +5,8 @@
 > - `slime/docker/patch/latest/`（GPU 侧最新补丁集，7 个 patch）
 > - 追加第二部分：上述 patch 内容向 sglang 迁移的可行性梳理
 >
-> 分析日期：2026-11-03（patch 梳理）/ 2026-11-05（sglang 迁移梳理）
-> 本地仓库：slime `D:\WorkSpace\slime`（v0.2.2 基线）；sglang 核对基准 `D:\WorkSpace\sglang-prwork`（SeaAsters fork，2026-11-03）
+> 分析日期：2026-11-03（patch 梳理）/ 2026-11-05（sglang 迁移梳理）/ 2026-11-09（上游同步更新：slime → `79aa41a8`，sglang 官方 main `ab84df61dd` 全量复核）
+> 本地仓库：slime `D:\WorkSpace\slime`（已同步至 79aa41a8，2026-11-06）；sglang 核对基准 `D:\WorkSpace\sglang-prwork`（SeaAsters fork，2026-11-03）＋ 官方 main `ab84df61dd`（2026-11-09 fetch）
 
 ---
 
@@ -103,12 +103,15 @@ MindSpeed (fc63de5)       ← mindspeed.patch
 
 ### 3.1 megatron.patch（checkpoint 兼容 + kernel 修复 + 优化器修复）
 
+> **2026-11-06 slime 上游重写本 patch**（Megatron-LM 基线 `4b4acac9` → `ae76c60e`）：删掉 YaRN RoPE 与 param_and_grad_buffer 两块（前者经 blob hash ＋ kernel 内容双重验证为**上游已另法修复**，后者本为等价重构，均非丢修复），新增 multi_token_prediction 一项。下表已按新版更新。
+
 | 主题 | 改动 |
 |---|---|
 | **checkpoint 部分加载** | `dist_checkpointing`：`torch.load` 加 `weights_only=False`；缺失 key 由 raise 改为 warning+skip；`allow_partial_load=True`。允许加载与当前模型不完全一致的 checkpoint（RL 场景常见：值头增删、结构微调） |
-| **MLA YaRN RoPE Triton 修复** | `fused_mla_yarn_rope_apply.py`：fwd/bwd kernel 增加 `k_dim_ceil`（非二次幂 k_dim 补齐+掩码）、head 越界掩码、`v_dim=0` 分支、`o_value`/`dv` 的 view 形状修正 |
+| MLA YaRN RoPE 修复（11-06 版已移除） | 原 `fused_mla_yarn_rope_apply.py` 的 `k_dim_ceil` 修复：新基线上游已用 `K_BLOCK/V_BLOCK/ROT_BLOCK = next_power_of_2(...)` ＋"padded dims 才建掩码"方式另法修复，patch 项删除 |
 | torch_memory_saver | `dynamic_context.py`、`training.py`：适配新版 API（`TorchMemorySaver()` 实例化替代模块级单例） |
 | **MTP loss 修复** | `gpt_model.py`：forward 增加 `mtp_kwargs`；MTP loss 仅在有 labels/mtp_labels 时计算；`process_mtp_loss` 用 `mtp_labels` 作为 input_ids——支持 RL 侧自定义 MTP label |
+| **MTP 断言放宽（11-06 新增）** | `multi_token_prediction.py`：`position_ids` 断言放宽为"或 embedding 无 `add_position_embedding`"（Nemotron VL 场景） |
 | 分布式优化器 | `distrib_optimizer.py`：param_group 的 `step=None` 删除；checkpoint bucket state 去除 `step`/`padding` 冗余（消除对 save 时优化器布局的依赖） |
 | ckpt_step | `checkpointing.py`：`ckpt_step=0` 生效（`is not None`），强制非 release，跳过 non-persistent 查找 |
 | **hybrid optimizer 关键修复** | `hybrid_optimizer.py`：`update_fp32_param_by_new_param` 改为刷新**所有** inner fp32 副本（原实现只刷新 `param_to_fp32_param` 里的，已 FP32 但有独立 CPU 副本的参数会被旧副本在第一次 optimizer step 时覆盖掉刚同步的新权重——RL 权重同步关键 bug） |
@@ -182,6 +185,13 @@ NCCL 权重同步之外、**基于共享存储的替代通道**，适合大模�
 
 用途：colocated RL 部署中，训练阶段 rollout 引擎释放 GPU 内存时把 host 内存也腾出来（避免 host OOM / 供训练进程使用）。
 
+### 3.8 新增 patch（2026-11-06，服务 Nemotron 3.5 Super VL，主仓库 PR #2471）
+
+| patch | 改动 |
+|---|---|
+| sglang-nemotron-multi-image.patch | `multimodal/processors/nano_nemotron_vl.py`：新增 `expand_image_placeholders`，多图占位符按数量展开并校验（原实现 `prompt.replace(IMG_CONTEXT_TOKEN, ..., 1)` 只替换第一个占位符，多图场景错位）；patch 注释明写 `TODO(shifangx): upstream to SGLang, then drop this patch` |
+| sglang-radio_layerscale.patch | `models/internvl.py`：C-RADIO（`model_type == "radio"`）视觉模型没有 LayerScale 权重，ls1/ls2 保持常量 1.0 而不建 `nn.Parameter`——避免 colocated release/resume（RL 睡眠唤醒）把不存在的参数清零；真 InternViT 分支不受影响 |
+
 ---
 
 ## 4. NPU 与 GPU 侧工作对比
@@ -208,12 +218,12 @@ NCCL 权重同步之外、**基于共享存储的替代通道**，适合大模�
 
 # 第二部分：哪些 patch 内容可以梳理进 sglang
 
-> 核对基准：本地 sglang fork `D:\WorkSpace\sglang-prwork`（SeaAsters/sglang，2026-11-03，最新 checkout）。
-> 注意：sglang **官方**上游（sgl-project/sglang）状态可能与本地 fork 有差异，正式提 PR 前需再对官方 main 核对。
+> 核对基准（2026-11-09 更新）：本地 sglang fork `D:\WorkSpace\sglang-prwork`（2026-11-03）＋ 官方 main `ab84df61dd`（2026-11-09 fetch 后 git grep 全量复核，不受 API 限流）。
+> 官方 main 复核结论与本地 fork 一致，此前因限流未抽查的 `enable_fp32_moe_router` 亦确认未上游。
 
 ## 5. 核对方法与分类总览
 
-用每个 patch 的标志性符号（新增函数名、环境变量、参数名）在本地 sglang 中全文检索：命中 = 已在上游；未命中 = 上游缺失。
+用每个 patch 的标志性符号（新增函数名、环境变量、参数名）在 sglang 中全文检索：命中 = 已在上游；未命中 = 上游缺失。核对范围：本地 fork ＋ 官方 main `ab84df61dd`（git grep 全量）。
 
 | 类别 | 含义 | 涉及 patch |
 |---|---|---|
@@ -282,7 +292,7 @@ NCCL 权重同步之外、**基于共享存储的替代通道**，适合大模�
 
 | patch 内容 | 本地 sglang 现状 |
 |---|---|
-| llama.py 接入 `split_qkv_rmsnorm_rope`（NPU sglang.patch） | **已上游**，且推广到 qwen3.py、glm4_moe.py、minimax_m3.py、dflash.py、llada2.py 共 6 个模型 |
+| llama.py 接入 `split_qkv_rmsnorm_rope`（NPU sglang.patch） | **已上游**，官方 main 推广到 **9 个模型**（llama / qwen3 / qwen3_moe / qwen3_next / qwen3_5 / glm4_moe / minimax_m3 / dflash / llada2，llada2 还用了 pos_cache_half 变体） |
 | `vocab_parallel_embedding.py` 的 `disable=_is_npu`（禁 torch.compile） | **已上游**（逐字一致） |
 | rotary_embedding 的 `_is_npu` fallback | **已上游**（条件一致） |
 | ascend_backend 统一 TND / `npu_fused_infer_attention_score` | **已上游**（TND 出现 13+ 处，文件演进到 3800+ 行） |
@@ -296,7 +306,7 @@ NCCL 权重同步之外、**基于共享存储的替代通道**，适合大模�
 
 **qwen3_vl deepstack 处理顺序**：
 
-- 上游：保留 `post_residual_addition` 机制（与 HF 行为对齐）；
+- 上游：保留 `post_residual_addition` 机制（与 HF 行为对齐；2026-11-09 官方 main `ab84df61dd` 复核：`qwen3_vl.py:1235/1243/1279` 仍在，且已抽象为 `layers/layer_boundary/prepare.py` 共用基础设施）；
 - NPU patch：删除该机制，改为 decoder layer 返回后直接 `hidden_states += deepstack_embeds`。
 
 这不是"上游化"而是**分叉**：要么 NPU patch 基于旧上游、现已过时；要么 NPU 上 post_residual_addition 有实际 bug。处置：在最新上游上重跑 NPU Qwen3-VL 验证，无问题则删掉该 NPU 改动；仍有问题则定位清楚后作为 NPU backend 内部 workaround 提给 sglang，不改模型主逻辑。
@@ -313,8 +323,8 @@ NCCL 权重同步之外、**基于共享存储的替代通道**，适合大模�
 
 ## 10. 行动建议（优先级排序）
 
-1. **第一批（低风险、高价值）**：top_p 重放、release_hicache、`/post_process_weights` 通用化、PD 超时、EAGLE clamp、radix committed-len——sglang 职责内的独立改进，先在本地 fork 落地再考虑官方 PR。
+1. **第一批（低风险、高价值）**：top_p 重放、release_hicache、`/post_process_weights` 通用化、PD 超时、EAGLE clamp、radix committed-len、nemotron-multi-image、radio_layerscale（11-06 新增的两个小 patch，前者官方已标 TODO upstream）——sglang 职责内的独立改进，先在本地 fork 落地再考虑官方 PR。
 2. **第二批（需拆分改写）**：deterministic patch——把 kernel/算法通用部分与 RL 对齐动机解耦后迁入，注释与测试去 slime 化。
 3. **第三批（框架类）**：pull_weights——作为 `weight_sync/` 子系统扩展迁入。
 4. **清理动作**：NPU sglang.patch 按新版 sglang 重新生成（预计大部分消失）；qwen3_vl deepstack 重验后决去留；slime 协议兼容层随 slime 升级评估删除。
-5. **官方 PR 前置**：本地基准是 SeaAsters fork，向 sgl-project/sglang 提 PR 前需对官方 main 重新核对 B 类结论。
+5. **官方 PR 前置**：✅ 已完成（2026-11-09 对官方 main `ab84df61dd` git grep 全量复核，B 类结论一致；提 PR 时以 PR 当日 main 为准再做一次快速核对即可）。
