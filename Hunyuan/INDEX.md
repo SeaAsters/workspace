@@ -4,6 +4,8 @@
 
 > **📌 增量更新**：2026-10-26 已完成第二次复扫，组织公开仓库 **85 → 90**。增量报告见 [`agent/2026-10-26/`](agent/2026-10-26/) 与 [`infer/2026-10-26/`](infer/2026-10-26/)，增量总览见本文件 [第八节](#八增量扫描2026-10-12--2026-10-26)。下文第一~七节保持 10-12 基线口径未变。
 
+> **📌 增量更新**：2026-11-09 已完成第三次复扫，组织公开仓库 **90 → 95**（Agent 17 / Infer 61 / 其余 17）。本轮核心事件：**Hy4 正式版发布（11-04，API/产品先行、权重后置）**、稀疏注意力内核 `FlashTopK`、同传模型 `Hy-SimulMT`、两个"程序化 ground truth"评测基准。增量报告见 [`agent/2026-11-09/`](agent/2026-11-09/) 与 [`infer/2026-11-09/`](infer/2026-11-09/)，总览见 [第九节](#九增量扫描2026-10-26--2026-11-09)。
+
 > **说明**：本次交付为**调研报告**（不包含仓库克隆）。所有结论均基于各仓库 README / LICENSE 原文，关键数字与命令照抄原文并注明来源；原文未说明的一律标注 `README 未说明`。
 > 仓库在持续更新，命令与版本请以仓库当前 README 为准。
 
@@ -23,13 +25,17 @@ D:\WorkSpace\workspace\Hunyuan\
 │   │   └── 04-embodied-and-agentic-3d.md           （具身智能 + Agentic 3D，7 个仓库）
 │   └── 2026-10-26\
 │       └── 05-agent-memory-and-delta.md            （增量：Hy-Memory 记忆框架 + WorkForge 环境合成 + 平台收缩）
+│   └── 2026-11-09\
+│       └── 07-agent-benchmarks-and-hy4-agentic.md  （增量：HyperLogic + AppCIF 双基准 + Hy-Memory 高频迭代 + Hy4 正式版 agent 能力）
 │
 ├── infer\                                ← 推理方向交付物
 │   ├── 2026-10-12\
 │   │   ├── 02-inference-optimization-libs.md       （稀疏注意力 / 高效推理库，8 个）
 │   │   └── 03-model-release-deployment-matrix.md   （模型发布库部署矩阵，10 个重点 + 全量索引）
-│   └── 2026-10-26\
-│       └── 06-infer-world-model-and-serving.md     （增量：Hy-Nomas 世界模型栈 + Hy-Memory GGUF/AuK 蒸馏 + 量化与部署）
+│   ├── 2026-10-26\
+│   │   └── 06-infer-world-model-and-serving.md     （增量：Hy-Nomas 世界模型栈 + Hy-Memory GGUF/AuK 蒸馏 + 量化与部署）
+│   └── 2026-11-09\
+│       └── 08-infer-hy4-final-flash-topk-simulmt.md（增量：Hy4 正式版 + FlashTopK/HyScale 内核 + Hy-SimulMT 同传 + 本地 vllm-ascend-hy4 实测）
 │
 └── _research\                            ← 原始素材（可溯源）
     ├── repos-classification.csv          ← 85 个仓库完整分类表（2026-10-12 基线，机器可读）
@@ -239,6 +245,8 @@ pwsh -File clone-repos.ps1 -Category agent -Pull
 | [`infer/2026-10-12/03-model-release-deployment-matrix.md`](infer/2026-10-12/03-model-release-deployment-matrix.md) | 模型发布库推理框架支持矩阵（vLLM / SGLang / TensorRT-LLM / llama.cpp）、部署命令摘录、量化与投机解码专题、选型建议 | 1,691 行 |
 | [`agent/2026-10-26/05-agent-memory-and-delta.md`](agent/2026-10-26/05-agent-memory-and-delta.md) | ⭐ **增量（Agent）**：`Hy-Memory`/Hy Memory 2.0 三层开源（SDK 架构/scene 路由/记忆写入模型/框架层基准）、`WorkForge` 可验证环境合成、`UniRL v0.2.0` 打版、元器/QClaw 退场与 WorkBuddy×企微落地、公开信息时间线 | ~500 行 |
 | [`infer/2026-10-26/06-infer-world-model-and-serving.md`](infer/2026-10-26/06-infer-world-model-and-serving.md) | ⭐ **增量（推理）**：`Hy-Nomas` 世界模型推理栈（54 层 MMDiT/8 步蒸馏/单卡 4090 四件套/serving 拓扑）、`Hy-Memory` vLLM+GGUF 量化配方、`AuK` 4 步蒸馏管线、DSpine/HYDRA/OmniCapBench、量化与部署信号修订 | ~450 行 |
+| [`agent/2026-11-09/07-agent-benchmarks-and-hy4-agentic.md`](agent/2026-11-09/07-agent-benchmarks-and-hy4-agentic.md) | ⭐ **增量（Agent）**：`HyperLogic`（执行导出答案 + Hard agent 工具链）与 `AppCIF-Bench`（Prompt-as-Environment + 可执行引擎）双基准深挖、`Hy-Memory` 295 commits 高频迭代（SDK 2.0.14）、Hy4 正式版 agent 能力口径（Computer Use/WorkBuddy 83.18）、Hyra AI4Science 六模型 | ~430 行 |
+| [`infer/2026-11-09/08-infer-hy4-final-flash-topk-simulmt.md`](infer/2026-11-09/08-infer-hy4-final-flash-topk-simulmt.md) | ⭐ **增量（推理）**：Hy4 正式版发布口径与"权重后置"节奏、`FlashTopK`/HyScale 稀疏注意力全栈（2.07×@1M、支持 Hy4-preview 32×128 indexer）、`Hy-SimulMT` 同传三路部署、Hy-Nomas TR 落地、**本地 `vllm-ascend-hy4` 商发分支实测**（Hy4-VL 昇腾 day0 适配早于正式版两周） | ~470 行 |
 | [`_research/repos-classification.csv`](_research/repos-classification.csv) | 85 仓库完整分类表（repo / category / subcategory / stars / license / 备注） | 85 行 |
 | [`_research/licenses.csv`](_research/licenses.csv) | 85 仓库许可证实读结果（license / license_file / **default branch**） | 85 行 |
 | `_research/readmes/` | 33 份仓库 README 原文快照（2026-10-12） | — |
@@ -267,3 +275,37 @@ pwsh -File clone-repos.ps1 -Category agent -Pull
 
 - ⚠️ **时间错位**：网传"混元世界模型 1.1（WorldMirror）2026-10-22 开源"实为 **2025-10** 旧闻（HF `createdAt` 2025-10-16、IT之家原文 2025-10-22），源头是内容农场把旧发布写成新发布。
 - ⚠️ **公众号正文不可读**：`mp.weixin.qq.com` 全量返回验证码页，`r.jina.ai` 代理亦失败；本目录所有公众号条目**只作"存在性"证据**，正文内容一律以模型卡/仓库/证券时报等可读源为准。
+
+---
+
+## 九、增量扫描（2026-10-26 → 2026-11-09）
+
+**复扫结论**：组织公开仓库 **90 → 95**（+4 新 + 1 补录）；窗口内被推送的既有仓库 **12 个**；HF `tencent` 窗口内新模型 **1 个**（DSpine 27B，非混元团队）；本轮**最重要的事件不在仓库侧，而在平台侧**——**Hy4 正式版于 11-04 发布**（GitHub/HF 零增量，产品与 API 全量上线，权重承诺"近期开源"）。两条线的增量：
+
+| 方向 | 窗口内最重要的三件事 | 详见 |
+|---|---|---|
+| **Agent** | ① 评测侧一次补进两个"程序化 ground truth"基准：`HyperLogic`（求解器导出答案 + 30% 公开 + SHA-256 commitment）与 `AppCIF-Bench`（6 个可执行代码仿真引擎，NeurIPS 2026，数据 CC-BY-NC）；② `Hy-Memory` 295 commits / SDK 2.0.5→2.0.14 高频产品化（+730★ 有真实迭代支撑）；③ Hy4 正式版把 Computer Use/长程智能体推向旗舰主线，但学术基准里仍无混元模型 | [`agent/2026-11-09/07-...`](agent/2026-11-09/07-agent-benchmarks-and-hy4-agentic.md) |
+| **Infer** | ① **Hy4 正式版**（11-04）：API/产品先行、权重后置，幻觉率 12.95%→7.2%，定价不变；② `FlashTopK`/HyScale：稀疏注意力从架构到内核的全栈开源（GLM-5.1 1M 训练 2.07×；支持 Hy4-preview 32×128 indexer）；③ `Hy-SimulMT` 同传（10-26，恰在上轮扫描后 2 小时）：30B-A3B 六权重、StreamLAAL 约 3 秒、三路部署；④ **本地 `vllm-ascend-hy4` 实测**：Hy4-VL 昇腾 day0 适配早于正式版两周 | [`infer/2026-11-09/08-...`](infer/2026-11-09/08-infer-hy4-final-flash-topk-simulmt.md) |
+
+**本轮需要修订的 10-26 结论**（各报告 §6/§7 有完整证据链）：
+
+1. **"评测向可验证演进"** → 本轮以最强形式强化：两个新基准的核心 ground truth 都由程序产生，LLM judge 降级为最后一公里语义比对。
+2. **"Stars 与代码变更脱钩"** → 分仓库修订：`Hy-Memory` +730★ 有 295 commits 支撑；`Prism` +368★ 仍只有署名提交。
+3. **"HunyuanOCR-1.5 只在仓库名里"** → **推翻**：1.5 是 2026-07-07 发布的官方真实版本（同仓库升级，不单独建 HF 权重库）。
+4. **"UniRL v0.2.0 于 10-19 打版"** → 口径修正：`published_at=10-08`（10-19 是 release 对象创建时间）。
+5. **"无 LICENSE 12 个"** → RoboFusion 补 MIT `LICENSE.txt`（11-03），余 11 个。
+6. **"Hy-Nomas 技术报告 Coming Soon"** → 解除：arXiv 2610.36729（10-27）。
+7. **"没有任何官方延迟数字"** → 分负载修订：Hy-SimulMT 给出 StreamLAAL 3 秒与 SGLang-Omni 6.5×；旗舰 LLM 与世界模型仍无吞吐数字。
+
+**本轮新增判断**（⑩~⑯，完整版见两份报告）：
+
+> **⑩ 评测防污染设计成为标配**（30% 公开子集 / v1.1 不可比声明 / 只放题不放分）；**⑪ 混元造基准、自家模型缺席**（HyperLogic 7 模型、AppCIF 12 模型均无 Hy 系列）；**⑫ Agent 出口收敛到 WorkBuddy 并进入"模型-产品 Co-Design"叙事**；**⑬ "API/产品先行、权重后置"成为 Hy4 正式版新发布模式**（两个月一个大版本节拍）；**⑭ 稀疏注意力完成"架构→系统→内核→NPU"四层全栈开源**（FlashTopK 同时支持 GLM/DeepSeek/Qwen 变体路线图）；**⑮ "30B-A3B 专用小模型"成为可复制模板**（Hy-Memory → Hy-SimulMT）；**⑯ 旗舰模型的昇腾 day0 是制度化动作**（本地商发分支证实，官方 NPU 镜像同步）。
+
+**本轮踩到的坑（写给下一次扫描）**：
+
+- ⚠️ **发布边界**：`Hy-SimulMT` 内容公开于 10-26 12:53，距上轮快照（10:30）仅 2 小时——**扫描当天下午的发布会被窗口切掉**。下次扫描时刻尽量选当天早间，并接受"边界仓库"要在下轮补录的现实。
+- ⚠️ **Release 时间双口径**：`published_at` 与 release 对象 `created_at`（atom 的 updated）可以相差 11 天（UniRL v0.2.0）——引用发布时间一律用认证 API 的 `published_at`。
+- ⚠️ **LICENSE 文件名变体再 +1**：RoboFusion 用 `LICENSE.txt`（此前已有 `License.txt` 系）——查许可证永远用 GitHub API 的 files 列表或 raw 试探，不要只猜 `LICENSE`。
+- ⚠️ **超前叙事**：财联社标题"史上最强开源模型"发布时权重并未开源（"近期开源"）——标题与正文口径不一致时，以正文承诺为准并在时间线标注"未兑现/待兑现"。
+- ✅ **`gh` 已认证可用**（`C:\Program Files\GitHub CLI\gh.exe`，账号 SeaAsters）：组织快照、commits、releases、`published_at` 全部走认证 API，60 次/小时限流问题彻底解除（脚本见 `_research/2026-11-09/scan_detail.py`）。
+- 素材：[`_research/2026-11-09/`](_research/2026-11-09/)（org 快照 / delta / commits / releases / HF models+datasets / 16 份 README / 3 个可重跑脚本）。
