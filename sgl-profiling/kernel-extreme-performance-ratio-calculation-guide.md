@@ -2,9 +2,9 @@
 
 更新日期：2026-11-23。
 
-本指引固化本次 Ascend `kernel_details.csv` 分析采用的方法：保留原始数据，在明确的采样范围内剔除通信与重复边界，逐调用计算加权占比，再统计平均耗时。采集流程另见 [SGLang NPU Profiling 采集与解析指南](sglang-npu-profiling-guide.md)。
+本指引固化本次 Ascend `kernel_details.csv` 分析采用的方法：保留原始数据，在明确的采样范围内剔除通信与重复边界，先对同一逻辑位置的重复采样求平均耗时，再计算百分比和 ratio 加权占比。采集流程另见 [SGLang NPU Profiling 采集与解析指南](sglang-npu-profiling-guide.md)。
 
-本文将两组加权占比之和记为“极致性能比” `R`，定义方向为**按指定规则加权的时间量 / 当前计算算子累计耗时**。它是本次分析约定的指标，不自动取倒数，也不等同于端到端吞吐提升、设备利用率或严格理论性能极限。
+本文将两组加权占比之和记为“极致性能比” `R`，定义方向为**按指定规则加权的时间量 / 全部逻辑行平均耗时之和**。它是本次分析约定的指标，不自动取倒数，也不等同于端到端吞吐提升、设备利用率或严格理论性能极限。
 
 ## 1. 先确定统计范围
 
@@ -44,7 +44,7 @@
 
 1. 保留开头的 `SparseFlashAttention`。
 2. 从统计范围排除末尾属于下一个周期的那一次 `SparseFlashAttention`。
-3. 同时从总计算耗时分母、分组明细、调用次数和平均值中排除它。
+3. 在求平均前排除该边界记录，使它不进入有效采样、平均值及后续分母。
 
 **不是所有文件都删除最后一个 `SparseFlashAttention`。** 必须通过执行顺序、模型层数/周期或时间线确认它确实超出目标范围。
 
@@ -57,25 +57,62 @@
 - 完整采样默认保留全部范围内调用。首步、长耗时和边界异常不能只因“看起来慢”就剔除。
 - 若另外做稳态分析，应明确指定共同的稳定窗口，重新筛选、计算分母和所有统计，并将结果标为稳态口径。
 
-## 3. 分母、阶段 ratio 与阈值
+## 3. 修订后的统计单位：先求平均，保留四层表的行结构
 
-### 3.1 两组共用的分母
+**最终采用“逻辑位置平均耗时口径”，不再以逐调用累计耗时作为主表百分比的分母。** 大算子阈值改为 `>=10 μs`，等于 10 μs 计入大算子组。
 
-令 `C` 为完成上述范围选择与剔除后，保留下来的所有非通信调用集合。每条调用耗时为 `d_i`，单位 μs：
+### 3.1 一行对应哪个算子
+
+主表沿用此前四层统计表的执行顺序：一行对应四层范围内的一个固定逻辑位置。对多个完整采样周期或 step 中该位置的重复调用求平均。
+
+“沿用四层表形式”指按逻辑位置逐行呈现，并不要求把完整模型数据强制裁成四层。分析完整模型时，以一次完整 forward 的全部逻辑位置为模板；只选四层时，以一个完整四层周期为模板。后文的均值、分母和分组公式均覆盖实际选定的完整模板。
+
+例如，同一个四层周期有三次 KDA recurrent：即使 Name 和形状相同，它们属于不同层，也保留为三行。每行分别对相同层、相同位置的多次采样求平均，不能把三行压成一行后令该算子在分母中只出现一次。
+
+确定逻辑行时，核对以下信息：
+
+- 逻辑层号、周期内执行序号或经验证的序列对齐位置；
+- `Name`、`Type`、`Accelerator Core`；
+- `Input Shapes`、`Output Shapes`；
+- `Input Data Types`、`Output Data Types`。
+
+`kernel_details.csv` 不一定直接提供逻辑层号，必要时结合时间线或重复执行序列建立“原始行号 → 逻辑位置”的映射。不能只按 Name 或 Task ID 分组。
+
+同一位置若出现不同形状、batch 或执行路径，应先拆成可比较的采样窗口，不把互斥路径的多个形状均值同时加进一个四层分母。采样周期不完整、各位置样本数不一致时，先复核并选取完整范围，不静默补零或删掉慢样本。
+
+### 3.2 平均耗时
+
+令 `g` 为主表中的逻辑行，`n_g` 为该行有效采样次数，`d_g,j` 为每次采样 Duration，单位 μs：
 
 ```text
-T_compute = Σ(d_i), i ∈ C
+mean_g = Σ(d_g,j) / n_g
+min_g  = MIN(d_g,j)
+max_g  = MAX(d_g,j)
 ```
 
-分母包括大于、小于以及恰好等于 10 μs 的有效计算调用。它不是“大算子总耗时”或“小算子总耗时”，也不包含通信、host 调度、Free、Preparing、stream 等待或采集解析时间。
+应保留 `n_g`、最短和最长耗时供复核，但百分比使用 `mean_g`。不先按单次 Duration 分成大小算子，否则平均值接近阈值的同一逻辑行会被拆到两个组。
 
-`T_compute` 是 Duration 累计值，**不是时间线区间并集或 step 墙钟耗时**。如果计算任务之间有重叠，应保留这一方法定义，并另行报告墙钟/重叠分析；不能在公式中悄悄换成墙钟分母。
+### 3.3 分母是全部逻辑行平均耗时之和
 
-每个数据集使用自己的 `T_compute`，比较两个模型时不得共用其中一个分母。
+```text
+T_mean = Σ(mean_g)，求和覆盖统计范围内全部非通信逻辑行
+```
 
-### 3.2 最大阶段 ratio 取哪些列
+`T_mean` 是**平均四层算子累计时间**，不是一次随机调用的平均时间，也不是 `Σ(原始全部调用 Duration)`，更不是时间线并集或墙钟时延。
 
-对每条调用，分别从以下十个执行阶段列取最大值，记为 `m_i`：
+- 四层中的不同位置均计入，即使同名、同形状也不能漏计其出现次数。
+- `>=10 μs` 和 `<10 μs` 两个 sheet 使用同一个 `T_mean`，不能分别拿本组均值之和作分母。
+- Full 和 Top16 分别计算自己的 `T_mean`。
+- 仅查看“形状不同”子集时，只筛选分子，分母仍是本侧完整四层全部逻辑行平均耗时之和。
+- 若只截取了一个完整四层周期，每个位置只有一次采样，`mean_g` 等于该行 Duration；若有多步采样，先跨采样求平均再计算。
+
+如另行给出原始累计耗时，标为 `T_raw = Σ(d_g,j)`，只用于追溯。不得把 `T_raw` 和 `T_mean` 混用。
+
+## 4. 阶段 ratio 与最终计算规则
+
+### 4.1 最大阶段 ratio
+
+使用以下十个执行阶段列：
 
 ```text
 aic_mac_ratio
@@ -90,197 +127,142 @@ aiv_mte2_ratio
 aiv_mte3_ratio
 ```
 
-```text
-m_i = MAX(该调用的十个执行阶段 ratio)
-```
-
-不使用以下字段：`aic_icache_miss_rate`、`aiv_icache_miss_rate`、`cube_utilization(%)`、各阶段绝对时间或 cycles。
-
-- ratio 按原值使用，例如 `0.8`，不要再除以 100；显示成百分比不改变其数值。
-- 不将十个 ratio 求和，不求平均，也不把组内不同调用的最大 ratio 当成全部调用的 ratio。
-- 不将 `m_i` 截断到 0.8；大算子按公式直接计算 `m_i / 0.8`。
-- `Duration` 或 ratio 缺失、非数值、非有限值时必须报告并复核。不能把 `N/A`、空值或解析失败直接补成 0，形成虚低占比。确定为“不适用”的阶段可以明确排除该字段，但应披露处理方式；所有阶段都无有效值的调用不能产生有效加权占比。
-- 本次实际计算使用的非通信样本均有有效的十阶段数值。下面参考代码对缺失值采用报错策略。
-
-### 3.3 严格采用大于和小于
+为使表中一行表示同一位置的平均采样，本指引统一采用：**先对每个阶段分别取采样均值，再在十个阶段均值之间取最大值**。
 
 ```text
-大算子集合 B：d_i > 10 μs
-小算子集合 S：d_i < 10 μs
-边界集合 E：d_i = 10 μs
+stage_mean_g,s = Σ(ratio_g,j,s) / n_g
+m_g = MAX(stage_mean_g,s)，s 遍历十个执行阶段
 ```
 
-本次数据没有恰好等于 10 μs 的调用。以后若出现，按当前严格规则：`E` 仍计入 `T_compute`，但不计入 `B`、`S` 的加权小计；单独披露其数量和累计耗时，不能声称两组覆盖了全部调用。若要改为 `<=10 μs`，需显式变更口径，不能沿用同一结果标签。
+单次采样时即为该调用的十阶段最大值。不要取所有采样中出现过的最大峰值，也不要把 `MAX(阶段均值)` 与 `平均(逐次最大值)` 混用；它们一般不相等。
 
-## 4. 最终采取的计算公式
+不使用 `aic_icache_miss_rate`、`aiv_icache_miss_rate`、`cube_utilization(%)`、各阶段绝对时间或 cycles。
 
-### 4.1 大于 10 μs
+- ratio 按原小数使用，例如 `0.8`，不再除以 100。
+- 不将十阶段求和，不将最大阶段 ratio 截断到 0.8。
+- Duration 或 ratio 缺失、非数值或非有限值时应报告并复核，不能直接补 0。确认“不适用”的阶段可以明确排除，但需披露；参考代码默认缺失即报错。
+
+### 4.2 阈值按平均耗时判断
 
 ```text
-p_i = (d_i / T_compute) × (m_i / 0.8), i ∈ B
-R_big = Σ(p_i), i ∈ B
+大算子集合 B：mean_g >= 10 μs
+小算子集合 S：mean_g < 10 μs
 ```
 
-### 4.2 小于 10 μs
+**平均耗时恰好为 10 μs，计入大算子组，使用 /0.8。** 两组互斥并覆盖全部有效逻辑行，不再单列“等于10 μs但不参与加权”的集合。
+
+同一位置两次耗时分别为 8 和 12 μs，平均为 10 μs，则整行进入 `>=10 μs` 组；不能仍把这两次调用拆进不同阈值组。
+
+### 4.3 先平均，再求百分比
 
 ```text
-p_i = (d_i / T_compute) × m_i, i ∈ S
-R_small = Σ(p_i), i ∈ S
+原始平均耗时占比：
+q_g = mean_g / T_mean
+
+mean_g >= 10 μs：
+p_g = (mean_g / T_mean) × (m_g / 0.8)
+
+mean_g < 10 μs：
+p_g = (mean_g / T_mean) × m_g
+
+R_big   = Σ(p_g)，g ∈ B
+R_small = Σ(p_g)，g ∈ S
+R       = R_big + R_small
 ```
 
-0.8 只用于大算子组，小算子组不除以 0.8。两组必须逐调用计算后再求和。
+展示百分比时才乘 100 或设置 Excel 百分比格式。`Σ(q_g) = 100%`；ratio 加权后的 `R` 不重新归一化，也不强行截断为 100%。0.8 只用于大算子组。
 
-### 4.3 总体指标与其他百分比
+**最终顺序固定为：范围/剔除 → 逻辑位置对齐 → 求 Duration 和各阶段 ratio 的均值 → 以平均 Duration 分组 → 平均耗时之和作分母 → 算百分比和加权占比 → 求和。**
 
-```text
-极致性能比 R = R_big + R_small
-百分比展示 = R × 100%
+原版按原始逐调用累计 Duration 计算的百分比与本版口径不同，历史结果必须标明旧口径，不应直接作为本版复核值。
 
-原始时间占比 q_i = d_i / T_compute
-```
+## 5. 表格保持四层统计的形式
 
-`R_big`、`R_small` 和 `R` 直接展示计算结果，不重新归一化到 100%。由于大算子存在 `/0.8`，加权结果也不保证小于原始耗时占比，不能将其强制截断为 100%。
+### 5.1 单份数据
 
-原始时间占比与 ratio 加权占比是两个指标，必须分列命名。不要用普通 Duration 占比替代用户指定的加权公式。
+原数据保持不变，新建以下 sheet：
 
-如果进一步给出 `1/R`，必须单独命名并说明额外假设；本指引的最终指标默认就是 `R`，不直接将倒数当作实测吞吐加速比。
+1. **原始数据**：完整复制原 CSV，包括通信，保留列顺序和原始行号。
+2. **平均耗时**：保留四层中各逻辑位置的顺序，一行一个位置；Duration 列填该位置平均耗时，各阶段 ratio 列填对应阶段采样均值。
+3. **大于等于10us**：从平均耗时表筛选 `mean_g >= 10` 的行；顺序与原四层表一致，末尾 `SUM` 加权占比。
+4. **小于10us**：筛选 `mean_g < 10` 的行；顺序与原四层表一致，末尾 `SUM` 加权占比。
 
-### 4.4 算子平均耗时
+阈值 sheet 不再复制原始逐调用明细来直接计算主指标；复制的是**已经求平均后的四层逻辑行**。表格主体仍是熟悉的原字段布局，只在右侧增加采样次数、原始行号集合、平均耗时占比和加权占比等必要列。
 
-对某一分组 `g`：
+平均耗时表应包含：逻辑位置、Name/Type、输入输出形状、Core/dtype、采样次数、平均/最短/最长 Duration、十阶段 ratio 均值、最大阶段均值 `m_g`、阈值组、`q_g` 和 `p_g`。
 
-```text
-n_g      = 本组调用次数
-D_g      = Σ(d_i), i ∈ g
-mean_g   = D_g / n_g
-min_g    = MIN(d_i), i ∈ g
-max_g    = MAX(d_i), i ∈ g
-```
+若另外按 Type 或 Name/形状汇总，只作为辅助视图，并保留原四层位置的出现次数；不能用无位置、去重后的均值表替代主表分母。
 
-建议在同一个平均耗时 sheet 中提供两种粒度：
+### 5.2 Full 与 Top16 并排比较
 
-1. **按 Type 汇总**：回答某类算子总体的次数、累计耗时、平均耗时。此粒度可能混合不同形状，应明确标注。
-2. **按具体工作量细分**：至少按 `(Name, Type, Accelerator Core, Input Shapes, Output Shapes, Input Data Types, Output Data Types)` 分组，避免把不同形状或 dtype 的调用当作同一工作量比较。
+沿用四层对齐表形式，同一逻辑位置放在同一行，左右分别列出：
 
-平均耗时页使用 `C` 中所有有效计算调用，不受 `>10`、`<10` 分组限制，也不按两组分别截断后再求一个未加权平均。
+- 采样次数、平均耗时（μs）、最大阶段 ratio 均值；
+- 平均耗时占本侧 `T_mean` 的百分比、ratio 加权占比；
+- 输入输出形状、平均耗时差、平均耗时变化率、占比差（百分点）。
 
-分组平均值合并时，必须按次数加权：
+按逻辑位置及执行顺序对齐，并用 Name 和形状辅助核对。不要先按阈值拆开再对齐，因为同一位置可能在两边属于不同的阈值组。
 
-```text
-总体平均 = Σ(D_g) / Σ(n_g)
-```
+单侧独有算子保留，对端留空，不按 0 μs 计算提速；该行平均耗时仍计入本侧分母。差值统一为 `Top16 − Full`，耗时变化率为 `mean_Top16 / mean_Full − 1`。
 
-不能直接将各组 `mean_g` 做普通平均，除非各组调用次数恰好相同。
+## 6. Excel 公式示例
 
-## 5. 分组占比和对齐比较
+以下假定已生成一行一个逻辑位置的平均耗时表，且沿用核对过的标准 48 列布局：
 
-对某类算子或某个形状组，分别保留：
-
-```text
-累计时间占比         = D_g / T_compute
-单次平均时间占比     = mean_g / T_compute
-ratio 加权占比       = Σ(p_i), i ∈ g
-```
-
-第一项反映该组所有调用的总成本，第二项反映一次平均调用相对当前整个统计窗口的比例。两者相差调用次数，不可混淆。
-
-累计时间占比、逐调用加权占比可以在不重复的分组间求和；单次平均时间占比不能跨不同组简单相加后称为总体占比。
-
-比较两个数据集时：
-
-- 按执行顺序和 Name 对齐，并用输入输出形状辅助处理重复的 Cast 等算子。
-- 不按阈值组分别强行对齐。同一算子可能在一边大于 10 μs，在另一边小于 10 μs。
-- 单侧额外算子保留并标明，对端留空，不按 0 μs 计算“提速”。其耗时仍计入本侧完整统计范围的分母。
-- 本次差值方向统一为 `Top16 − Full`；平均耗时变化率为 `mean_Top16 / mean_Full − 1`。
-- 占比差以百分点表示：`(share_Top16 − share_Full) × 100`，不要与相对百分比变化混用。
-- 只统计“形状不同”子集时，分子筛选该子集，分母仍用本侧全部有效计算调用，不改成“形状不同算子的耗时总和”。
-
-## 6. 输出表格约定
-
-每份输入生成新的工作簿，保留原文件不变，采用四个 sheet：
-
-1. **原始数据**：完整复制 CSV，包含通信，保留原列顺序和数据值。
-2. **大于10us**：仅复制 `B` 的原始数据行，顺序不变；右侧新增逐调用加权占比，末尾用 `SUM` 求和。
-3. **小于10us**：仅复制 `S` 的原始数据行，顺序不变；右侧新增逐调用加权占比，末尾用 `SUM` 求和。
-4. **平均耗时**：按 Type 汇总和按名称/形状/dtype 细分，至少包含次数、累计、平均、最短、最长和累计时间占比。
-
-两个阈值 sheet 都显示同一个 `T_compute` 和各自公式。原始数据页保留被剔除记录，统计页说明排除条件及数量，确保可以复算。公式保留为 Excel 公式，结果无需归一化。
-
-### 6.1 Excel 公式示例
-
-以下列号仅适用于已核对的标准 48 列 `kernel_details` 布局；新文件必须优先按列名映射，不能盲目套列号。
-
-- `J`：Duration。
-- `F`：Type。
-- 十阶段 ratio：`Y, AA, AC, AE, AG, AI, AN, AP, AR, AT`。
-- `AW`：新增加权占比。
-- 假设 `$AZ$2` 存放本侧 `T_compute`。
+- `J`：该位置的平均 Duration，而不是某次调用或累计 Duration。
+- `Y, AA, AC, AE, AG, AI, AN, AP, AR, AT`：十阶段 ratio 的采样均值。
+- `AW`：按最终规则计算的加权占比。
+- `AZ2`：`T_mean`，引用完整平均耗时表所有逻辑行的 J 列之和。
 
 ```excel
-大于10us页，第2行：
-=J2/$AZ$2*(MAX(Y2,AA2,AC2,AE2,AG2,AI2,AN2,AP2,AR2,AT2)/0.8)
+平均耗时表的分母，末行按实际四层逻辑行数填写：
+=SUM('平均耗时'!J2:J237)
 
-小于10us页，第2行：
-=J2/$AZ$2*MAX(Y2,AA2,AC2,AE2,AG2,AI2,AN2,AP2,AR2,AT2)
+原始平均耗时占比：
+=J2/$AZ$2
 
-本页占比合计，末行号以实际筛选数量为准：
-=SUM(AW2:AW3635)
+统一的加权占比公式，等于10也除以0.8：
+=J2/$AZ$2*MAX(Y2,AA2,AC2,AE2,AG2,AI2,AN2,AP2,AR2,AT2)/IF(J2>=10,0.8,1)
 
-平均耗时：
-=本组Duration累计/本组调用次数
+阈值标记：
+=IF(J2>=10,">=10us","<10us")
+
+筛选后的占比合计，范围按该页实际行数填写：
+=SUM(AW2:AW41)
 ```
 
-对于没有额外边界排除的完整 CSV，分母可以引用原始数据页：
+不能再用原始数据页的 `SUMIFS(Duration)` 作为新口径的分母。若阈值标签是文本，`SUMIFS` 字面匹配条件分别为 `"=>=10us"` 和 `"=<10us"`，避免将标签当成比较运算。
 
-```excel
-=SUMIFS('原始数据'!J2:J22097,'原始数据'!F2:F22097,"<>hcom*",'原始数据'!F2:F22097,"<>hccl*")
-```
+## 7. 可手算的修订示例
 
-对于四层截取，必须额外排除已经确认重复的边界行；数据和分母引用范围必须保持一致。
+假设同一个四层范围暂以三个逻辑位置演示，每个位置有两次有效采样；阶段 ratio 不随两次采样变化：
 
-如果汇总表用文本 `>10us` 或 `<10us` 标记分组，`SUMIFS` 要做**字面文本匹配**，不能误触发比较运算符：
-
-```excel
-匹配文本 >10us 的条件："=>10us"
-匹配文本 <10us 的条件："=<10us"
-```
-
-## 7. 可手工复核的示例
-
-以下为构造数据，通信和重复边界已经剔除，计算总耗时为 100 μs：
-
-| 调用 | Duration（μs） | 最大阶段 ratio | 分组 | 原始时间占比 | 公式加权占比 |
-| --- | ---: | ---: | --- | ---: | ---: |
-| A | 40 | 0.80 | >10 μs | 40% | 40% |
-| B | 30 | 0.64 | >10 μs | 30% | 24% |
-| C | 20 | 0.40 | >10 μs | 20% | 10% |
-| D | 6 | 0.60 | <10 μs | 6% | 3.6% |
-| E | 4 | 0.50 | <10 μs | 4% | 2% |
+| 逻辑位置 | 两次 Duration（μs） | 平均 Duration（μs） | 最大阶段均值 | 分组 | 平均耗时占比 | 加权占比 |
+| --- | --- | ---: | ---: | --- | ---: | ---: |
+| A | 8、12 | 10 | 0.8 | >=10 μs | 28.5714% | 28.5714% |
+| B | 18、22 | 20 | 0.4 | >=10 μs | 57.1429% | 28.5714% |
+| C | 4、6 | 5 | 0.5 | <10 μs | 14.2857% | 7.1429% |
 
 ```text
-R_big   = 40% + 24% + 10% = 74%
-R_small = 3.6% + 2%       = 5.6%
-R       = 79.6%
-全部调用平均耗时 = 100 / 5 = 20 μs
+T_mean  = 10 + 20 + 5 = 35 μs
+T_raw   = 8 + 12 + 18 + 22 + 4 + 6 = 70 μs（仅用于追溯）
+R_big   = 57.1429%
+R_small = 7.1429%
+R       = 64.2857%
 ```
 
-本次实际完整 CSV 的复核值如下，均保留完整 8 步、排除通信，没有执行四层末尾剔除：
-
-| 数据集 | 有效计算调用数 | T_compute（μs） | >10 μs 调用数 | R_big | <10 μs 调用数 | R_small |
-| --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| Full TP16 EP1 | 20624 | 162108.365 | 3634 | 55.3122% | 16990 | 18.0943% |
-| Top16 TP16 | 21416 | 165539.524 | 3412 | 53.5177% | 18004 | 18.9934% |
-
-这些数字是各自 profiling 样本内的加权统计，不是端到端 benchmark。
+A 的平均值等于 10，完整归入大算子组。分母使用 35，而不是原始调用累计的 70。
 
 ## 8. 最小参考实现
 
-示例直接按列名读取；输入范围和 `exclude_source_rows` 必须事先确认。行号按文件的物理行位置计数：表头为第 1 行、第一条数据为第 2 行。本次标准导出的每条记录各占一行；若存在字段内换行，应改用明确的记录标识，不能套用这个物理行号约定。
+代码按列名读取。`position_by_source_row` 是人工确认或序列对齐后得到的“原始CSV数据行 → 四层逻辑位置”映射，不能用 Name 直接代替位置。表头计第1行，第一条数据计第2行；有字段内换行时应改用明确的记录标识。
+
+输入应已限定为相同 batch/形状的完整重复周期。代码要求各逻辑行样本数一致；不一致时先修正采样范围，不能静默补齐。
 
 ```python
 import csv
 import math
-from collections import defaultdict
+from collections import OrderedDict
 
 RATIO_FIELDS = (
     "aic_mac_ratio", "aic_scalar_ratio", "aic_mte1_ratio",
@@ -288,79 +270,82 @@ RATIO_FIELDS = (
     "aiv_vec_ratio", "aiv_scalar_ratio", "aiv_mte2_ratio",
     "aiv_mte3_ratio",
 )
-GROUP_FIELDS = (
+IDENTITY_FIELDS = (
     "Name", "Type", "Accelerator Core", "Input Shapes", "Output Shapes",
     "Input Data Types", "Output Data Types",
 )
 
 def number(value, field):
-    result = float(value)  # N/A、空值等直接报错，不能替换成 0
+    result = float(value)
     if not math.isfinite(result) or result < 0:
         raise ValueError(f"Invalid {field}: {value!r}")
     return result
 
-def analyze(path, exclude_source_rows=()):
+def analyze(path, position_by_source_row, exclude_source_rows=()):
     excluded = set(exclude_source_rows)
-    compute = []
+    groups = OrderedDict()
     with open(path, encoding="utf-8-sig", newline="") as stream:
         for source_row, row in enumerate(csv.DictReader(stream), start=2):
             if source_row in excluded:
                 continue
-            kind = row["Type"].strip().lower()
-            if kind.startswith(("hcom", "hccl")):
+            if row["Type"].strip().lower().startswith(("hcom", "hccl")):
                 continue
+            position = position_by_source_row[source_row]
+            identity = tuple(row[key] for key in IDENTITY_FIELDS)
+            group = groups.setdefault(position, {"identity": identity, "samples": []})
+            if group["identity"] != identity:
+                raise ValueError(f"Shape/path changed at position {position!r}")
             duration = number(row["Duration(us)"], "Duration(us)")
-            max_ratio = max(number(row[key], key) for key in RATIO_FIELDS)
-            compute.append((source_row, row, duration, max_ratio))
+            ratios = [number(row[key], key) for key in RATIO_FIELDS]
+            group["samples"].append((source_row, duration, ratios))
 
-    total = math.fsum(item[2] for item in compute)
-    if total <= 0:
-        raise ValueError("No positive compute duration")
+    if not groups:
+        raise ValueError("No compute samples")
+    if len({len(group["samples"]) for group in groups.values()}) != 1:
+        raise ValueError("Incomplete cycles: sample counts differ")
 
-    big, small, equal = [], [], []
-    groups = defaultdict(list)
-    for source_row, row, duration, max_ratio in compute:
-        groups[tuple(row[key] for key in GROUP_FIELDS)].append(duration)
-        if duration == 10:
-            equal.append((source_row, duration))
-            continue
-        divisor = 0.8 if duration > 10 else 1.0
-        share = duration / total * max_ratio / divisor
-        (big if duration > 10 else small).append((source_row, share))
+    rows = []
+    for position, group in groups.items():
+        samples = group["samples"]
+        count = len(samples)
+        durations = [sample[1] for sample in samples]
+        stage_means = [
+            math.fsum(sample[2][s] for sample in samples) / count
+            for s in range(len(RATIO_FIELDS))
+        ]
+        rows.append({
+            "position": position, "identity": group["identity"],
+            "source_rows": [sample[0] for sample in samples],
+            "count": count, "mean_us": math.fsum(durations) / count,
+            "min_us": min(durations), "max_us": max(durations),
+            "stage_means": stage_means, "max_ratio": max(stage_means),
+        })
 
-    r_big = math.fsum(share for _, share in big)
-    r_small = math.fsum(share for _, share in small)
-    averages = {
-        key: {
-            "count": len(values),
-            "sum_us": math.fsum(values),
-            "mean_us": math.fsum(values) / len(values),
-            "min_us": min(values),
-            "max_us": max(values),
-        }
-        for key, values in groups.items()
-    }
-    return {
-        "compute_count": len(compute), "compute_total_us": total,
-        "big": big, "small": small, "equal_10us": equal,
-        "r_big": r_big, "r_small": r_small, "r_total": r_big + r_small,
-        "averages": averages,
-    }
+    total_mean = math.fsum(row["mean_us"] for row in rows)
+    if total_mean <= 0:
+        raise ValueError("No positive mean duration")
+    for row in rows:
+        large = row["mean_us"] >= 10
+        row["bucket"] = ">=10us" if large else "<10us"
+        row["time_share"] = row["mean_us"] / total_mean
+        row["weighted_share"] = row["time_share"] * row["max_ratio"] / (0.8 if large else 1)
+    r_big = math.fsum(row["weighted_share"] for row in rows if row["bucket"] == ">=10us")
+    r_small = math.fsum(row["weighted_share"] for row in rows if row["bucket"] == "<10us")
+    return {"rows": rows, "total_mean_us": total_mean,
+            "r_big": r_big, "r_small": r_small, "r_total": r_big + r_small}
 ```
 
-返回的占比为小数，显示百分比时再乘 100 或使用 Excel 百分比格式。没有重复边界的完整文件调用 `analyze(path)`，不得无条件设置“删除最后一个 attention”。
+返回百分比是小数，最后再设置百分比格式。逻辑位置的顺序沿用确认后的四层顺序，不能按算子类型排序后打乱主表。
 
 ## 9. 最后采用的规则与验收
 
-最终口径固定为：
+1. 原数据不修改；先限定单rank、单阶段、完整且同工作量的统计范围。
+2. 排除通信和确认重复的边界，保留范围内全部有效采样。
+3. 四层的每个逻辑位置保留一行，对同一位置的重复采样先求平均；不同层的同名算子不合并。
+4. 各阶段 ratio 先分别求采样均值，再取十阶段均值的最大值。
+5. 两组共用 `T_mean = 全部逻辑行平均Duration之和`；不使用原始调用累计Duration作分母。
+6. 平均Duration `>=10 μs`（包含等于10）用 `/0.8`；平均Duration `<10 μs` 不除以0.8。
+7. 按平均耗时计算原始百分比与ratio加权占比，分别列示，再对加权占比求和。
+8. 输出沿用四层表：按逻辑位置保留顺序，两侧并排对齐；采样次数、绝对平均耗时、形状、百分比和差值可追溯。
 
-1. 保留原始数据，先确定单 rank、单阶段和相同采样范围。
-2. 排除通信及通信 launcher；仅在已确认超出目标范围时排除重复边界。
-3. 分母为上述范围内全部非通信调用的 Duration 累计，两组共用。
-4. `>10 μs` 用 `duration / T_compute × max_ratio / 0.8`；`<10 μs` 用 `duration / T_compute × max_ratio`。
-5. ratio 逐调用取十阶段最大值，不取 miss rate 或 cube utilization，不截断、不补缺失为零。
-6. 先逐调用计算，再分组求和；保留原始时间占比与加权占比的区别。
-7. 平均耗时采用 `累计Duration / 调用次数`；同时提供类型汇总与名称/形状/dtype 细分。
-8. 恰好 10 μs 单独披露；不强行归入任一严格阈值组。
-
-交付前核对：原文件未改动；分母和筛选范围一致；调用数与模型层数/step 数相符；各组累计及次数能回归总体；平均值按次数加权；公式可重算且无错误；缺失字段和额外剔除均有记录；百分比只在最后格式化，保留未舍入计算值。
+验收时核对样本数与周期数、四层逻辑行数、通信/边界排除清单、`Σ(mean_g)=T_mean`、`Σ(q_g)=100%`、两阈值组完整覆盖、ratio均值及最大值计算顺序、原始位置没有被同名去重、公式可重算，以及所有展示值都在最后舍入。
