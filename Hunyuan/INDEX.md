@@ -6,6 +6,8 @@
 
 > **📌 增量更新**：2026-11-09 已完成第三次复扫，组织公开仓库 **90 → 95**（Agent 17 / Infer 61 / 其余 17）。本轮核心事件：**Hy4 正式版发布（11-04，API/产品先行、权重后置）**、稀疏注意力内核 `FlashTopK`、同传模型 `Hy-SimulMT`、两个"程序化 ground truth"评测基准。增量报告见 [`agent/2026-11-09/`](agent/2026-11-09/) 与 [`infer/2026-11-09/`](infer/2026-11-09/)，总览见 [第九节](#九增量扫描2026-10-26--2026-11-09)。
 
+> **📌 增量更新**：2026-11-23 已完成第四次复扫，组织公开仓库 **95 → 99**（Infer 61 → 63）。**Hy4 正式版权重开源三件套**（`Hy4`/`Hy4-FP8`/`Hy4-base`，架构 `HYV4VLForConditionalGeneration` 证实商发分支推断）+ **`Hy4-flash` 发布并两天内开源**（224B/12B 激活，LatentMoE + Engram + 1:3 混合注意力）+ **DFly2 投机解码**替代 MTP + **License 收窄为 Tencent Hy License（MaaS 条款）**。简版/详细版总结见 [`_research/2026-11-23/`](_research/2026-11-23/)，总览见 [第十节](#十增量扫描2026-11-09--2026-11-23)。
+
 > **说明**：本次交付为**调研报告**（不包含仓库克隆）。所有结论均基于各仓库 README / LICENSE 原文，关键数字与命令照抄原文并注明来源；原文未说明的一律标注 `README 未说明`。
 > 仓库在持续更新，命令与版本请以仓库当前 README 为准。
 
@@ -310,3 +312,33 @@ pwsh -File clone-repos.ps1 -Category agent -Pull
 - ⚠️ **超前叙事**：财联社标题"史上最强开源模型"发布时权重并未开源（"近期开源"）——标题与正文口径不一致时，以正文承诺为准并在时间线标注"未兑现/待兑现"。
 - ✅ **`gh` 已认证可用**（`C:\Program Files\GitHub CLI\gh.exe`，账号 SeaAsters）：组织快照、commits、releases、`published_at` 全部走认证 API，60 次/小时限流问题彻底解除（脚本见 `_research/2026-11-09/scan_detail.py`）。
 - 素材：[`_research/2026-11-09/`](_research/2026-11-09/)（org 快照 / delta / commits / releases / HF models+datasets / 16 份 README / 3 个可重跑脚本）。
+
+---
+
+## 十、增量扫描（2026-11-09 → 2026-11-23）
+
+**复扫结论**：组织公开仓库 **95 → 99**（+2 新 +2 补录）；HF `tencent` 窗口内新增模型 **34 个**。**本窗口主题：Hy 系权重全部兑现开源**——
+
+| 事件 | 要点 | 详见 |
+|---|---|---|
+| ⭐ **Hy4 正式版权重开源** | `Hy4`（BF16）+ `Hy4-FP8` + **`Hy4-base` 预训练底座** 三件套上 HF + `AngelSlim/Hy4-GGUF`；架构 **`HYV4VLForConditionalGeneration`** 与本地商发分支逐字一致（上轮推断证实）；**DFly2 投机解码（KV Share + Index Share，5 层 3.3B）替代 MTP**；ViT 1.23B 原生多模态；System Card 已发布；⚠️ **License 从 Apache-2.0 收窄为 Tencent Hy License**（Section 10 MaaS 条款：年营收 >$50M 或产品 MAU >1 亿需书面许可，内部使用豁免）；幻觉率 README 口径 15.76%→5.45%（与 11-04 报道的 12.95%→7.2% 并存，引用需注明出处） | [`_research/2026-11-23/Agent&推理详细版（261109-261123）.md`](_research/2026-11-23/Agent&推理详细版（261109-261123）.md) §二 |
+| ⭐ **Hy4 flash 发布并两天内开源**（11-16 上线 → 11-18 开源） | 224B 总参（含 **Engram 63.5B**）/ 12B 激活；**三项新架构**：1:3 稀疏+SWA 混合注意力、**LatentMoE**（512 取 16 潜空间）、**Engram N-gram embedding**（bigram+trigram 哈希）；KV cache 仅 Hy4 的 1/6；megakernel + 4-bit + DFly2 解码 >150 tokens/s；WorkIndex 42.1 略超 preview（39.7），单任务成本 Hy4 的 1/20；定价 0.5/2/0.02 元每百万 tokens | 同上 §三 |
+| FlashTopK | **11-09 合入 SM100 支持**（scan/pruning/refine 内核 + 结果）——roadmap 外提前落地 Blackwell | 同上 §4.2 |
+| UniRL | 30 commits：**新算法 AROPD**（AR 采样 token 在线蒸馏）+ 训练侧 PE 图像感知改写 | 同上 §4.1 |
+| Hy-Memory | 155 commits；SDK **2.0.15**；Kuzu 图内存治理（冻结图隔离重建） | 同上 §4.1 |
+| HF 爆量 | **WeMM-Video 家族**（2B/4B/9B/35BA3B × BF16/GGUF/AWQ/FP8/**NVFP4**，`Tencent` org 其他团队）20 仓库 + WePocketModel + WeVisForensics | 同上 §4.3 |
+| 新仓库 | `MovieRoll`（北大×混元长视频生成，**SGLang Diffusion 后端**）；补录 `ORAV-Bench`（清华×Hy 音视频生成基准） | 同上 §4.3 |
+
+**上轮判断兑现情况**：⑬"API/产品先行、权重后置"→ **兑现**（11 月中下旬权重转公开）；⑭稀疏注意力全栈 → **扩展到 SM100**；"下次扫描观察点"三项全部命中（Hy4 权重开源 ✓、Hy4 flash ✓、FlashTopK roadmap 部分落地——SM100 属计划外新增）。
+
+**本轮新增判断**：**⑳ 双模型结构成型**（Hy4 保智能上限 / flash 保日常成本，官方明确分工建议）；**㉑ "开源"的开放度在商业维度收窄**（preview Apache-2.0 → 正式版 MaaS 条款 License——权重开放与商用自由是两件事）；**㉒ DFly2 成为稀疏注意力模型的第三条投机路线**（与 MTP/DSpine 并列，KV+Index 共享、常数成本、PD 就绪）。
+
+**本轮踩到的坑（写给下一次扫描）**：
+
+- ⚠️ **提前建仓 + 私有转公开**已是标准模式（Hy4 于 10-28/29 建仓，11 月中才公开）——`created_at` 远早于可见时间，TOUCHED/MISSED 判定要结合 HF `createdAt` 与 README News 综合定性，权重公开的"确切瞬间"往往取不到一手时间戳，标注区间即可。
+- ⚠️ **GGUF 可能不在 `tencent` org**（Hy4-GGUF 在 `AngelSlim` org）——查量化版本时 author 过滤会漏，需按模型名搜索。
+- ⚠️ **架构名先于权重出现**：本地商发分支的 `HYV4VLForConditionalGeneration` 注册早于正式版权重公开三周——商发/NPU 侧代码是"即将开源什么"的领先指标。
+
+**昇腾侧动作**：P0 = 拉取 Hy4-FP8 / Hy4-flash-FP8 实机验证 + 商发分支重同步（注意视觉塔规格差异：本地 27 层/1,152 vs 正式版 ViT 40 层/1,536，本地规格更接近 flash）；P0 合规 = 对外服务前过 Tencent Hy License MaaS 条款；P1 = DFly2 接受率评估、flash 三架构研究。
+
+素材：[`_research/2026-11-23/`](_research/2026-11-23/)（org/delta CSV、commits/releases JSON、HF JSON、Hy4 系 README、LICENSE 原文、scan_r4.py 可重跑）。
