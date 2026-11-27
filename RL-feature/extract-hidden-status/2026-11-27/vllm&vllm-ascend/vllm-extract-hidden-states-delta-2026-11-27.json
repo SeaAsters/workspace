@@ -1,0 +1,3774 @@
+{
+ "repository": "vllm-project/vllm",
+ "repositories": [
+  "vllm-project/vllm",
+  "vllm-project/vllm-ascend"
+ ],
+ "topic": "hidden",
+ "window_semantics": "UTC [2026-11-20T06:54:42Z, cutoff)",
+ "start_utc": "2026-11-20T06:54:42Z",
+ "end_utc_exclusive": "2026-11-27T01:49:24Z",
+ "cutoff_utc": "2026-11-27T01:49:24Z",
+ "main_sha": "29fa74e654c66f36db7e195fd53e3a43c90b7a76",
+ "main_shas": {
+  "vllm-project/vllm": "29fa74e654c66f36db7e195fd53e3a43c90b7a76",
+  "vllm-project/vllm-ascend": "d1108b2f8288da4a4cf2358bb392b34b1a0d7b97"
+ },
+ "main_observed_utc": "2026-11-27T01:49:24Z",
+ "baseline": "接续 2026-11-20 的 vLLM + vllm-ascend 合并报告；两仓以关键词命中条目 + 窗口内合入提交作为基线",
+ "record_count": 9,
+ "classification_counts": {
+  "本期新建": 2,
+  "前期补漏续跟": 7
+ },
+ "records": [
+  {
+   "repository": "vllm-project/vllm",
+   "number": 69875,
+   "kind": "pr",
+   "title": "[Bugfix][Spec Decode][PP] Allocate aux hidden-state receive buffers in residual dtype",
+   "url": "https://github.com/vllm-project/vllm/pull/69875",
+   "topic": "hidden",
+   "priority": "P0",
+   "classification": "本期新建",
+   "activity": "新建（深读：PP aux 接收缓冲 dtype）",
+   "created_at": "2026-11-25T09:52:43Z",
+   "period_end_state": "open",
+   "current_state": "open",
+   "current_state_fetched_separately": true,
+   "merged_at": null,
+   "closed_at": null,
+   "base_ref": null,
+   "head_sha": null,
+   "merged_by": null,
+   "additions": null,
+   "deletions": null,
+   "draft": null,
+   "labels": [
+    "bug",
+    "speculative-decoding",
+    "mrv2"
+   ],
+   "event_types": {},
+   "events": [],
+   "commits": [],
+   "changed_files_current_head": [],
+   "analysis_current_design": "[Bugfix][Spec Decode][PP] Allocate aux hidden-state receive buffers in residual dtype。**本期深读对象**。`reserve_aux_intermediate_tensor_slots()` 原先用**模型 dtype**（如 bf16）为下游 PP 阶段预分配 aux hidden-state 槽位，但 aux 取自**残差流**，部分模型（如 Muse Spark）的残差流是 fp32——接收端缓冲比发送端窄，PP 传递时被静默降精度。修复改为：若 `IntermediateTensors` 里有 `hidden_states`，aux 槽位就用它的 dtype，否则回落到模型 dtype；新测试对 fp32 / bf16 / 无 hidden_states 三种情况分别断言槽位 dtype。",
+   "npu": "**与 Ascend 直接相关**：Ascend 的 DeepSeek-V4 系列残差流保留 fp32（`FP32 mixing state` 就在 PP intermediate tensors 里），接收端 aux 槽位若按 bf16 分配会静默降精度。验收断言应是「aux 槽位 dtype == hidden_states dtype」，而不是「能跑通」。",
+   "validation": "作者侧 test_eagle3_pp_aux_dtype.py（61 行，新增）；本期未复测。",
+   "evidence": "本 JSON 的 events / commits / changed_files_current_head 为结构化证据；扫描脚本与说明见仓库内 RL-feature/_scan-2026-11-27/README.md，原始 patch 与 API 缓存只保留在本地工作区（未入库）。"
+  },
+  {
+   "repository": "vllm-project/vllm",
+   "number": 69064,
+   "kind": "issue",
+   "title": "[Bug][Spec Decode] Enable VLM hidden states extraction",
+   "url": "https://github.com/vllm-project/vllm/issues/69064",
+   "topic": "hidden",
+   "priority": "P1",
+   "classification": "本期新建",
+   "activity": "新建 bug 报告",
+   "created_at": "2026-11-21T01:24:16Z",
+   "period_end_state": "open",
+   "current_state": "open",
+   "current_state_fetched_separately": true,
+   "merged_at": null,
+   "closed_at": null,
+   "base_ref": null,
+   "head_sha": null,
+   "merged_by": null,
+   "additions": null,
+   "deletions": null,
+   "draft": null,
+   "labels": [
+    "bug",
+    "documentation",
+    "speculative-decoding",
+    "ready",
+    "kv-connector"
+   ],
+   "event_types": {},
+   "events": [],
+   "commits": [],
+   "changed_files_current_head": [],
+   "analysis_current_design": "[Bug][Spec Decode] Enable VLM hidden states extraction：VLM（多模态）走 `extract_hidden_states` 时提取不到或形状不对。说明 hidden-state 提取的模型侧覆盖仍偏文本模型，多模态 target 的 aux 路径尚未打通。",
+   "npu": "缺失：Ascend 的多模态 target 同样没有该路径。",
+   "validation": "用户报告；本期无修复。",
+   "evidence": "本 JSON 的 events / commits / changed_files_current_head 为结构化证据；扫描脚本与说明见仓库内 RL-feature/_scan-2026-11-27/README.md，原始 patch 与 API 缓存只保留在本地工作区（未入库）。"
+  },
+  {
+   "repository": "vllm-project/vllm",
+   "number": 53243,
+   "kind": "issue",
+   "title": "[Bug]: extract_hidden_states overestimates DeepSeek-V4 KV cache memory",
+   "url": "https://github.com/vllm-project/vllm/issues/53243",
+   "topic": "hidden",
+   "priority": "P1",
+   "classification": "前期补漏续跟",
+   "activity": "Issue 讨论",
+   "created_at": "2026-08-21T08:53:24Z",
+   "period_end_state": "open",
+   "current_state": "open",
+   "current_state_fetched_separately": true,
+   "merged_at": null,
+   "closed_at": null,
+   "base_ref": null,
+   "head_sha": null,
+   "merged_by": null,
+   "additions": null,
+   "deletions": null,
+   "draft": null,
+   "labels": [
+    "stale",
+    "deepseek",
+    "DSv4"
+   ],
+   "event_types": {},
+   "events": [],
+   "commits": [],
+   "changed_files_current_head": [],
+   "analysis_current_design": "[Bug] `extract_hidden_states` 高估 DeepSeek-V4 的 KV cache 内存：提取用的 cache-only KV 组被按最大宽度计费（与 #56822 同族问题），同样显存只能起更小配置。本期有更新，仍 open。",
+   "npu": "需实测：Ascend 的 KV 池计费需按实际 group 宽度复算，否则可用 batch 被低估。",
+   "validation": "用户报告；本期无修复。",
+   "evidence": "本 JSON 的 events / commits / changed_files_current_head 为结构化证据；扫描脚本与说明见仓库内 RL-feature/_scan-2026-11-27/README.md，原始 patch 与 API 缓存只保留在本地工作区（未入库）。"
+  },
+  {
+   "repository": "vllm-project/vllm",
+   "number": 52073,
+   "kind": "pr",
+   "title": "[Spec Decode] Test extract_hidden_states on NemotronH hybrid models",
+   "url": "https://github.com/vllm-project/vllm/pull/52073",
+   "topic": "hidden",
+   "priority": "P2",
+   "classification": "前期补漏续跟",
+   "activity": "持续跟进",
+   "created_at": "2026-08-13T00:18:21Z",
+   "period_end_state": "open",
+   "current_state": "open",
+   "current_state_fetched_separately": true,
+   "merged_at": null,
+   "closed_at": null,
+   "base_ref": null,
+   "head_sha": null,
+   "merged_by": null,
+   "additions": null,
+   "deletions": null,
+   "draft": null,
+   "labels": [
+    "needs-rebase",
+    "stale",
+    "kv-connector"
+   ],
+   "event_types": {},
+   "events": [],
+   "commits": [],
+   "changed_files_current_head": [],
+   "analysis_current_design": "[Spec Decode] Test extract_hidden_states on NemotronH hybrid models：为混合 Mamba 模型补提取测试，属覆盖补齐。",
+   "npu": "需实测：Ascend 的 hybrid 模型若走同一路径，测试需在 NPU 上重跑。",
+   "validation": "本期未复测。",
+   "evidence": "本 JSON 的 events / commits / changed_files_current_head 为结构化证据；扫描脚本与说明见仓库内 RL-feature/_scan-2026-11-27/README.md，原始 patch 与 API 缓存只保留在本地工作区（未入库）。"
+  },
+  {
+   "repository": "vllm-project/vllm",
+   "number": 68824,
+   "kind": "pr",
+   "title": "[Bugfix] Capture final-layer aux hidden state in DeepSeek-V3.2",
+   "url": "https://github.com/vllm-project/vllm/pull/68824",
+   "topic": "hidden",
+   "priority": "P2",
+   "classification": "前期补漏续跟",
+   "activity": "仍 open（上期新建）",
+   "created_at": "2026-11-20T02:26:23Z",
+   "period_end_state": "open",
+   "current_state": "open",
+   "current_state_fetched_separately": true,
+   "merged_at": null,
+   "closed_at": null,
+   "base_ref": null,
+   "head_sha": null,
+   "merged_by": null,
+   "additions": null,
+   "deletions": null,
+   "draft": null,
+   "labels": [
+    "bug",
+    "deepseek"
+   ],
+   "event_types": {},
+   "events": [],
+   "commits": [],
+   "changed_files_current_head": [],
+   "analysis_current_design": "上期的「DeepSeek-V3.2 丢最后一层 aux」修复本期仍未合入（11-20 之后无更新），问题 #68813 也仍 open——也就是说**少一层的问题在 main 上还没修**。",
+   "npu": "缺失：Ascend 实现同样需要核对循环边界。",
+   "validation": "本期未复测。",
+   "evidence": "本 JSON 的 events / commits / changed_files_current_head 为结构化证据；扫描脚本与说明见仓库内 RL-feature/_scan-2026-11-27/README.md，原始 patch 与 API 缓存只保留在本地工作区（未入库）。"
+  },
+  {
+   "repository": "vllm-project/vllm",
+   "number": 65991,
+   "kind": "pr",
+   "title": "[Spec Decode] Add option to disable extract_hidden_states decode drafts",
+   "url": "https://github.com/vllm-project/vllm/pull/65991",
+   "topic": "hidden",
+   "priority": "P2",
+   "classification": "前期补漏续跟",
+   "activity": "持续跟进",
+   "created_at": "2026-11-05T21:20:14Z",
+   "period_end_state": "open",
+   "current_state": "open",
+   "current_state_fetched_separately": true,
+   "merged_at": null,
+   "closed_at": null,
+   "base_ref": null,
+   "head_sha": null,
+   "merged_by": null,
+   "additions": null,
+   "deletions": null,
+   "draft": null,
+   "labels": [
+    "documentation",
+    "speculative-decoding",
+    "llama",
+    "kv-connector",
+    "mrv2"
+   ],
+   "event_types": {},
+   "events": [],
+   "commits": [],
+   "changed_files_current_head": [],
+   "analysis_current_design": "[Spec Decode] 关闭 extract_hidden_states decode draft 的开关（K=0），本期更新到 11-24，仍 open。",
+   "npu": "需实测：Ascend 同一调度下 K=0 时 aux 仍需按请求返回。",
+   "validation": "本期未复测。",
+   "evidence": "本 JSON 的 events / commits / changed_files_current_head 为结构化证据；扫描脚本与说明见仓库内 RL-feature/_scan-2026-11-27/README.md，原始 patch 与 API 缓存只保留在本地工作区（未入库）。"
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 21831,
+   "kind": "pr",
+   "title": "[Feature][SpecDecode] Support GLM-5.3-Flash DFlash2 and PP (#21831)",
+   "url": "https://github.com/vllm-project/vllm-ascend/pull/21831",
+   "topic": "hidden",
+   "priority": "P0",
+   "classification": "前期补漏续跟",
+   "activity": "合入（GLM-5.3 DFlash2 + PP）",
+   "created_at": "2026-11-13T08:47:13Z",
+   "period_end_state": "merged",
+   "current_state": "closed",
+   "current_state_fetched_separately": true,
+   "merged_at": "2026-11-23T15:39:58+08:00",
+   "closed_at": null,
+   "base_ref": "main",
+   "head_sha": "9316dd8089b0ff7286ba83e777afe3cdffce066a",
+   "merged_by": null,
+   "additions": null,
+   "deletions": null,
+   "draft": false,
+   "labels": [
+    "module:tests",
+    "module:core",
+    "ready-precise",
+    "ci-run"
+   ],
+   "event_types": {},
+   "events": [],
+   "commits": [
+    {
+     "sha": "9316dd8089b0ff7286ba83e777afe3cdffce066a",
+     "subject": "[Feature][SpecDecode] Support GLM-5.3-Flash DFlash2 and PP (#21831)",
+     "date": "2026-11-23T15:39:58+08:00"
+    }
+   ],
+   "changed_files_current_head": [
+    "release_notes/fragments/21831.yaml",
+    "tests/ut/models/test_glm5next_pp.py",
+    "tests/ut/test_platform.py",
+    "vllm_ascend/models/glm5next/model.py",
+    "vllm_ascend/platform.py"
+   ],
+   "analysis_current_design": "[Feature][SpecDecode] Support GLM-5.3-Flash DFlash2 and PP，`2026-11-23T15:39+08:00` 合入（`9316dd80`）。在已合入的 DFlash2 基础上把 **PP** 也打通：target 侧 aux 接口 + mHC 延后残差补全 + SP 安全捕获，并进入 PP 传输。是本期 Ascend 侧唯一把「aux 捕获 + PP」同时合入的能力项。",
+   "npu": "需实测：PP>1 时 aux 槽位顺序、full-token 还原与 mHC 残差补全的次序必须与单卡一致；结合本期上游 #69875（接收缓冲 dtype）一起验，避免 bf16/fp32 混用。",
+   "validation": "合入提交自带用例；本期未复测。",
+   "evidence": "本 JSON 的 events / commits / changed_files_current_head 为结构化证据；扫描脚本与说明见仓库内 RL-feature/_scan-2026-11-27/README.md，原始 patch 与 API 缓存只保留在本地工作区（未入库）。"
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 22485,
+   "kind": "pr",
+   "title": "[BugFix][Model] Skip unused DeepSeek V4.1 HC buffer for DSpark (#22485)",
+   "url": "https://github.com/vllm-project/vllm-ascend/pull/22485",
+   "topic": "hidden",
+   "priority": "P1",
+   "classification": "前期补漏续跟",
+   "activity": "合入（跳过无用 HC buffer）",
+   "created_at": "2026-11-19T11:04:56Z",
+   "period_end_state": "merged",
+   "current_state": "closed",
+   "current_state_fetched_separately": true,
+   "merged_at": "2026-11-20T16:27:43+08:00",
+   "closed_at": null,
+   "base_ref": "main",
+   "head_sha": "a285b50d4be519f0d4a713f01eb1d563592fbc3c",
+   "merged_by": null,
+   "additions": null,
+   "deletions": null,
+   "draft": false,
+   "labels": [
+    "module:tests",
+    "ready-precise"
+   ],
+   "event_types": {},
+   "events": [],
+   "commits": [
+    {
+     "sha": "a285b50d4be519f0d4a713f01eb1d563592fbc3c",
+     "subject": "[BugFix][Model] Skip unused DeepSeek V4.1 HC buffer for DSpark (#22485)",
+     "date": "2026-11-20T16:27:43+08:00"
+    }
+   ],
+   "changed_files_current_head": [
+    "release_notes/fragments/22485.yaml",
+    "tests/ut/models/test_deepseek_v41_mtp_buffer.py",
+    "vllm_ascend/models/deepseek_v41/model.py"
+   ],
+   "analysis_current_design": "[BugFix][Model] Skip unused DeepSeek V4.1 HC buffer for DSpark，`2026-11-20T16:27+08:00` 合入（`a285b50d`）。DSpark 不需要的 HC buffer 操作被跳过，属 aux/HC 链路的开销清理（延续上期 #16621 的思路）。",
+   "npu": "需实测：删除后需确认 DSpark 实际消费的 aux 槽位仍被正确初始化，否则是脏数据而非崩溃。",
+   "validation": "合入提交自带测试；本期未复测。",
+   "evidence": "本 JSON 的 events / commits / changed_files_current_head 为结构化证据；扫描脚本与说明见仓库内 RL-feature/_scan-2026-11-27/README.md，原始 patch 与 API 缓存只保留在本地工作区（未入库）。"
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 22198,
+   "kind": "pr",
+   "title": "[Misc] Main2Main v0.34.0 (#22198)",
+   "url": "https://github.com/vllm-project/vllm-ascend/pull/22198",
+   "topic": "hidden",
+   "priority": "P2",
+   "classification": "前期补漏续跟",
+   "activity": "合入（Main2Main v0.34.0）",
+   "created_at": "2026-11-17T12:23:57Z",
+   "period_end_state": "merged",
+   "current_state": "closed",
+   "current_state_fetched_separately": true,
+   "merged_at": "2026-11-24T18:32:38Z",
+   "closed_at": null,
+   "base_ref": "main",
+   "head_sha": "9b8c54e0d189f34259ab5112f2378ccf558a4e18",
+   "merged_by": null,
+   "additions": null,
+   "deletions": null,
+   "draft": false,
+   "labels": [
+    "documentation",
+    "module:tests",
+    "module:ops",
+    "module:core",
+    "main2main",
+    "ci-run",
+    "ai-review"
+   ],
+   "event_types": {},
+   "events": [],
+   "commits": [
+    {
+     "sha": "9b8c54e0d189f34259ab5112f2378ccf558a4e18",
+     "subject": "[Misc] Main2Main v0.34.0 (#22198)",
+     "date": "2026-11-24T18:32:38Z"
+    }
+   ],
+   "changed_files_current_head": [
+    ".github/vllm-release-tag.commit",
+    "Dockerfile",
+    "Dockerfile.310p",
+    "Dockerfile.310p.openEuler",
+    "Dockerfile.a3",
+    "Dockerfile.a3.openEuler",
+    "Dockerfile.a5",
+    "Dockerfile.a5.openEuler",
+    "Dockerfile.openEuler",
+    "README.md",
+    "README.zh.md",
+    "docs/source/tutorials/models/Qwen3.8-Flash-Next.md",
+    "docs/source/user_guide/feature_guide/speculative_decoding.md",
+    "examples/offline_DSD_k_tuner/generate_config.py",
+    "pyproject.toml",
+    "release_notes/fragments/20627.yaml",
+    "requirements.txt",
+    "tests/e2e/nightly/single_node/ops/singlecard_ops/test_hisparse_resolve_residency.py",
+    "tests/e2e/nightly/single_node/ops/singlecard_ops/test_minimax_m3_sparse_attn.py",
+    "tests/e2e/nightly/single_node/ops/singlecard_ops/triton/test_hisparse.py",
+    "tests/e2e/nightly/single_node/ops/singlecard_ops/triton/test_num_nans.py",
+    "tests/e2e/nightly/single_node/ops/singlecard_ops/triton/test_postprocess_mamba.py",
+    "tests/e2e/nightly/single_node/ops/singlecard_ops/triton/test_prepare_dflash_inputs.py",
+    "tests/e2e/nightly/single_node/ops/singlecard_ops/triton/test_rejection_sample_v2.py",
+    "tests/e2e/pull_request/four_card/context_parallel/test_accuracy_v2.py",
+    "tests/e2e/pull_request/one_card/spec_decode/test_eagle.py",
+    "tests/e2e/pull_request/one_card/spec_decode/test_mtp_eagle_correctness.py",
+    "tests/e2e/pull_request/one_card/test_gumbel_sampling.py",
+    "tests/e2e/pull_request/one_card/test_hisparse_attention.py",
+    "tests/e2e/pull_request/one_card/test_hisparse_integration.py",
+    "tests/e2e/pull_request/one_card/test_hisparse_prefill_staging.py",
+    "tests/e2e/pull_request/one_card/test_qwen3_8b_w8a8.py",
+    "tests/e2e/pull_request/two_card/ops/triton/test_rejection_sample_v2.py",
+    "tests/e2e/pull_request/two_card/spec_decode/test_spec_decode.py",
+    "tests/ut/attention/test_attention_utils.py",
+    "tests/ut/attention/test_batch_invariance_support.py",
+    "tests/ut/attention/test_flash_attn.py",
+    "tests/ut/attention/test_mla_v1.py",
+    "tests/ut/attention/test_sfa_v1.py",
+    "tests/ut/compilation/test_acl_graph.py",
+    "tests/ut/core/test_dyntra_lb_scheduler.py",
+    "tests/ut/core/test_kv_cache_interface.py",
+    "tests/ut/core/test_recompute_scheduler.py",
+    "tests/ut/core/test_score_encoder_cache_scheduler.py",
+    "tests/ut/distributed/eplb/test_state.py",
+    "tests/ut/distributed/kv_transfer/kv_p2p/test_mooncake_connector.py",
+    "tests/ut/distributed/weight_transfer/test_hccl_engine.py",
+    "tests/ut/distributed/weight_transfer/test_npu_ipc_engine.py",
+    "tests/ut/graph_dispatch_fixture.py",
+    "tests/ut/kv_offload/mooncake_v2/test_push_scheduler.py",
+    "tests/ut/kv_offload/utils.py",
+    "tests/ut/kv_trace/test_kv_trace_runtime.py",
+    "tests/ut/kv_trace/test_kv_trace_state.py",
+    "tests/ut/models/minimax_m3/test_minimax_dspark_adapter.py",
+    "tests/ut/models/minimax_m3/test_minimax_m3.py",
+    "tests/ut/models/qwen4_exp/test_qsa_layerwise_hooks.py",
+    "tests/ut/models/qwen4_exp/test_qsa_upstream_abi.py",
+    "tests/ut/models/test_deepseek_v41_cache.py",
+    "tests/ut/models/test_glm5next_mtp_embedding.py",
+    "tests/ut/models/test_kimi_k3_pp_sp.py",
+    "tests/ut/models/test_qwen4_exp_cache_config.py",
+    "tests/ut/models/test_qwen4_exp_soc_gating.py",
+    "tests/ut/ops/test_fused_moe.py",
+    "tests/ut/ops/test_kimi_kda.py",
+    "tests/ut/ops/test_kimi_kda_pcp.py",
+    "tests/ut/ops/test_linear.py",
+    "tests/ut/ops/test_mla_weight_processing.py",
+    "tests/ut/patch/platform/release_scheduler_fixture.py",
+    "tests/ut/patch/platform/test_patch_balance_schedule.py",
+    "tests/ut/patch/platform/test_patch_fused_moe.py",
+    "tests/ut/patch/platform/test_patch_pp_mtp.py",
+    "tests/ut/patch/platform/test_patch_speculative_config_dspark.py",
+    "tests/ut/patch/platform/test_patch_swa_bounded_replay.py",
+    "tests/ut/patch/platform/test_patch_use_v2_model_runner.py",
+    "tests/ut/patch/worker/patch_common/test_patch_distributed.py",
+    "tests/ut/patch/worker/test_deepseek_pp_embedding.py",
+    "tests/ut/patch/worker/test_patch_bind_kv_cache.py",
+    "tests/ut/patch/worker/test_patch_deepseek_v2.py",
+    "tests/ut/patch/worker/test_patch_dspark_eplb.py",
+    "tests/ut/patch/worker/test_patch_v2_gumbel.py",
+    "tests/ut/spec_decode/test_dflash2_v2.py",
+    "tests/ut/spec_decode/test_dflash_pcp.py",
+    "tests/ut/spec_decode/test_dspark_pcp_dp_sync.py",
+    "tests/ut/spec_decode/test_mla_dspark.py",
+    "tests/ut/spec_decode/test_multi_module_mtp_speculator.py",
+    "tests/ut/test_ascend_forward_context.py",
+    "tests/ut/test_compressed_prefix_cache.py",
+    "tests/ut/test_platform.py",
+    "tests/ut/worker/test_adaptive_verification.py",
+    "tests/ut/worker/test_model_runner_v2.py",
+    "tests/ut/worker/test_model_runner_v2_finegrained_tp.py",
+    "tests/ut/worker/test_model_runner_v2_kv_cache.py",
+    "tests/ut/worker/test_model_runner_v2_mamba.py",
+    "tests/ut/worker/test_mtp_pcp_speculator_v2.py",
+    "tests/ut/worker/test_worker_inheritance.py",
+    "tests/ut/worker/test_worker_v1.py",
+    "tests/ut/worker/test_worker_v2.py",
+    "tests/ut/worker/v2/test_aclgraph.py",
+    "tests/ut/worker/v2/test_embedding_tp_dummy_inputs.py",
+    "tests/ut/worker/v2/test_speculator.py",
+    "tests/ut/worker/v2/test_standalone_ar_speculator.py",
+    "tests/ut/worker/v2/test_states.py",
+    "vllm_ascend/_310p/worker/v2/aclgraph.py",
+    "vllm_ascend/_310p/worker/v2/model_runner.py",
+    "vllm_ascend/_310p/worker/v2/rope.py",
+    "vllm_ascend/_310p/worker/v2/spec_decode/mtp_speculator.py",
+    "vllm_ascend/ascend_config.py",
+    "vllm_ascend/ascend_forward_context.py",
+    "vllm_ascend/attention/mla_v1.py",
+    "vllm_ascend/attention/sfa_v1.py",
+    "vllm_ascend/attention/utils.py",
+    "vllm_ascend/compilation/acl_graph.py",
+    "vllm_ascend/compilation/compiler_interface.py",
+    "vllm_ascend/core/dyntra_lb_scheduler.py",
+    "vllm_ascend/core/recompute_scheduler.py",
+    "vllm_ascend/core/scheduler_output.py",
+    "vllm_ascend/distributed/ec_transfer/ec_connector/mooncake/store_backend.py",
+    "vllm_ascend/distributed/eplb/eplb_state.py",
+    "vllm_ascend/distributed/kv_transfer/kv_p2p/mooncake/push_scheduler.py",
+    "vllm_ascend/distributed/kv_transfer/kv_pool/ascend_store/backend/mooncake_layerwise.py",
+    "vllm_ascend/distributed/kv_transfer/kv_pool/ascend_store/lookup_key.py",
+    "vllm_ascend/distributed/kv_transfer/kv_pool/kv_offload/native/cpu_npu.py",
+    "vllm_ascend/distributed/weight_transfer/hccl_engine.py",
+    "vllm_ascend/distributed/weight_transfer/npu_ipc_engine.py",
+    "vllm_ascend/ec_manager/score_ec_manager.py",
+    "vllm_ascend/kv_trace/kv_trace_state.py",
+    "vllm_ascend/models/deepseek_v4/model.py",
+    "vllm_ascend/models/deepseek_v4/vl_model.py",
+    "vllm_ascend/models/deepseek_v41/engram/hash_state.py",
+    "vllm_ascend/models/deepseek_v41/vl_model.py",
+    "vllm_ascend/models/gemma4_mm.py",
+    "vllm_ascend/models/glm5next/kda.py",
+    "vllm_ascend/models/kimi_k3/cache_config.py",
+    "vllm_ascend/models/kimi_k3/kimi_k3.py",
+    "vllm_ascend/models/kimi_k3/paired_sfa_cache.py",
+    "vllm_ascend/models/minimax_m3/minimax_m3.py",
+    "vllm_ascend/models/minimax_m3/minimax_m3_dspark.py",
+    "vllm_ascend/models/minimax_m3/msa_m3.py",
+    "vllm_ascend/models/qwen4_exp/cpu_length_sync.py",
+    "vllm_ascend/models/qwen4_exp/qsa.py",
+    "vllm_ascend/models/step5/model.py",
+    "vllm_ascend/models/step5/sparse_attention.py",
+    "vllm_ascend/ops/fused_moe/fused_moe.py",
+    "vllm_ascend/ops/fused_moe/routed_experts.py",
+    "vllm_ascend/ops/head_parallel.py",
+    "vllm_ascend/ops/kimi_kda.py",
+    "vllm_ascend/ops/kimi_mla.py",
+    "vllm_ascend/ops/linear.py",
+    "vllm_ascend/ops/mla.py",
+    "vllm_ascend/ops/triton/docs/prepare_dflash_inputs.md",
+    "vllm_ascend/ops/triton/sample/categorical_sample.py",
+    "vllm_ascend/patch/__init__.py",
+    "vllm_ascend/patch/platform/__init__.py",
+    "vllm_ascend/patch/platform/patch_balance_schedule.py",
+    "vllm_ascend/patch/platform/patch_fused_moe.py",
+    "vllm_ascend/patch/platform/patch_kimi_k31_config.py",
+    "vllm_ascend/patch/platform/patch_pp_mtp.py",
+    "vllm_ascend/patch/platform/patch_structured_output.py",
+    "vllm_ascend/patch/platform/patch_swa_bounded_replay.py",
+    "vllm_ascend/patch/worker/__init__.py",
+    "vllm_ascend/patch/worker/patch_adaptive_verification.py",
+    "vllm_ascend/patch/worker/patch_attn_utils.py",
+    "vllm_ascend/patch/worker/patch_bind_kv_cache.py",
+    "vllm_ascend/patch/worker/patch_deepseek_v2.py",
+    "vllm_ascend/patch/worker/patch_eagle_speculator.py",
+    "vllm_ascend/patch/worker/patch_kimi_k25.py",
+    "vllm_ascend/patch/worker/patch_mamba_utils.py",
+    "vllm_ascend/patch/worker/patch_model_runner.py",
+    "vllm_ascend/patch/worker/patch_uva.py",
+    "vllm_ascend/platform.py",
+    "vllm_ascend/worker/utils.py",
+    "vllm_ascend/worker/v2/aclgraph_utils.py",
+    "vllm_ascend/worker/v2/attn_utils.py",
+    "vllm_ascend/worker/v2/model_runner.py",
+    "vllm_ascend/worker/v2/model_states/mamba_hybrid.py",
+    "vllm_ascend/worker/v2/pcp_manager.py",
+    "vllm_ascend/worker/v2/spec_decode/dflash/aclgraph.py",
+    "vllm_ascend/worker/v2/spec_decode/dflash/speculator.py",
+    "vllm_ascend/worker/v2/spec_decode/dspark/speculator.py",
+    "vllm_ascend/worker/v2/spec_decode/multi_module_mtp/speculator.py",
+    "vllm_ascend/worker/v2/spec_decode/rejection_sampler_utils.py",
+    "vllm_ascend/worker/v2/spec_decode/standalone_ar/speculator.py",
+    "vllm_ascend/worker/v2/spec_decode/target_dependent_ar/aclgraph.py",
+    "vllm_ascend/worker/v2/spec_decode/target_dependent_ar/speculator.py",
+    "vllm_ascend/worker/v2/states.py",
+    "vllm_ascend/worker/worker.py"
+   ],
+   "analysis_current_design": "[Misc] Main2Main v0.34.0，`2026-11-24T18:32+08:00` 合入（`9b8c54e0`）：对齐上游 v0.34.0。上游本期把 aux relay 集中到 `PPHandler`（#66177）、加 CPU-pages（#66785）、改 draft 为独立 PP 段（#66063），main2main 之后必须重跑 aux/PP 组合用例。",
+   "npu": "需实测：这类升级最典型的故障是「接口还在但语义变了」，尤其 aux 槽位与 dtype。",
+   "validation": "合入提交；本期未复测。",
+   "evidence": "本 JSON 的 events / commits / changed_files_current_head 为结构化证据；扫描脚本与说明见仓库内 RL-feature/_scan-2026-11-27/README.md，原始 patch 与 API 缓存只保留在本地工作区（未入库）。"
+  }
+ ],
+ "non_substantive_followup": [
+  {
+   "number": 63972,
+   "repository": "vllm-project/vllm",
+   "title": "[CI Failure]: CPU-Spec Decode Tests - test_dflash2.py::test_dflash_fc_runs_fp32_target_hidden_states_in_draft_dtype",
+   "state": "closed",
+   "note": "对应 #63436 的 CI 失败记录，随修复关闭"
+  },
+  {
+   "number": 63406,
+   "repository": "vllm-project/vllm",
+   "title": "[Core][CUDA Graph] Separate prefill (token) and decode (request) CUDA graph capture size",
+   "state": "open",
+   "note": "仅与 #63427 的内存分解互相引用，非捕获接口变更"
+  },
+  {
+   "number": 19866,
+   "repository": "vllm-project/vllm-ascend",
+   "title": "[BugFix] Fix request-major sampling masks for speculative decoding on Ascend",
+   "state": "open",
+   "note": "采样 mask 主题（本报告只作相邻提及）"
+  },
+  {
+   "number": 20129,
+   "repository": "vllm-project/vllm-ascend",
+   "title": "[BugFix][Sample] Adapt sampling-mask packing to the vLLM slot layout",
+   "state": "open",
+   "note": "采样 mask 主题（本报告只作相邻提及）"
+  }
+ ],
+ "limitations": [
+  "当前 diff 与正文只描述采集时 head，不是完整源码快照",
+  "force-push 可能移除旧提交；patch/commits 只反映当前 head 可达提交，timeline 保留可见事件",
+  "评论中的测试与性能数字均为作者报告，本次未运行 GPU/NPU 或模型测试",
+  "相关度由主代理判断，完整候选与排除记录见本 JSON 的 candidate_decisions",
+  "vLLM 多数隐藏状态能力以 spec-decode 方法（extract_hidden_states）和逐模型 PP relay 存在，尚无公共 return_hidden_states 响应字段",
+  "vllm-ascend 的 aux-over-PP 是逐模型（DeepSeek-V4/V2 补丁、Kimi-K3、MiniMax-M3）打开，不是全局能力"
+ ],
+ "scan_coverage": {
+  "baseline_prs": 174,
+  "baseline_with_window_activity": 142,
+  "candidate_total": 77,
+  "candidate_prs": 61,
+  "candidate_issues": 16,
+  "featured_records": 9,
+  "discovered_items": 2536,
+  "discovered_prs": 2106,
+  "discovered_issues": 430,
+  "search_queries": 16,
+  "per_repository": {
+   "vllm-project/vllm": {
+    "baseline_prs": 27,
+    "baseline_with_window_activity": 24,
+    "candidate_total": 47,
+    "discovered_items": 1534,
+    "discovered_prs": 1257,
+    "discovered_issues": 277,
+    "search_queries": 16,
+    "commits_scanned_in_window": 454,
+    "main_sha": "29fa74e654c66f36db7e195fd53e3a43c90b7a76"
+   },
+   "vllm-project/vllm-ascend": {
+    "baseline_prs": 147,
+    "baseline_with_window_activity": 118,
+    "candidate_total": 30,
+    "discovered_items": 1002,
+    "discovered_prs": 849,
+    "discovered_issues": 153,
+    "search_queries": 0,
+    "commits_scanned_in_window": 285,
+    "main_sha": "d1108b2f8288da4a4cf2358bb392b34b1a0d7b97"
+   }
+  }
+ },
+ "query_indexes": [
+  {
+   "kind": "issues_search",
+   "repo": "vllm-project/vllm",
+   "query": "repo:vllm-project/vllm \"hidden states\" updated:>=2026-11-20",
+   "total": null,
+   "returned": null,
+   "cutoff_utc": "2026-11-20T06:54:42Z"
+  },
+  {
+   "kind": "issues_search",
+   "repo": "vllm-project/vllm",
+   "query": "repo:vllm-project/vllm \"hidden state\" updated:>=2026-11-20",
+   "total": null,
+   "returned": null,
+   "cutoff_utc": "2026-11-20T06:54:42Z"
+  },
+  {
+   "kind": "issues_search",
+   "repo": "vllm-project/vllm",
+   "query": "repo:vllm-project/vllm \"hidden-state\" updated:>=2026-11-20",
+   "total": null,
+   "returned": null,
+   "cutoff_utc": "2026-11-20T06:54:42Z"
+  },
+  {
+   "kind": "issues_search",
+   "repo": "vllm-project/vllm",
+   "query": "repo:vllm-project/vllm hidden_states updated:>=2026-11-20",
+   "total": null,
+   "returned": null,
+   "cutoff_utc": "2026-11-20T06:54:42Z"
+  },
+  {
+   "kind": "issues_search",
+   "repo": "vllm-project/vllm",
+   "query": "repo:vllm-project/vllm return_hidden_states updated:>=2026-11-20",
+   "total": null,
+   "returned": null,
+   "cutoff_utc": "2026-11-20T06:54:42Z"
+  },
+  {
+   "kind": "issues_search",
+   "repo": "vllm-project/vllm",
+   "query": "repo:vllm-project/vllm aux_hidden_states updated:>=2026-11-20",
+   "total": 4,
+   "returned": 4,
+   "cutoff_utc": "2026-11-20T06:54:42Z"
+  },
+  {
+   "kind": "issues_search",
+   "repo": "vllm-project/vllm",
+   "query": "repo:vllm-project/vllm extract_hidden_states updated:>=2026-11-20",
+   "total": 17,
+   "returned": 17,
+   "cutoff_utc": "2026-11-20T06:54:42Z"
+  },
+  {
+   "kind": "issues_search",
+   "repo": "vllm-project/vllm",
+   "query": "repo:vllm-project/vllm \"aux hidden\" updated:>=2026-11-20",
+   "total": 45,
+   "returned": 45,
+   "cutoff_utc": "2026-11-20T06:54:42Z"
+  },
+  {
+   "kind": "issues_search",
+   "repo": "vllm-project/vllm",
+   "query": "repo:vllm-project/vllm \"forward observer\" updated:>=2026-11-20",
+   "total": 2,
+   "returned": 2,
+   "cutoff_utc": "2026-11-20T06:54:42Z"
+  },
+  {
+   "kind": "issues_search",
+   "repo": "vllm-project/vllm",
+   "query": "repo:vllm-project/vllm label:\"RFC\" updated:>=2026-11-20",
+   "total": 69,
+   "returned": 69,
+   "cutoff_utc": "2026-11-20T06:54:42Z"
+  },
+  {
+   "kind": "issues_search",
+   "repo": "vllm-project/vllm",
+   "query": "repo:vllm-project/vllm is:pr created:2026-11-20..2026-11-23",
+   "total": 583,
+   "returned": 583,
+   "cutoff_utc": "2026-11-20T06:54:42Z"
+  },
+  {
+   "kind": "issues_search",
+   "repo": "vllm-project/vllm",
+   "query": "repo:vllm-project/vllm is:issue created:2026-11-20..2026-11-23",
+   "total": 107,
+   "returned": 107,
+   "cutoff_utc": "2026-11-20T06:54:42Z"
+  },
+  {
+   "kind": "issues_search",
+   "repo": "vllm-project/vllm",
+   "query": "repo:vllm-project/vllm is:pr created:2026-11-23..2026-11-25",
+   "total": 622,
+   "returned": 622,
+   "cutoff_utc": "2026-11-20T06:54:42Z"
+  },
+  {
+   "kind": "issues_search",
+   "repo": "vllm-project/vllm",
+   "query": "repo:vllm-project/vllm is:issue created:2026-11-23..2026-11-25",
+   "total": 88,
+   "returned": 88,
+   "cutoff_utc": "2026-11-20T06:54:42Z"
+  },
+  {
+   "kind": "issues_search",
+   "repo": "vllm-project/vllm",
+   "query": "repo:vllm-project/vllm is:pr created:2026-11-25..2026-11-28",
+   "total": 405,
+   "returned": 405,
+   "cutoff_utc": "2026-11-20T06:54:42Z"
+  },
+  {
+   "kind": "issues_search",
+   "repo": "vllm-project/vllm",
+   "query": "repo:vllm-project/vllm is:issue created:2026-11-25..2026-11-28",
+   "total": 77,
+   "returned": 77,
+   "cutoff_utc": "2026-11-20T06:54:42Z"
+  },
+  {
+   "kind": "local_git_commit_scan",
+   "repo": "vllm",
+   "window_start": "2026-11-20T06:54:42Z",
+   "head_sha": "29fa74e654c66f36db7e195fd53e3a43c90b7a76",
+   "commits_in_window": 454,
+   "keyword_matched_commits": [
+    "118d12f728c4",
+    "3ba087987fdc",
+    "6abe321bd825"
+   ]
+  },
+  {
+   "kind": "local_git_commit_scan",
+   "repo": "vllm-ascend",
+   "window_start": "2026-11-20T06:54:42Z",
+   "head_sha": "d1108b2f8288da4a4cf2358bb392b34b1a0d7b97",
+   "commits_in_window": 285,
+   "keyword_matched_commits": [
+    "118c369eafe9",
+    "9b7a557f2aba",
+    "4d210ef323a2",
+    "9b8c54e0d189",
+    "bfd0365d97b0",
+    "bc186f2bbe50",
+    "9316dd8089b0",
+    "a285b50d4be5"
+   ]
+  }
+ ],
+ "tracked_baseline_audit": [
+  {
+   "repository": "vllm-project/vllm",
+   "number": 50187,
+   "title": "[Bugfix][Spec Decode] Fix misspelled EAGLE3 aux-hidden-state layer method overrides",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": null,
+   "updated_at": "2026-11-27T01:33:11Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm",
+   "number": 50722,
+   "title": "[Bug]: With qwen3.5-35b-a3b, the performance is relatively poor both when using dflash and when not using it, but the accepted length of dflash is around 5–6.",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "open",
+   "merged_at": null,
+   "updated_at": "2026-11-22T01:34:42Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm",
+   "number": 50851,
+   "title": "[Bug][Spec Decode] DSpark speculative decoding broken on H200 nightly",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "open",
+   "merged_at": null,
+   "updated_at": "2026-11-22T01:34:27Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm",
+   "number": 50853,
+   "title": "[RFC]: Complete Model Runner V2 pipeline parallelism: scheduling, speculative decoding, and PP-first DP/EP topology",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "open",
+   "merged_at": null,
+   "updated_at": "2026-11-22T01:34:25Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm",
+   "number": 52073,
+   "title": "[Spec Decode] Test extract_hidden_states on NemotronH hybrid models",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "open",
+   "merged_at": null,
+   "updated_at": "2026-11-25T01:42:37Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm",
+   "number": 53243,
+   "title": "[Bug]: extract_hidden_states overestimates DeepSeek-V4 KV cache memory",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "open",
+   "merged_at": null,
+   "updated_at": "2026-11-21T01:32:46Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm",
+   "number": 53273,
+   "title": "[Model][Gemma4] Fuse post-attention residual add into pre-FFN RMSNorm",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "open",
+   "merged_at": null,
+   "updated_at": "2026-11-24T20:54:09Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm",
+   "number": 53366,
+   "title": "[Bug]: torch.compile cache key does not include num_speculative_tokens, causing compiled-graph collision across different speculative-token counts",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "open",
+   "merged_at": null,
+   "updated_at": "2026-11-21T01:32:25Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm",
+   "number": 54347,
+   "title": "[Kimi K3] Support sequence parallelism with pipeline parallelism",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "open",
+   "merged_at": null,
+   "updated_at": "2026-11-24T12:56:35Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm",
+   "number": 56822,
+   "title": "[Bugfix] Bill hidden-state extraction at its own KV cache group width",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "open",
+   "merged_at": null,
+   "updated_at": "2026-11-25T11:48:43Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm",
+   "number": 57736,
+   "title": "feat: capture selected hidden-state rows for rollout windows and teacher scoring",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "open",
+   "merged_at": null,
+   "updated_at": "2026-11-21T17:10:52Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm",
+   "number": 58332,
+   "title": "[Bugfix] Include draft execution fields in SpeculativeConfig.compute_hash",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "open",
+   "merged_at": null,
+   "updated_at": "2026-11-24T20:15:40Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm",
+   "number": 59542,
+   "title": "[RFC]: Opt-in return of the last hidden state at sampled positions, per request (Model Runner V2)",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "open",
+   "merged_at": null,
+   "updated_at": "2026-11-21T13:54:49Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm",
+   "number": 59543,
+   "title": "[Core] Opt-in per-request return of the last hidden states in generation (MRV2)",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "open",
+   "merged_at": null,
+   "updated_at": "2026-11-21T14:22:24Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm",
+   "number": 59693,
+   "title": "[ROCm][Perf] Kimi-K3: token-sharded residual stream for long prefills",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "open",
+   "merged_at": null,
+   "updated_at": "2026-11-26T22:02:58Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm",
+   "number": 62411,
+   "title": "[KV Connector] Windowed hidden-state export for ExampleHiddenStatesConnector",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "open",
+   "merged_at": null,
+   "updated_at": "2026-11-20T03:43:50Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "vllm-project/vllm",
+   "number": 63553,
+   "title": "[Spec Decode] Allow Gemma4 MTP with KV-sharing fast prefill",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "open",
+   "merged_at": null,
+   "updated_at": "2026-11-23T16:39:31Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm",
+   "number": 65991,
+   "title": "[Spec Decode] Add option to disable extract_hidden_states decode drafts",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "open",
+   "merged_at": null,
+   "updated_at": "2026-11-24T18:44:47Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm",
+   "number": 66440,
+   "title": "[Perf][Spec Decode] Keep full CUDA graphs when extracting hidden states",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "open",
+   "merged_at": null,
+   "updated_at": "2026-11-20T17:13:59Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm",
+   "number": 66787,
+   "title": "[Model] Capture Qwen4Exp auxiliary states for PP speculative decoding",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "open",
+   "merged_at": null,
+   "updated_at": "2026-11-26T10:33:28Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm",
+   "number": 67350,
+   "title": "[PP][MRV2] Add per-field tensor layouts for pipeline transport",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "open",
+   "merged_at": null,
+   "updated_at": "2026-11-25T05:11:24Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm",
+   "number": 67965,
+   "title": "[KV Connector] Let a KV connector receive hidden states",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": null,
+   "updated_at": "2026-11-20T22:10:51Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm",
+   "number": 68554,
+   "title": "[Bugfix][ROCm] Give EngineCore the cleanup grace window when shutdown has no budget",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": "2026-11-20T16:50:39Z",
+   "updated_at": "2026-11-20T16:50:46Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm",
+   "number": 68611,
+   "title": "[MRV2][Spec Decode] Rejected-token feature extraction",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": null,
+   "updated_at": "2026-11-21T18:33:28Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm",
+   "number": 68813,
+   "title": "[Bug]: DeepSeek-V3.2 / GLM-5.x drop the final-layer aux hidden state, so `extract_hidden_states` returns one fewer state than requested",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "open",
+   "merged_at": null,
+   "updated_at": "2026-11-20T01:17:28Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "vllm-project/vllm",
+   "number": 68824,
+   "title": "[Bugfix] Capture final-layer aux hidden state in DeepSeek-V3.2",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "open",
+   "merged_at": null,
+   "updated_at": "2026-11-20T08:00:46Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm",
+   "number": 68871,
+   "title": "[BUG][XPU] Fix XPU sampling mask dtype",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": null,
+   "updated_at": "2026-11-20T05:52:56Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 2386,
+   "title": "[RFC]: Automatic Kernel Fusion via torch.fx.graph and graph rewriter for vLLM-Ascend",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": null,
+   "updated_at": "2026-11-26T02:18:01Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 6414,
+   "title": "[RFC]: DSA supports C8 quantization",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": null,
+   "updated_at": "2026-11-24T12:00:56Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 7444,
+   "title": "fix(quantization): use weight_scale_fp32 in W8A8DynamicLinearMethod.apply()",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "open",
+   "merged_at": null,
+   "updated_at": "2026-11-21T16:32:59Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 7742,
+   "title": "add Qwen3.5-27B-w8a8-A3",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": null,
+   "updated_at": "2026-11-27T01:38:28Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 8235,
+   "title": "Vllm lora 1",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "open",
+   "merged_at": null,
+   "updated_at": "2026-11-21T18:27:43Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 8970,
+   "title": "[Feature]: Support Gemma4 model with eager mode optimization",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "open",
+   "merged_at": null,
+   "updated_at": "2026-11-21T16:37:14Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 10488,
+   "title": "[Feature] Add fused W4A4 INT4 MoE \"mega\" kernel for Qwen3.x-MoE (Ascend 910B)",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "open",
+   "merged_at": null,
+   "updated_at": "2026-11-23T06:43:14Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 10928,
+   "title": "[Community] Weekly Meeting Agenda",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "open",
+   "merged_at": null,
+   "updated_at": "2026-11-26T14:10:30Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 11066,
+   "title": "[Feature][SpecDecode] Support GLM-5.3-Flash DSpark target states and draft caches",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": null,
+   "updated_at": "2026-11-22T17:15:19Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 12069,
+   "title": "[Refactor]update permute/unpermute to init_routing/finalize_routing",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "open",
+   "merged_at": null,
+   "updated_at": "2026-11-22T18:10:30Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 12659,
+   "title": "[Refactor][Sampler] Keep random-sampling noise on the calling stream",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": null,
+   "updated_at": "2026-11-22T17:15:22Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 14002,
+   "title": "[RFC]: DSA-CP Decoupling, PCP Migration, and DSA-CP Sunset",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": null,
+   "updated_at": "2026-11-24T10:55:03Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 15298,
+   "title": "[Feature]qkv cat multi-stream for Kimi-K3",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": null,
+   "updated_at": "2026-11-24T03:11:42Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 15953,
+   "title": "[BugFix] Apply expert gate in quantized shared expert paths",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": null,
+   "updated_at": "2026-11-21T03:44:59Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 16057,
+   "title": "[RFC]: Align MRV2 autoregressive speculative decoding with vLLM fused multi-step decode",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "open",
+   "merged_at": null,
+   "updated_at": "2026-11-20T01:39:59Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 16914,
+   "title": "[Bug] MegaMoe on Kimi K3 (A3, PD-disaggregated 4P4D) produces garbled output and vector-core crash (acl error 507035)",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": null,
+   "updated_at": "2026-11-24T02:15:06Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 17084,
+   "title": "[CANN 9.2.0] aclnnFusedInferAttentionScoreV4 decode crash: keyRope stride-view invalid offset (int32 overflow signature) on Kimi-K3 W4A8 TP16",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": null,
+   "updated_at": "2026-11-24T02:15:14Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 17670,
+   "title": "[Performance][MoE] Eliminate host-bound sync in AlltoAllv dispatch preprocess",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "open",
+   "merged_at": null,
+   "updated_at": "2026-11-21T14:27:49Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 18102,
+   "title": "[Performance] Use GateLinear for DeepSeek V4 & V4.1 routers",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": "2026-11-23T06:42:38Z",
+   "updated_at": "2026-11-23T06:42:38Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 18113,
+   "title": "[Performance][Model] Overlap Engram projection with decoder execution",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "open",
+   "merged_at": null,
+   "updated_at": "2026-11-20T09:56:12Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 18827,
+   "title": "[RFC]: Speculative Decoding Roadmap Q4 2026",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "open",
+   "merged_at": null,
+   "updated_at": "2026-11-20T03:33:40Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 19108,
+   "title": "[BugFix][Attention] Join O-proj TP collectives on SFA dummy runs",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "open",
+   "merged_at": null,
+   "updated_at": "2026-11-25T14:03:33Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 19120,
+   "title": "[RFC]: Track vLLM speculative decoding issues and fixes",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "open",
+   "merged_at": null,
+   "updated_at": "2026-11-23T01:16:01Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 19284,
+   "title": "[Feature][Model] Enable DeepSeek V4.1 MRV2 PP with arbitrary layer partitions",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": "2026-11-20T09:09:30Z",
+   "updated_at": "2026-11-20T09:09:30Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 19699,
+   "title": "[BugFix][Config] Complete FlashComm1/SP configuration migration",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "open",
+   "merged_at": null,
+   "updated_at": "2026-11-24T16:56:46Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 19817,
+   "title": "[Feature][Quant] add W8A16_FP8 fused MoE quantization method",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "open",
+   "merged_at": null,
+   "updated_at": "2026-11-25T06:55:33Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 19845,
+   "title": "[RFC]: Extend adaptive verification support across ascend attention backends",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "open",
+   "merged_at": null,
+   "updated_at": "2026-11-24T02:22:40Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 20266,
+   "title": "[Feature] Support DeepSeek V4.1 sequence-parallel SWA bounded replay",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "open",
+   "merged_at": null,
+   "updated_at": "2026-11-26T07:09:36Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 20311,
+   "title": "[Feature][Model] Enable Qwen3.8 Flash Next PP and SP",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": "2026-11-25T14:34:02Z",
+   "updated_at": "2026-11-26T06:32:42Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 20568,
+   "title": "[RFC]: Fine-grained Input Projection TP for Linear Attention Decode",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": null,
+   "updated_at": "2026-11-26T03:43:28Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 20672,
+   "title": "[Performance] Optimize DeepSeek V4.1 indexer weights projection overlap",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "open",
+   "merged_at": null,
+   "updated_at": "2026-11-20T07:56:52Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 20757,
+   "title": "[Test] Add KV pool hit watch to A3 PR e2e cases",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "open",
+   "merged_at": null,
+   "updated_at": "2026-11-23T10:53:40Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 20841,
+   "title": "[RFC]: Prefill Context Parallel Piecewise Graph",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": null,
+   "updated_at": "2026-11-25T07:10:32Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 20938,
+   "title": "[Feature][Performance][xlite] Update to xlite attention metadata V2 and remove padded tokens/requests from forward",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": "2026-11-10T10:53:30Z",
+   "updated_at": "2026-11-24T06:05:59Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 20987,
+   "title": "[BugFix][KV Offload] Preserve explicit and aligned simple-offload pool sizes",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": null,
+   "updated_at": "2026-11-26T01:57:16Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 21014,
+   "title": "[Feature][Model] Add Mistral Large 4 support on Ascend",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "open",
+   "merged_at": null,
+   "updated_at": "2026-11-26T06:30:39Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 21177,
+   "title": "[Performance][DSV4.1] Project sequence shards before all-gather",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "open",
+   "merged_at": null,
+   "updated_at": "2026-11-26T08:08:22Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 21281,
+   "title": "[Performance][SpecDecode] Enable FlashAttn for GLM DFlash2 ACL graphs",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "open",
+   "merged_at": null,
+   "updated_at": "2026-11-26T09:59:55Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 21305,
+   "title": "[RFC]: Deprecate and Sunset Decode Context Parallelism (DCP) for GQA Models",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": null,
+   "updated_at": "2026-11-24T10:51:50Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 21414,
+   "title": "[Performance][PCP] Overlap local Q projection with global cache preparation",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": "2026-11-25T03:16:16Z",
+   "updated_at": "2026-11-25T03:16:17Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 21456,
+   "title": "[Refactor][CP] Decouple PCP/DCP metadata, topology and backend selection",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "open",
+   "merged_at": null,
+   "updated_at": "2026-11-23T06:19:42Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 21507,
+   "title": "[RFC]: Step 5 Preview Roadmap",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "open",
+   "merged_at": null,
+   "updated_at": "2026-11-27T01:45:39Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 21627,
+   "title": "[Performance] Integrate union GBSA prefill for Qwen4Exp",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": "2026-11-25T14:39:22Z",
+   "updated_at": "2026-11-25T14:39:22Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 21660,
+   "title": "[Performance] Fuse rotated Engram gate on A3",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": "2026-11-23T01:48:53Z",
+   "updated_at": "2026-11-23T01:48:53Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 21675,
+   "title": "[Feature] support MLA attention mode for Kimi-K3.1 DFlash2 draft models",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "open",
+   "merged_at": null,
+   "updated_at": "2026-11-27T01:43:54Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 21680,
+   "title": "[Feature][MoE] Add opt-in DSpark expert-pool routing for single-device expert offload",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "open",
+   "merged_at": null,
+   "updated_at": "2026-11-26T14:31:48Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 21687,
+   "title": "[Feature][Kimi] Provision the shared draft embedding on the last PP stage",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "open",
+   "merged_at": null,
+   "updated_at": "2026-11-25T13:00:05Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 21693,
+   "title": "[Feature][Model] Support prefill context parallelism for Qwen3.8-Flash-Next",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": "2026-11-23T09:01:03Z",
+   "updated_at": "2026-11-23T09:01:04Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 21719,
+   "title": "[RFC] Reuse vLLM vocab-parallel TopK for DFlash2 on Ascend",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "open",
+   "merged_at": null,
+   "updated_at": "2026-11-20T14:50:15Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 21732,
+   "title": "[RFC] Standardizing how dynamic KV-cache quantization is enabled",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "open",
+   "merged_at": null,
+   "updated_at": "2026-11-25T12:18:36Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 21738,
+   "title": "[Feature] Add DSpine speculative decoding support for Ascend MRV2",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "open",
+   "merged_at": null,
+   "updated_at": "2026-11-23T16:12:11Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 21831,
+   "title": "[Feature][SpecDecode] Support GLM-5.3-Flash DFlash2 and PP",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": "2026-11-23T07:39:59Z",
+   "updated_at": "2026-11-23T07:40:00Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 21845,
+   "title": "[BugFix][Worker] Explain MC2 profiling failures caused by a small HCCL_BUFFSIZE",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "open",
+   "merged_at": null,
+   "updated_at": "2026-11-20T06:09:05Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 21903,
+   "title": "[Refactor][MRV2] Reuse unified KV cache allocation for Kimi K3 and K3.1Pro",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "open",
+   "merged_at": null,
+   "updated_at": "2026-11-26T08:35:32Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 21922,
+   "title": "[Feature] Support compact DeepSeek V4.1 decoder replay with SP and PCP",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "open",
+   "merged_at": null,
+   "updated_at": "2026-11-25T14:14:24Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 22046,
+   "title": "[Bug][DSV4.1][V1 runner] TypeError: 'NoneType' object is not subscriptable in decode graph capture with multistream_engram_overlap (v0.32.0rc1)",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "open",
+   "merged_at": null,
+   "updated_at": "2026-11-26T01:54:14Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 22176,
+   "title": "[Misc] main2main upgrade to the November 26 vLLM pin",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "open",
+   "merged_at": null,
+   "updated_at": "2026-11-26T10:25:09Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 22181,
+   "title": "[Feature][Kimi] Compose PCP prefill and DCP with DSpark",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": "2026-11-21T06:58:18Z",
+   "updated_at": "2026-11-21T06:58:18Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 22198,
+   "title": "[Misc] Main2Main v0.34.0",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": "2026-11-24T18:32:41Z",
+   "updated_at": "2026-11-24T18:32:58Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 22241,
+   "title": "[Bug]: serve LiquidAI/d1-3B  curl /v1/systemone raise 500 Internal Server Error",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "open",
+   "merged_at": null,
+   "updated_at": "2026-11-24T07:41:42Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 22253,
+   "title": "[Feature] Enable Qwen3.8 Flash Next DFlash2 on Ascend TP",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "open",
+   "merged_at": null,
+   "updated_at": "2026-11-26T11:33:36Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 22284,
+   "title": "[Bug][Upstream]: AttributeError on SimpleNamespace config stubs in Ascend KV-cache patches (4 upstream cases)",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "open",
+   "merged_at": null,
+   "updated_at": "2026-11-23T03:02:26Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 22311,
+   "title": "[Performance][MoE] Prepare DeepSeek V4.1 hash routing inputs once per forward",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": null,
+   "updated_at": "2026-11-20T01:30:34Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 22341,
+   "title": "[Feature][Spec Decode] Add HCCL batch-sharded DSpark sampling for DeepSeek V4.1",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "open",
+   "merged_at": null,
+   "updated_at": "2026-11-27T01:46:26Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 22370,
+   "title": "[Performance] Benchmark fused GLM5Next KDA verify and tune small-batch projection on Ascend 950",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "open",
+   "merged_at": null,
+   "updated_at": "2026-11-26T02:16:48Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 22376,
+   "title": "[Performance][Qwen4Exp] Pipeline QSA indexer projections",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": null,
+   "updated_at": "2026-11-22T09:22:43Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 22385,
+   "title": "[Feature] Fuse matmul-collective ops for dense sequence parallelism and MoE shared expert",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "open",
+   "merged_at": null,
+   "updated_at": "2026-11-24T01:13:29Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 22417,
+   "title": "[BugFix][Quantization] Keep W8A8FP8 MoE EPLB on FP8 GMM/SwiGLU/quant fallback",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "open",
+   "merged_at": null,
+   "updated_at": "2026-11-26T13:50:43Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 22418,
+   "title": "[BugFix][310P][LoRA] Forward MoE LoRA context and apply LoRA hooks on 310P",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "open",
+   "merged_at": null,
+   "updated_at": "2026-11-26T13:50:41Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 22437,
+   "title": "[RFC]:  MoonEP redundant-expert load balancing for inference prefill",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "open",
+   "merged_at": null,
+   "updated_at": "2026-11-23T08:31:37Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 22466,
+   "title": "[Feature][310P] Enable data and expert parallelism in Model Runner V2",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "open",
+   "merged_at": null,
+   "updated_at": "2026-11-27T01:18:37Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 22485,
+   "title": "[BugFix][Model] Skip unused DeepSeek V4.1 HC buffer for DSpark",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": "2026-11-20T08:27:44Z",
+   "updated_at": "2026-11-20T08:27:44Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 22487,
+   "title": "[BugFix][Model][v0.32.0rc] Skip unused DeepSeek V4.1 HC buffer for DSpark",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": "2026-11-20T08:28:08Z",
+   "updated_at": "2026-11-20T08:28:08Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 22500,
+   "title": "[BugFix][v0.32.0rc] Backport V4.1 DSpark layer capture fix (#22122)",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": "2026-11-20T08:36:16Z",
+   "updated_at": "2026-11-20T08:36:16Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 22502,
+   "title": "[Feature][PCP] Opt-in owner-sharded KV cache for DeepSeek V4.1 Flash on A3 (layer 1/2)",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "open",
+   "merged_at": null,
+   "updated_at": "2026-11-24T11:35:30Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 22505,
+   "title": "[BugFix][LoRA] Apply DeepSeek V4 compressor and wo_a adapters",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "open",
+   "merged_at": null,
+   "updated_at": "2026-11-26T08:52:44Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 22536,
+   "title": "[BugFix][MoE] Fix prepared routing with CANN MegaMoE shared expert fusion",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "open",
+   "merged_at": null,
+   "updated_at": "2026-11-20T09:30:13Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 22541,
+   "title": "Feat/a2 dispatch ffn combine w4a8",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": null,
+   "updated_at": "2026-11-24T09:58:02Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 22542,
+   "title": "[BugFix] Skip multimodal lookup on empty MRV2 PCP ranks",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": "2026-11-24T06:15:19Z",
+   "updated_at": "2026-11-24T06:19:56Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 22543,
+   "title": "Feat/a2 dispatch ffn combine w8a8",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": null,
+   "updated_at": "2026-11-20T01:23:29Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 22544,
+   "title": "[Bug]: DeepSeek V4.1 multimodal prefill hangs when MRV2 PCP ranks have zero local tokens",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "open",
+   "merged_at": null,
+   "updated_at": "2026-11-20T01:22:18Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 22545,
+   "title": "[BugFix][Worker] Preserve measured non-KV memory when sizing the KV cache",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "open",
+   "merged_at": null,
+   "updated_at": "2026-11-25T01:45:06Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 22546,
+   "title": "[Doc][recipe]update Qwen3.6-27B.yaml to support ascend 910B",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": "2026-11-25T03:17:11Z",
+   "updated_at": "2026-11-25T03:17:55Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 22547,
+   "title": "[CI][BugFix] Raise changed-docs link check deadline",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": "2026-11-20T01:58:26Z",
+   "updated_at": "2026-11-20T02:15:04Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 22548,
+   "title": "[Performance][A3] Add TileLang RecoverSSM verify, commit and PLE compact operators",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "open",
+   "merged_at": null,
+   "updated_at": "2026-11-20T01:48:29Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 22549,
+   "title": "[Verify] Nightly test on main",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": null,
+   "updated_at": "2026-11-20T04:25:22Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 22550,
+   "title": "[Verify] Nightly test on main",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": null,
+   "updated_at": "2026-11-20T01:54:25Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 22551,
+   "title": "[BugFix] Use the published cannbot wheels in A5 images",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": "2026-11-20T02:29:48Z",
+   "updated_at": "2026-11-20T02:29:49Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 22552,
+   "title": "[Performance][A5] Add TileLang GDN RecoverSSM operators",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "open",
+   "merged_at": null,
+   "updated_at": "2026-11-25T09:24:02Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 22553,
+   "title": "[BugFix][DSV4] Load KV cache epilog before use",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": "2026-11-20T09:32:47Z",
+   "updated_at": "2026-11-20T09:32:47Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 22554,
+   "title": "[BugFix] Fix GLM KPool FP8 nightly test collection",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": "2026-11-20T02:36:27Z",
+   "updated_at": "2026-11-20T02:37:32Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 22555,
+   "title": "[Bug]: P-side Memcache layerwise KV copies time out in HYBM NOTIFY_WAIT (107020) on Ascend 950 with PP disabled",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "open",
+   "merged_at": null,
+   "updated_at": "2026-11-20T02:02:54Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 22556,
+   "title": "[Ops][Feature] Add Ascend overlay for Qwen/Qwen3.5-122B-A10B",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": null,
+   "updated_at": "2026-11-20T02:15:14Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 22557,
+   "title": "[Feature][kv_transfer] Support do_virtual in MooncakeConnectorV2",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": "2026-11-24T01:24:14Z",
+   "updated_at": "2026-11-24T01:24:14Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 22558,
+   "title": "[KVPool] Verify block zeroing and synchronous Mooncake GET ordering on Decode consumers",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "open",
+   "merged_at": null,
+   "updated_at": "2026-11-26T12:16:19Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 22559,
+   "title": "[CI] Test DeepSeek V4 sleep/wakeup without extra cleanup",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "open",
+   "merged_at": null,
+   "updated_at": "2026-11-20T02:35:26Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 22560,
+   "title": "[BugFix][Frontend] Honor min_tokens in the Anthropic Messages API",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "open",
+   "merged_at": null,
+   "updated_at": "2026-11-20T12:12:05Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 22561,
+   "title": "[BugFix][v0.30.0] Honor Anthropic Messages API min_tokens",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "open",
+   "merged_at": null,
+   "updated_at": "2026-11-20T09:52:35Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 22562,
+   "title": "[BugFix][v0.32.0rc] Honor Anthropic Messages API min_tokens",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "open",
+   "merged_at": null,
+   "updated_at": "2026-11-23T14:32:32Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 22563,
+   "title": "[Doc] Refresh GLM-5.3 A3 ordinary PD configuration",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": null,
+   "updated_at": "2026-11-20T07:04:00Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 22564,
+   "title": "Kvtc offload",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "open",
+   "merged_at": null,
+   "updated_at": "2026-11-26T17:24:07Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 22565,
+   "title": "[RFC]: Publish a wrapper-level Triton operator reference and track documentation gaps",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "open",
+   "merged_at": null,
+   "updated_at": "2026-11-26T05:47:05Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 22566,
+   "title": "[BugFix] Add opt-in stream events for A6 MXFP8 warmup and decode stalls",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "open",
+   "merged_at": null,
+   "updated_at": "2026-11-20T02:43:34Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 22567,
+   "title": "Explicit model calls",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "open",
+   "merged_at": null,
+   "updated_at": "2026-11-26T08:25:20Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 22568,
+   "title": "[Verify] Nightly test on main",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": null,
+   "updated_at": "2026-11-20T02:52:29Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 22569,
+   "title": "[Performance] Fuse the DeepSeek-V4.1 MLA prologue on Atlas A3",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "open",
+   "merged_at": null,
+   "updated_at": "2026-11-24T04:35:34Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 22570,
+   "title": "[BugFix] Allow Kimi RecoverSSM with non-layerwise MemCache pooling",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "open",
+   "merged_at": null,
+   "updated_at": "2026-11-20T03:04:36Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 22571,
+   "title": "[Doc] Establish the Triton operator reference and migrate verified operator docs",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "open",
+   "merged_at": null,
+   "updated_at": "2026-11-20T09:30:15Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 22572,
+   "title": "[RFC]: Sleep/Wakeup Upstream Alignment",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "open",
+   "merged_at": null,
+   "updated_at": "2026-11-25T09:15:10Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 22573,
+   "title": "[Performance][Attention] Fuse layout transforms into the SFA Q projection",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "open",
+   "merged_at": null,
+   "updated_at": "2026-11-20T03:40:53Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 22574,
+   "title": "[CI][BugFix] Make the review-triggered ci-gate retrigger's no-CI-run outcome a green notice, and stamp the gate comment with freshness",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": "2026-11-20T03:50:12Z",
+   "updated_at": "2026-11-20T03:50:21Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 22575,
+   "title": "[Doc][Recipe] Add DeepSeek-V4.1-Flash 950DT 1P1D recipe",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": "2026-11-23T01:10:34Z",
+   "updated_at": "2026-11-23T01:11:16Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 22576,
+   "title": "[Misc] Add logs for KV-exhaustion recompute in PD disaggregated serving",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": null,
+   "updated_at": "2026-11-25T09:30:41Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 22577,
+   "title": "[Test] Add selected single-card operator tests to PR E2E",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": "2026-11-23T09:21:48Z",
+   "updated_at": "2026-11-23T09:21:48Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 22578,
+   "title": "[Test] Reduce single-card operator nightly test overhead",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": "2026-11-24T02:16:17Z",
+   "updated_at": "2026-11-24T02:16:20Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 22579,
+   "title": "[RFC]: Support HY4 Flash, multimodal inference and DFly on Ascend MRV2",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "open",
+   "merged_at": null,
+   "updated_at": "2026-11-20T03:33:37Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 22580,
+   "title": "[Feature][SpecDecode] Scaffold HY4 Flash DFly on Ascend MRV2",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "open",
+   "merged_at": null,
+   "updated_at": "2026-11-20T03:47:30Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 22581,
+   "title": "[Feature]: Validate configurable MRV2 async scheduling depth on Ascend",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "open",
+   "merged_at": null,
+   "updated_at": "2026-11-20T03:32:33Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 22582,
+   "title": "[Performance][KV Transfer] Merge partial-page Mooncake cache spans including internal padding",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "open",
+   "merged_at": null,
+   "updated_at": "2026-11-23T02:15:02Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 22583,
+   "title": "[Bug][Docs]: examples/external_online_dp/launch_online_dp.py does not support --pcp-size used by DeepSeek-V4.1-Flash A2 PD deployment",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "open",
+   "merged_at": null,
+   "updated_at": "2026-11-20T03:47:44Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 22584,
+   "title": "[Verify] Nightly test on main",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": null,
+   "updated_at": "2026-11-20T03:52:13Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 22585,
+   "title": "[BugFix] Support --pcp-size in external online DP launcher example",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": null,
+   "updated_at": "2026-11-25T07:14:46Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 22586,
+   "title": "[BugFix][KV Pool] Isolate metadata benchmark revisions",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "open",
+   "merged_at": null,
+   "updated_at": "2026-11-20T04:11:53Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 22587,
+   "title": "[Performance] Shard full page-aligned GLM-5.3-Flash FP8 prefill chunks on TP8",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "open",
+   "merged_at": null,
+   "updated_at": "2026-11-20T04:53:15Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 22588,
+   "title": "[Doc][Recipe] Add ascend_910b support for Qwen3.6-35B-A3B Ascend recipe",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": "2026-11-25T03:17:40Z",
+   "updated_at": "2026-11-25T03:18:44Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 22589,
+   "title": "[Doc][Recipe] Add Ascend 910B W8A8C8 PD overlay for GLM-5.2",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "open",
+   "merged_at": null,
+   "updated_at": "2026-11-25T03:16:41Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 22590,
+   "title": "[Feature][PP] Support bounded activation send buffering on Ascend",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "open",
+   "merged_at": null,
+   "updated_at": "2026-11-23T16:11:47Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 22591,
+   "title": "[BugFix][v0.32.0rc] Preserve the DeepSeek-V4.1 MoE cursor during bounded replay",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": "2026-11-20T09:28:11Z",
+   "updated_at": "2026-11-20T09:28:11Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 22592,
+   "title": "[BugFix][Ops] Retire eager packaged MLA stream uses on Ascend A5",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": "2026-11-23T06:44:32Z",
+   "updated_at": "2026-11-23T06:44:33Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 22593,
+   "title": "[Feature][PP] Add standalone activation send buffering on Ascend",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "open",
+   "merged_at": null,
+   "updated_at": "2026-11-25T09:37:40Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 22594,
+   "title": "[Doc] Add Hy4 deployment tutorial for Ascend 950DT",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": "2026-11-21T04:18:31Z",
+   "updated_at": "2026-11-21T04:18:32Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 22595,
+   "title": "[Feature] Enable A2 MegaMoe and env-driven profiling",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "open",
+   "merged_at": null,
+   "updated_at": "2026-11-24T02:30:14Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 22596,
+   "title": "[Bug]: QuantSparseLightningIndexer (MIX kernel) traps under FULL_DECODE_ONLY ACL Graph replay for DeepSeek-V4.1-Flash on Ascend 950DT",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "open",
+   "merged_at": null,
+   "updated_at": "2026-11-25T06:36:58Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 22597,
+   "title": "[CI][BugFix] Tolerate a missing gate result artifact in the ci-gate comment bot",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": "2026-11-20T07:25:13Z",
+   "updated_at": "2026-11-20T07:25:13Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 22598,
+   "title": "[Test] Revert response anomaly detection for SIT accuracy cases",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": "2026-11-20T10:58:40Z",
+   "updated_at": "2026-11-20T10:58:40Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 22599,
+   "title": "[BugFix]: align Mooncake DCP routing with vLLM rank order",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": "2026-11-25T07:17:36Z",
+   "updated_at": "2026-11-25T07:17:36Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 22600,
+   "title": "[Feature][HiSparse] Enable HiSparse on HDK 25.5.1 with MemFabric",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": "2026-11-23T07:18:27Z",
+   "updated_at": "2026-11-23T07:18:27Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 22601,
+   "title": "[Feature]: Allow AscendStore KV pool with TP>1 and PCP>1 for Kimi-K3.1-Pro KDA state (pool restore measured on TP4 x PCP4)",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "open",
+   "merged_at": null,
+   "updated_at": "2026-11-20T06:29:27Z",
+   "in_window_activity": false
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 22602,
+   "title": "[Refactor][Model] Retire MiniMax-M3 K2Q custom operators",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "open",
+   "merged_at": null,
+   "updated_at": "2026-11-25T15:42:17Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 22603,
+   "title": "[Misc] Upgrade PyTorch and TorchNPU to 2.14.0",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "open",
+   "merged_at": null,
+   "updated_at": "2026-11-27T01:46:41Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 22604,
+   "title": "[Doc][Recipe] Add DeepSeek-V3.1 Ascend overlay",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "open",
+   "merged_at": null,
+   "updated_at": "2026-11-26T13:09:47Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 22605,
+   "title": "[Doc][Recipe] Add Kimi-K2.6 Ascend overlay",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "open",
+   "merged_at": null,
+   "updated_at": "2026-11-26T13:09:49Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 22606,
+   "title": "[Doc][Recipe] Add DeepSeek-V4-Pro Ascend overlay",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "open",
+   "merged_at": null,
+   "updated_at": "2026-11-26T13:09:52Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 22607,
+   "title": "[Feature][Profiler] Add opt-in operator call stacks for the torch_npu profiler",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": null,
+   "updated_at": "2026-11-21T06:48:17Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 22608,
+   "title": "[Docs] Correct GLM tutorial review inconsistencies",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "closed",
+   "merged_at": null,
+   "updated_at": "2026-11-20T07:03:58Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 22609,
+   "title": "[Feature][DeepSeek] Offload DeepSeek V4.1 input embeddings with Host VMM",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "open",
+   "merged_at": null,
+   "updated_at": "2026-11-25T03:51:21Z",
+   "in_window_activity": true
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 22610,
+   "title": "[Bug]: AscendStoreConnector async KV load completion filtering can retain KV blocks and stall admission",
+   "baseline_topics": [
+    "hidden_states"
+   ],
+   "state": "open",
+   "merged_at": null,
+   "updated_at": "2026-11-20T06:54:33Z",
+   "in_window_activity": false
+  }
+ ],
+ "candidate_decisions": [
+  {
+   "repository": "vllm-project/vllm",
+   "number": 70039,
+   "kind": "pr",
+   "title": "[Perf][HY4 Flash] Support asynchronous prefetch for Engram lookups",
+   "decision": "背景/边缘/无实质活动",
+   "reason": "按实际代码相关性和本期事件筛选；不将通用模型内部 hidden 张量使用、池化/嵌入任务、仅引用或纯 CI/时序调整计为输出接口新增",
+   "url": "https://github.com/vllm-project/vllm/pull/70039",
+   "state": "open",
+   "updated_at": "2026-11-26T03:49:58Z"
+  },
+  {
+   "repository": "vllm-project/vllm",
+   "number": 69895,
+   "kind": "issue",
+   "title": "[RFC]: Qwen3.6-27B DMTP speculative decoding with native MTP and DFlash2",
+   "decision": "背景/边缘/无实质活动",
+   "reason": "按实际代码相关性和本期事件筛选；不将通用模型内部 hidden 张量使用、池化/嵌入任务、仅引用或纯 CI/时序调整计为输出接口新增",
+   "url": "https://github.com/vllm-project/vllm/issues/69895",
+   "state": "open",
+   "updated_at": "2026-11-25T12:06:12Z"
+  },
+  {
+   "repository": "vllm-project/vllm",
+   "number": 69875,
+   "kind": "pr",
+   "title": "[Bugfix][Spec Decode][PP] Allocate aux hidden-state receive buffers in residual dtype",
+   "decision": "纳入主代理核心判断",
+   "reason": "按实际代码相关性和本期事件筛选；不将通用模型内部 hidden 张量使用、池化/嵌入任务、仅引用或纯 CI/时序调整计为输出接口新增",
+   "url": "https://github.com/vllm-project/vllm/pull/69875",
+   "state": "open",
+   "updated_at": "2026-11-25T10:10:06Z"
+  },
+  {
+   "repository": "vllm-project/vllm",
+   "number": 69874,
+   "kind": "pr",
+   "title": "[Feature][DSA] Add whole-batch sequence parallelism for DeepSeek-V3.2 sparse MLA",
+   "decision": "背景/边缘/无实质活动",
+   "reason": "按实际代码相关性和本期事件筛选；不将通用模型内部 hidden 张量使用、池化/嵌入任务、仅引用或纯 CI/时序调整计为输出接口新增",
+   "url": "https://github.com/vllm-project/vllm/pull/69874",
+   "state": "open",
+   "updated_at": "2026-11-26T09:20:52Z"
+  },
+  {
+   "repository": "vllm-project/vllm",
+   "number": 69726,
+   "kind": "pr",
+   "title": "[Model] Decouple `nemotron_nas` from llama",
+   "decision": "背景/边缘/无实质活动",
+   "reason": "按实际代码相关性和本期事件筛选；不将通用模型内部 hidden 张量使用、池化/嵌入任务、仅引用或纯 CI/时序调整计为输出接口新增",
+   "url": "https://github.com/vllm-project/vllm/pull/69726",
+   "state": "closed",
+   "updated_at": "2026-11-25T18:47:24Z"
+  },
+  {
+   "repository": "vllm-project/vllm",
+   "number": 69611,
+   "kind": "pr",
+   "title": "[Model Runner V2][Spec Decode] Pass exact finish metadata to speculators",
+   "decision": "背景/边缘/无实质活动",
+   "reason": "按实际代码相关性和本期事件筛选；不将通用模型内部 hidden 张量使用、池化/嵌入任务、仅引用或纯 CI/时序调整计为输出接口新增",
+   "url": "https://github.com/vllm-project/vllm/pull/69611",
+   "state": "closed",
+   "updated_at": "2026-11-25T10:50:30Z"
+  },
+  {
+   "repository": "vllm-project/vllm",
+   "number": 69549,
+   "kind": "pr",
+   "title": "[Model][MoE] Support sequence-parallel MoE in Step3p5 and Step3p5MTP",
+   "decision": "背景/边缘/无实质活动",
+   "reason": "按实际代码相关性和本期事件筛选；不将通用模型内部 hidden 张量使用、池化/嵌入任务、仅引用或纯 CI/时序调整计为输出接口新增",
+   "url": "https://github.com/vllm-project/vllm/pull/69549",
+   "state": "open",
+   "updated_at": "2026-11-24T04:27:54Z"
+  },
+  {
+   "repository": "vllm-project/vllm",
+   "number": 69399,
+   "kind": "pr",
+   "title": "[Bugfix][PCP] Enable sequence-parallel MoE inputs with prefill context parallel",
+   "decision": "背景/边缘/无实质活动",
+   "reason": "按实际代码相关性和本期事件筛选；不将通用模型内部 hidden 张量使用、池化/嵌入任务、仅引用或纯 CI/时序调整计为输出接口新增",
+   "url": "https://github.com/vllm-project/vllm/pull/69399",
+   "state": "closed",
+   "updated_at": "2026-11-23T11:50:57Z"
+  },
+  {
+   "repository": "vllm-project/vllm",
+   "number": 69368,
+   "kind": "pr",
+   "title": "[Kimi-K3] Keep sequence parallelism under pipeline parallelism for MegaMoE",
+   "decision": "背景/边缘/无实质活动",
+   "reason": "按实际代码相关性和本期事件筛选；不将通用模型内部 hidden 张量使用、池化/嵌入任务、仅引用或纯 CI/时序调整计为输出接口新增",
+   "url": "https://github.com/vllm-project/vllm/pull/69368",
+   "state": "open",
+   "updated_at": "2026-11-23T08:42:02Z"
+  },
+  {
+   "repository": "vllm-project/vllm",
+   "number": 69314,
+   "kind": "pr",
+   "title": "[XPU][Qwen3.5] Support sequence parallelism with pipeline parallelism",
+   "decision": "背景/边缘/无实质活动",
+   "reason": "按实际代码相关性和本期事件筛选；不将通用模型内部 hidden 张量使用、池化/嵌入任务、仅引用或纯 CI/时序调整计为输出接口新增",
+   "url": "https://github.com/vllm-project/vllm/pull/69314",
+   "state": "closed",
+   "updated_at": "2026-11-24T08:37:10Z"
+  },
+  {
+   "repository": "vllm-project/vllm",
+   "number": 69275,
+   "kind": "pr",
+   "title": "[Perf][Spec Decode] Run draft step 0 of Q-only drafters on last tokens only",
+   "decision": "背景/边缘/无实质活动",
+   "reason": "按实际代码相关性和本期事件筛选；不将通用模型内部 hidden 张量使用、池化/嵌入任务、仅引用或纯 CI/时序调整计为输出接口新增",
+   "url": "https://github.com/vllm-project/vllm/pull/69275",
+   "state": "open",
+   "updated_at": "2026-11-26T11:59:15Z"
+  },
+  {
+   "repository": "vllm-project/vllm",
+   "number": 69248,
+   "kind": "pr",
+   "title": "[Doc] Reorganize docs/training/ into weight_updates and rollout_artifacts",
+   "decision": "背景/边缘/无实质活动",
+   "reason": "按实际代码相关性和本期事件筛选；不将通用模型内部 hidden 张量使用、池化/嵌入任务、仅引用或纯 CI/时序调整计为输出接口新增",
+   "url": "https://github.com/vllm-project/vllm/pull/69248",
+   "state": "closed",
+   "updated_at": "2026-11-23T02:41:14Z"
+  },
+  {
+   "repository": "vllm-project/vllm",
+   "number": 69221,
+   "kind": "pr",
+   "title": "[Feature][PCP] Support attention, lm_head, and routed-expert LoRA with MRV2 PCP",
+   "decision": "背景/边缘/无实质活动",
+   "reason": "按实际代码相关性和本期事件筛选；不将通用模型内部 hidden 张量使用、池化/嵌入任务、仅引用或纯 CI/时序调整计为输出接口新增",
+   "url": "https://github.com/vllm-project/vllm/pull/69221",
+   "state": "open",
+   "updated_at": "2026-11-22T09:22:13Z"
+  },
+  {
+   "repository": "vllm-project/vllm",
+   "number": 69196,
+   "kind": "pr",
+   "title": "[Bugfix] Fix /classify for per-position seq-cls heads on the Transformers backend",
+   "decision": "背景/边缘/无实质活动",
+   "reason": "按实际代码相关性和本期事件筛选；不将通用模型内部 hidden 张量使用、池化/嵌入任务、仅引用或纯 CI/时序调整计为输出接口新增",
+   "url": "https://github.com/vllm-project/vllm/pull/69196",
+   "state": "closed",
+   "updated_at": "2026-11-24T14:45:22Z"
+  },
+  {
+   "repository": "vllm-project/vllm",
+   "number": 69186,
+   "kind": "pr",
+   "title": "[Perf][XPU] Run the fp32 lm_head through torch.mm(out_dtype=float32) on XPU",
+   "decision": "背景/边缘/无实质活动",
+   "reason": "按实际代码相关性和本期事件筛选；不将通用模型内部 hidden 张量使用、池化/嵌入任务、仅引用或纯 CI/时序调整计为输出接口新增",
+   "url": "https://github.com/vllm-project/vllm/pull/69186",
+   "state": "closed",
+   "updated_at": "2026-11-25T01:40:33Z"
+  },
+  {
+   "repository": "vllm-project/vllm",
+   "number": 69127,
+   "kind": "pr",
+   "title": "[Model] Add MiniCPM5-15B-A2.5B support",
+   "decision": "背景/边缘/无实质活动",
+   "reason": "按实际代码相关性和本期事件筛选；不将通用模型内部 hidden 张量使用、池化/嵌入任务、仅引用或纯 CI/时序调整计为输出接口新增",
+   "url": "https://github.com/vllm-project/vllm/pull/69127",
+   "state": "open",
+   "updated_at": "2026-11-26T15:36:45Z"
+  },
+  {
+   "repository": "vllm-project/vllm",
+   "number": 69064,
+   "kind": "pr",
+   "title": "[Bug][Spec Decode] Enable VLM hidden states extraction",
+   "decision": "纳入主代理核心判断",
+   "reason": "按实际代码相关性和本期事件筛选；不将通用模型内部 hidden 张量使用、池化/嵌入任务、仅引用或纯 CI/时序调整计为输出接口新增",
+   "url": "https://github.com/vllm-project/vllm/pull/69064",
+   "state": "open",
+   "updated_at": "2026-11-26T22:38:59Z"
+  },
+  {
+   "repository": "vllm-project/vllm",
+   "number": 69028,
+   "kind": "pr",
+   "title": "[Model] Add Inkling 2 Mini",
+   "decision": "背景/边缘/无实质活动",
+   "reason": "按实际代码相关性和本期事件筛选；不将通用模型内部 hidden 张量使用、池化/嵌入任务、仅引用或纯 CI/时序调整计为输出接口新增",
+   "url": "https://github.com/vllm-project/vllm/pull/69028",
+   "state": "closed",
+   "updated_at": "2026-11-21T16:53:27Z"
+  },
+  {
+   "repository": "vllm-project/vllm",
+   "number": 69017,
+   "kind": "pr",
+   "title": "[ROCm][Perf][DSv4.1] Run the mHC seams and step-end tail on AITER's FlyDSL kernels on gfx950",
+   "decision": "背景/边缘/无实质活动",
+   "reason": "按实际代码相关性和本期事件筛选；不将通用模型内部 hidden 张量使用、池化/嵌入任务、仅引用或纯 CI/时序调整计为输出接口新增",
+   "url": "https://github.com/vllm-project/vllm/pull/69017",
+   "state": "open",
+   "updated_at": "2026-11-20T19:45:56Z"
+  },
+  {
+   "repository": "vllm-project/vllm",
+   "number": 68972,
+   "kind": "pr",
+   "title": "[ROCm][RDNA][Perf] Fuse Qwen3.5 GDN in_proj_qkvz + in_proj_ba on gfx1100 and gfx1201",
+   "decision": "背景/边缘/无实质活动",
+   "reason": "按实际代码相关性和本期事件筛选；不将通用模型内部 hidden 张量使用、池化/嵌入任务、仅引用或纯 CI/时序调整计为输出接口新增",
+   "url": "https://github.com/vllm-project/vllm/pull/68972",
+   "state": "open",
+   "updated_at": "2026-11-25T10:07:40Z"
+  },
+  {
+   "repository": "vllm-project/vllm",
+   "number": 68897,
+   "kind": "issue",
+   "title": "[Bug]: DeepSeek-V4-Flash + DSpark TP4 on SM120: intermittent CUDA_ERROR_ILLEGAL_ADDRESS in KV-cache sizing warm-up",
+   "decision": "背景/边缘/无实质活动",
+   "reason": "按实际代码相关性和本期事件筛选；不将通用模型内部 hidden 张量使用、池化/嵌入任务、仅引用或纯 CI/时序调整计为输出接口新增",
+   "url": "https://github.com/vllm-project/vllm/issues/68897",
+   "state": "open",
+   "updated_at": "2026-11-20T08:14:35Z"
+  },
+  {
+   "repository": "vllm-project/vllm",
+   "number": 68824,
+   "kind": "pr",
+   "title": "[Bugfix] Capture final-layer aux hidden state in DeepSeek-V3.2",
+   "decision": "纳入主代理核心判断",
+   "reason": "按实际代码相关性和本期事件筛选；不将通用模型内部 hidden 张量使用、池化/嵌入任务、仅引用或纯 CI/时序调整计为输出接口新增",
+   "url": "https://github.com/vllm-project/vllm/pull/68824",
+   "state": "open",
+   "updated_at": "2026-11-20T08:00:46Z"
+  },
+  {
+   "repository": "vllm-project/vllm",
+   "number": 68813,
+   "kind": "issue",
+   "title": "[Bug]: DeepSeek-V3.2 / GLM-5.x drop the final-layer aux hidden state, so `extract_hidden_states` returns one fewer state than requested",
+   "decision": "背景/边缘/无实质活动",
+   "reason": "按实际代码相关性和本期事件筛选；不将通用模型内部 hidden 张量使用、池化/嵌入任务、仅引用或纯 CI/时序调整计为输出接口新增",
+   "url": "https://github.com/vllm-project/vllm/issues/68813",
+   "state": "open",
+   "updated_at": "2026-11-20T01:17:28Z"
+  },
+  {
+   "repository": "vllm-project/vllm",
+   "number": 68611,
+   "kind": "pr",
+   "title": "[MRV2][Spec Decode] Rejected-token feature extraction",
+   "decision": "背景/边缘/无实质活动",
+   "reason": "按实际代码相关性和本期事件筛选；不将通用模型内部 hidden 张量使用、池化/嵌入任务、仅引用或纯 CI/时序调整计为输出接口新增",
+   "url": "https://github.com/vllm-project/vllm/pull/68611",
+   "state": "closed",
+   "updated_at": "2026-11-21T18:33:28Z"
+  },
+  {
+   "repository": "vllm-project/vllm",
+   "number": 68554,
+   "kind": "pr",
+   "title": "[Bugfix][ROCm] Give EngineCore the cleanup grace window when shutdown has no budget",
+   "decision": "背景/边缘/无实质活动",
+   "reason": "按实际代码相关性和本期事件筛选；不将通用模型内部 hidden 张量使用、池化/嵌入任务、仅引用或纯 CI/时序调整计为输出接口新增",
+   "url": "https://github.com/vllm-project/vllm/pull/68554",
+   "state": "closed",
+   "updated_at": "2026-11-20T16:50:46Z"
+  },
+  {
+   "repository": "vllm-project/vllm",
+   "number": 67965,
+   "kind": "pr",
+   "title": "[KV Connector] Let a KV connector receive hidden states",
+   "decision": "背景/边缘/无实质活动",
+   "reason": "按实际代码相关性和本期事件筛选；不将通用模型内部 hidden 张量使用、池化/嵌入任务、仅引用或纯 CI/时序调整计为输出接口新增",
+   "url": "https://github.com/vllm-project/vllm/pull/67965",
+   "state": "closed",
+   "updated_at": "2026-11-20T22:10:51Z"
+  },
+  {
+   "repository": "vllm-project/vllm",
+   "number": 67350,
+   "kind": "pr",
+   "title": "[PP][MRV2] Add per-field tensor layouts for pipeline transport",
+   "decision": "背景/边缘/无实质活动",
+   "reason": "按实际代码相关性和本期事件筛选；不将通用模型内部 hidden 张量使用、池化/嵌入任务、仅引用或纯 CI/时序调整计为输出接口新增",
+   "url": "https://github.com/vllm-project/vllm/pull/67350",
+   "state": "open",
+   "updated_at": "2026-11-25T05:11:24Z"
+  },
+  {
+   "repository": "vllm-project/vllm",
+   "number": 66787,
+   "kind": "pr",
+   "title": "[Model] Capture Qwen4Exp auxiliary states for PP speculative decoding",
+   "decision": "背景/边缘/无实质活动",
+   "reason": "按实际代码相关性和本期事件筛选；不将通用模型内部 hidden 张量使用、池化/嵌入任务、仅引用或纯 CI/时序调整计为输出接口新增",
+   "url": "https://github.com/vllm-project/vllm/pull/66787",
+   "state": "open",
+   "updated_at": "2026-11-26T10:33:28Z"
+  },
+  {
+   "repository": "vllm-project/vllm",
+   "number": 66440,
+   "kind": "pr",
+   "title": "[Perf][Spec Decode] Keep full CUDA graphs when extracting hidden states",
+   "decision": "背景/边缘/无实质活动",
+   "reason": "按实际代码相关性和本期事件筛选；不将通用模型内部 hidden 张量使用、池化/嵌入任务、仅引用或纯 CI/时序调整计为输出接口新增",
+   "url": "https://github.com/vllm-project/vllm/pull/66440",
+   "state": "open",
+   "updated_at": "2026-11-20T17:13:59Z"
+  },
+  {
+   "repository": "vllm-project/vllm",
+   "number": 65991,
+   "kind": "pr",
+   "title": "[Spec Decode] Add option to disable extract_hidden_states decode drafts",
+   "decision": "纳入主代理核心判断",
+   "reason": "按实际代码相关性和本期事件筛选；不将通用模型内部 hidden 张量使用、池化/嵌入任务、仅引用或纯 CI/时序调整计为输出接口新增",
+   "url": "https://github.com/vllm-project/vllm/pull/65991",
+   "state": "open",
+   "updated_at": "2026-11-24T18:44:47Z"
+  },
+  {
+   "repository": "vllm-project/vllm",
+   "number": 63553,
+   "kind": "pr",
+   "title": "[Spec Decode] Allow Gemma4 MTP with KV-sharing fast prefill",
+   "decision": "背景/边缘/无实质活动",
+   "reason": "按实际代码相关性和本期事件筛选；不将通用模型内部 hidden 张量使用、池化/嵌入任务、仅引用或纯 CI/时序调整计为输出接口新增",
+   "url": "https://github.com/vllm-project/vllm/pull/63553",
+   "state": "open",
+   "updated_at": "2026-11-23T16:39:31Z"
+  },
+  {
+   "repository": "vllm-project/vllm",
+   "number": 62411,
+   "kind": "pr",
+   "title": "[KV Connector] Windowed hidden-state export for ExampleHiddenStatesConnector",
+   "decision": "背景/边缘/无实质活动",
+   "reason": "按实际代码相关性和本期事件筛选；不将通用模型内部 hidden 张量使用、池化/嵌入任务、仅引用或纯 CI/时序调整计为输出接口新增",
+   "url": "https://github.com/vllm-project/vllm/pull/62411",
+   "state": "open",
+   "updated_at": "2026-11-20T03:43:50Z"
+  },
+  {
+   "repository": "vllm-project/vllm",
+   "number": 59693,
+   "kind": "pr",
+   "title": "[ROCm][Perf] Kimi-K3: token-sharded residual stream for long prefills",
+   "decision": "背景/边缘/无实质活动",
+   "reason": "按实际代码相关性和本期事件筛选；不将通用模型内部 hidden 张量使用、池化/嵌入任务、仅引用或纯 CI/时序调整计为输出接口新增",
+   "url": "https://github.com/vllm-project/vllm/pull/59693",
+   "state": "open",
+   "updated_at": "2026-11-26T22:02:58Z"
+  },
+  {
+   "repository": "vllm-project/vllm",
+   "number": 59543,
+   "kind": "pr",
+   "title": "[Core] Opt-in per-request return of the last hidden states in generation (MRV2)",
+   "decision": "背景/边缘/无实质活动",
+   "reason": "按实际代码相关性和本期事件筛选；不将通用模型内部 hidden 张量使用、池化/嵌入任务、仅引用或纯 CI/时序调整计为输出接口新增",
+   "url": "https://github.com/vllm-project/vllm/pull/59543",
+   "state": "open",
+   "updated_at": "2026-11-21T14:22:24Z"
+  },
+  {
+   "repository": "vllm-project/vllm",
+   "number": 59542,
+   "kind": "issue",
+   "title": "[RFC]: Opt-in return of the last hidden state at sampled positions, per request (Model Runner V2)",
+   "decision": "背景/边缘/无实质活动",
+   "reason": "按实际代码相关性和本期事件筛选；不将通用模型内部 hidden 张量使用、池化/嵌入任务、仅引用或纯 CI/时序调整计为输出接口新增",
+   "url": "https://github.com/vllm-project/vllm/issues/59542",
+   "state": "open",
+   "updated_at": "2026-11-21T13:54:49Z"
+  },
+  {
+   "repository": "vllm-project/vllm",
+   "number": 58332,
+   "kind": "pr",
+   "title": "[Bugfix] Include draft execution fields in SpeculativeConfig.compute_hash",
+   "decision": "背景/边缘/无实质活动",
+   "reason": "按实际代码相关性和本期事件筛选；不将通用模型内部 hidden 张量使用、池化/嵌入任务、仅引用或纯 CI/时序调整计为输出接口新增",
+   "url": "https://github.com/vllm-project/vllm/pull/58332",
+   "state": "open",
+   "updated_at": "2026-11-24T20:15:40Z"
+  },
+  {
+   "repository": "vllm-project/vllm",
+   "number": 57736,
+   "kind": "pr",
+   "title": "feat: capture selected hidden-state rows for rollout windows and teacher scoring",
+   "decision": "背景/边缘/无实质活动",
+   "reason": "按实际代码相关性和本期事件筛选；不将通用模型内部 hidden 张量使用、池化/嵌入任务、仅引用或纯 CI/时序调整计为输出接口新增",
+   "url": "https://github.com/vllm-project/vllm/pull/57736",
+   "state": "open",
+   "updated_at": "2026-11-21T17:10:52Z"
+  },
+  {
+   "repository": "vllm-project/vllm",
+   "number": 56822,
+   "kind": "pr",
+   "title": "[Bugfix] Bill hidden-state extraction at its own KV cache group width",
+   "decision": "背景/边缘/无实质活动",
+   "reason": "按实际代码相关性和本期事件筛选；不将通用模型内部 hidden 张量使用、池化/嵌入任务、仅引用或纯 CI/时序调整计为输出接口新增",
+   "url": "https://github.com/vllm-project/vllm/pull/56822",
+   "state": "open",
+   "updated_at": "2026-11-25T11:48:43Z"
+  },
+  {
+   "repository": "vllm-project/vllm",
+   "number": 54347,
+   "kind": "pr",
+   "title": "[Kimi K3] Support sequence parallelism with pipeline parallelism",
+   "decision": "背景/边缘/无实质活动",
+   "reason": "按实际代码相关性和本期事件筛选；不将通用模型内部 hidden 张量使用、池化/嵌入任务、仅引用或纯 CI/时序调整计为输出接口新增",
+   "url": "https://github.com/vllm-project/vllm/pull/54347",
+   "state": "open",
+   "updated_at": "2026-11-24T12:56:35Z"
+  },
+  {
+   "repository": "vllm-project/vllm",
+   "number": 53366,
+   "kind": "issue",
+   "title": "[Bug]: torch.compile cache key does not include num_speculative_tokens, causing compiled-graph collision across different speculative-token counts",
+   "decision": "背景/边缘/无实质活动",
+   "reason": "按实际代码相关性和本期事件筛选；不将通用模型内部 hidden 张量使用、池化/嵌入任务、仅引用或纯 CI/时序调整计为输出接口新增",
+   "url": "https://github.com/vllm-project/vllm/issues/53366",
+   "state": "open",
+   "updated_at": "2026-11-21T01:32:25Z"
+  },
+  {
+   "repository": "vllm-project/vllm",
+   "number": 53273,
+   "kind": "pr",
+   "title": "[Model][Gemma4] Fuse post-attention residual add into pre-FFN RMSNorm",
+   "decision": "背景/边缘/无实质活动",
+   "reason": "按实际代码相关性和本期事件筛选；不将通用模型内部 hidden 张量使用、池化/嵌入任务、仅引用或纯 CI/时序调整计为输出接口新增",
+   "url": "https://github.com/vllm-project/vllm/pull/53273",
+   "state": "open",
+   "updated_at": "2026-11-24T20:54:09Z"
+  },
+  {
+   "repository": "vllm-project/vllm",
+   "number": 53243,
+   "kind": "issue",
+   "title": "[Bug]: extract_hidden_states overestimates DeepSeek-V4 KV cache memory",
+   "decision": "纳入主代理核心判断",
+   "reason": "按实际代码相关性和本期事件筛选；不将通用模型内部 hidden 张量使用、池化/嵌入任务、仅引用或纯 CI/时序调整计为输出接口新增",
+   "url": "https://github.com/vllm-project/vllm/issues/53243",
+   "state": "open",
+   "updated_at": "2026-11-21T01:32:46Z"
+  },
+  {
+   "repository": "vllm-project/vllm",
+   "number": 52073,
+   "kind": "pr",
+   "title": "[Spec Decode] Test extract_hidden_states on NemotronH hybrid models",
+   "decision": "纳入主代理核心判断",
+   "reason": "按实际代码相关性和本期事件筛选；不将通用模型内部 hidden 张量使用、池化/嵌入任务、仅引用或纯 CI/时序调整计为输出接口新增",
+   "url": "https://github.com/vllm-project/vllm/pull/52073",
+   "state": "open",
+   "updated_at": "2026-11-25T01:42:37Z"
+  },
+  {
+   "repository": "vllm-project/vllm",
+   "number": 50853,
+   "kind": "issue",
+   "title": "[RFC]: Complete Model Runner V2 pipeline parallelism: scheduling, speculative decoding, and PP-first DP/EP topology",
+   "decision": "背景/边缘/无实质活动",
+   "reason": "按实际代码相关性和本期事件筛选；不将通用模型内部 hidden 张量使用、池化/嵌入任务、仅引用或纯 CI/时序调整计为输出接口新增",
+   "url": "https://github.com/vllm-project/vllm/issues/50853",
+   "state": "open",
+   "updated_at": "2026-11-22T01:34:25Z"
+  },
+  {
+   "repository": "vllm-project/vllm",
+   "number": 50851,
+   "kind": "issue",
+   "title": "[Bug][Spec Decode] DSpark speculative decoding broken on H200 nightly",
+   "decision": "背景/边缘/无实质活动",
+   "reason": "按实际代码相关性和本期事件筛选；不将通用模型内部 hidden 张量使用、池化/嵌入任务、仅引用或纯 CI/时序调整计为输出接口新增",
+   "url": "https://github.com/vllm-project/vllm/issues/50851",
+   "state": "open",
+   "updated_at": "2026-11-22T01:34:27Z"
+  },
+  {
+   "repository": "vllm-project/vllm",
+   "number": 50722,
+   "kind": "issue",
+   "title": "[Bug]: With qwen3.5-35b-a3b, the performance is relatively poor both when using dflash and when not using it, but the accepted length of dflash is around 5–6.",
+   "decision": "背景/边缘/无实质活动",
+   "reason": "按实际代码相关性和本期事件筛选；不将通用模型内部 hidden 张量使用、池化/嵌入任务、仅引用或纯 CI/时序调整计为输出接口新增",
+   "url": "https://github.com/vllm-project/vllm/issues/50722",
+   "state": "open",
+   "updated_at": "2026-11-22T01:34:42Z"
+  },
+  {
+   "repository": "vllm-project/vllm",
+   "number": 50187,
+   "kind": "pr",
+   "title": "[Bugfix][Spec Decode] Fix misspelled EAGLE3 aux-hidden-state layer method overrides",
+   "decision": "背景/边缘/无实质活动",
+   "reason": "按实际代码相关性和本期事件筛选；不将通用模型内部 hidden 张量使用、池化/嵌入任务、仅引用或纯 CI/时序调整计为输出接口新增",
+   "url": "https://github.com/vllm-project/vllm/pull/50187",
+   "state": "closed",
+   "updated_at": "2026-11-27T01:33:11Z"
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 23131,
+   "kind": "pr",
+   "title": "[Feature][xlite] Support EAGLE3/extract_hidden_states/dflash/dspark speculative decoding",
+   "decision": "背景/边缘/无实质活动",
+   "reason": "按 Ascend 侧代码路径与本期事件筛选；纯文档/翻译、量化精度、CI 时序与无 hidden-state 语义的算子改动不计入",
+   "url": "https://github.com/vllm-project/vllm-ascend/pull/23131",
+   "state": "open",
+   "updated_at": "2026-11-26T12:41:50Z",
+   "score": 27
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 23200,
+   "kind": "pr",
+   "title": "[Doc] Document --async-scheduling compatibility for speculative decoding",
+   "decision": "背景/边缘/无实质活动",
+   "reason": "按 Ascend 侧代码路径与本期事件筛选；纯文档/翻译、量化精度、CI 时序与无 hidden-state 语义的算子改动不计入",
+   "url": "https://github.com/vllm-project/vllm-ascend/pull/23200",
+   "state": "open",
+   "updated_at": "2026-11-25T07:18:14Z",
+   "score": 15
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 11066,
+   "kind": "pr",
+   "title": "[Feature][SpecDecode] Support GLM-5.3-Flash DSpark target states and draft caches",
+   "decision": "背景/边缘/无实质活动",
+   "reason": "按 Ascend 侧代码路径与本期事件筛选；纯文档/翻译、量化精度、CI 时序与无 hidden-state 语义的算子改动不计入",
+   "url": "https://github.com/vllm-project/vllm-ascend/pull/11066",
+   "state": "closed",
+   "updated_at": "2026-11-22T17:15:19Z",
+   "score": 11
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 23279,
+   "kind": "pr",
+   "title": "[Performance][Spec Decode] Project DSpark auxiliary states before PCP all-gather",
+   "decision": "背景/边缘/无实质活动",
+   "reason": "按 Ascend 侧代码路径与本期事件筛选；纯文档/翻译、量化精度、CI 时序与无 hidden-state 语义的算子改动不计入",
+   "url": "https://github.com/vllm-project/vllm-ascend/pull/23279",
+   "state": "open",
+   "updated_at": "2026-11-25T14:36:28Z",
+   "score": 11
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 23262,
+   "kind": "pr",
+   "title": "[Feature] Add Qwen3.6-27B DMTP speculative decoding on Ascend",
+   "decision": "背景/边缘/无实质活动",
+   "reason": "按 Ascend 侧代码路径与本期事件筛选；纯文档/翻译、量化精度、CI 时序与无 hidden-state 语义的算子改动不计入",
+   "url": "https://github.com/vllm-project/vllm-ascend/pull/23262",
+   "state": "open",
+   "updated_at": "2026-11-26T02:37:22Z",
+   "score": 11
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 22804,
+   "kind": "pr",
+   "title": "[Refactor][SpecDecode] Align MRV2 init_speculator dispatch with upstream vLLM",
+   "decision": "背景/边缘/无实质活动",
+   "reason": "按 Ascend 侧代码路径与本期事件筛选；纯文档/翻译、量化精度、CI 时序与无 hidden-state 语义的算子改动不计入",
+   "url": "https://github.com/vllm-project/vllm-ascend/pull/22804",
+   "state": "open",
+   "updated_at": "2026-11-26T16:02:30Z",
+   "score": 9
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 23193,
+   "kind": "pr",
+   "title": "[BugFix] Fix DFlash2 grouped conv block_size for anchor-first query layout",
+   "decision": "背景/边缘/无实质活动",
+   "reason": "按 Ascend 侧代码路径与本期事件筛选；纯文档/翻译、量化精度、CI 时序与无 hidden-state 语义的算子改动不计入",
+   "url": "https://github.com/vllm-project/vllm-ascend/pull/23193",
+   "state": "open",
+   "updated_at": "2026-11-26T16:08:11Z",
+   "score": 9
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 22500,
+   "kind": "pr",
+   "title": "[BugFix][v0.32.0rc] Backport V4.1 DSpark layer capture fix (#22122)",
+   "decision": "背景/边缘/无实质活动",
+   "reason": "按 Ascend 侧代码路径与本期事件筛选；纯文档/翻译、量化精度、CI 时序与无 hidden-state 语义的算子改动不计入",
+   "url": "https://github.com/vllm-project/vllm-ascend/pull/22500",
+   "state": "closed",
+   "updated_at": "2026-11-20T08:36:16Z",
+   "score": 8
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 22964,
+   "kind": "pr",
+   "title": "[Revert] Revert \"[BugFix][MoE] Share DSpark MegaMoE contexts across CANN buffer APIs\" (#21727)",
+   "decision": "背景/边缘/无实质活动",
+   "reason": "按 Ascend 侧代码路径与本期事件筛选；纯文档/翻译、量化精度、CI 时序与无 hidden-state 语义的算子改动不计入",
+   "url": "https://github.com/vllm-project/vllm-ascend/pull/22964",
+   "state": "closed",
+   "updated_at": "2026-11-23T16:39:45Z",
+   "score": 8
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 23403,
+   "kind": "pr",
+   "title": "[Performance][DSV4.1] Fuse mHC and RMSNorm across decoder boundaries on A2/A3",
+   "decision": "背景/边缘/无实质活动",
+   "reason": "按 Ascend 侧代码路径与本期事件筛选；纯文档/翻译、量化精度、CI 时序与无 hidden-state 语义的算子改动不计入",
+   "url": "https://github.com/vllm-project/vllm-ascend/pull/23403",
+   "state": "open",
+   "updated_at": "2026-11-26T11:32:20Z",
+   "score": 8
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 23017,
+   "kind": "pr",
+   "title": "[BugFix][MoE] Share the MegaMoE buffer for DeepSeek V4.1 DSpark on A5",
+   "decision": "背景/边缘/无实质活动",
+   "reason": "按 Ascend 侧代码路径与本期事件筛选；纯文档/翻译、量化精度、CI 时序与无 hidden-state 语义的算子改动不计入",
+   "url": "https://github.com/vllm-project/vllm-ascend/pull/23017",
+   "state": "closed",
+   "updated_at": "2026-11-25T10:27:53Z",
+   "score": 6
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 23251,
+   "kind": "pr",
+   "title": "[BugFix] Avoid AIV pipeline stalls with host feedback in v2",
+   "decision": "背景/边缘/无实质活动",
+   "reason": "按 Ascend 侧代码路径与本期事件筛选；纯文档/翻译、量化精度、CI 时序与无 hidden-state 语义的算子改动不计入",
+   "url": "https://github.com/vllm-project/vllm-ascend/pull/23251",
+   "state": "open",
+   "updated_at": "2026-11-26T14:18:09Z",
+   "score": 6
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 22659,
+   "kind": "issue",
+   "title": "[Bug][PD] MooncakeHybridConnector pairs KV addresses by position without validating entry counts, silently dropping consumer layers the producer never registered (DSpark P/D asymmetry)",
+   "decision": "背景/边缘/无实质活动",
+   "reason": "按 Ascend 侧代码路径与本期事件筛选；纯文档/翻译、量化精度、CI 时序与无 hidden-state 语义的算子改动不计入",
+   "url": "https://github.com/vllm-project/vllm-ascend/issues/22659",
+   "state": "open",
+   "updated_at": "2026-11-20T16:31:27Z",
+   "score": 5
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 22181,
+   "kind": "pr",
+   "title": "[Feature][Kimi] Compose PCP prefill and DCP with DSpark",
+   "decision": "背景/边缘/无实质活动",
+   "reason": "按 Ascend 侧代码路径与本期事件筛选；纯文档/翻译、量化精度、CI 时序与无 hidden-state 语义的算子改动不计入",
+   "url": "https://github.com/vllm-project/vllm-ascend/pull/22181",
+   "state": "closed",
+   "updated_at": "2026-11-21T06:58:18Z",
+   "score": 5
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 22818,
+   "kind": "issue",
+   "title": "[Feature]: Align anchor-first DFlash/DFlash2 query layout on Ascend",
+   "decision": "背景/边缘/无实质活动",
+   "reason": "按 Ascend 侧代码路径与本期事件筛选；纯文档/翻译、量化精度、CI 时序与无 hidden-state 语义的算子改动不计入",
+   "url": "https://github.com/vllm-project/vllm-ascend/issues/22818",
+   "state": "open",
+   "updated_at": "2026-11-23T01:15:57Z",
+   "score": 5
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 19845,
+   "kind": "issue",
+   "title": "[RFC]: Extend adaptive verification support across ascend attention backends",
+   "decision": "背景/边缘/无实质活动",
+   "reason": "按 Ascend 侧代码路径与本期事件筛选；纯文档/翻译、量化精度、CI 时序与无 hidden-state 语义的算子改动不计入",
+   "url": "https://github.com/vllm-project/vllm-ascend/issues/19845",
+   "state": "open",
+   "updated_at": "2026-11-24T02:22:40Z",
+   "score": 5
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 23037,
+   "kind": "issue",
+   "title": "[Bug]: AscendFusedTopKRouter.is_fused_supported checks hidden_states.shape[-1] instead of router_logits.shape[-1] and inverts topk_group",
+   "decision": "背景/边缘/无实质活动",
+   "reason": "按 Ascend 侧代码路径与本期事件筛选；纯文档/翻译、量化精度、CI 时序与无 hidden-state 语义的算子改动不计入",
+   "url": "https://github.com/vllm-project/vllm-ascend/issues/23037",
+   "state": "open",
+   "updated_at": "2026-11-24T07:14:48Z",
+   "score": 5
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 23140,
+   "kind": "issue",
+   "title": "On vLLM 0.33.0 with `FULL_DECODE_ONLY` and seven draft tokens, `cudagraph_capture_sizes=[10, 24]` gives the runner a 16-token decode graph. FA3 still checks the original list. It misses 16 and builds a new tiling buffer, while the captured graph still points to the old one. Please use the actual capture sizes when choosing the buffer and test replay at 16 tokens after the KV lengths change.",
+   "decision": "背景/边缘/无实质活动",
+   "reason": "按 Ascend 侧代码路径与本期事件筛选；纯文档/翻译、量化精度、CI 时序与无 hidden-state 语义的算子改动不计入",
+   "url": "https://github.com/vllm-project/vllm-ascend/issues/23140",
+   "state": "open",
+   "updated_at": "2026-11-25T01:39:55Z",
+   "score": 5
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 22824,
+   "kind": "issue",
+   "title": "[Bug]: A5 V4.1 MLA visibility reuse depends on metadata producer order",
+   "decision": "背景/边缘/无实质活动",
+   "reason": "按 Ascend 侧代码路径与本期事件筛选；纯文档/翻译、量化精度、CI 时序与无 hidden-state 语义的算子改动不计入",
+   "url": "https://github.com/vllm-project/vllm-ascend/issues/22824",
+   "state": "closed",
+   "updated_at": "2026-11-25T11:45:12Z",
+   "score": 5
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 22854,
+   "kind": "issue",
+   "title": "[Bug] DeepSeek-V4.1 (dsa_v41 cache backend): `enable_adaptive_verification` aborts at startup — `get_cudagraph_support` misses the ALWAYS override `dsa_v1` already has",
+   "decision": "背景/边缘/无实质活动",
+   "reason": "按 Ascend 侧代码路径与本期事件筛选；纯文档/翻译、量化精度、CI 时序与无 hidden-state 语义的算子改动不计入",
+   "url": "https://github.com/vllm-project/vllm-ascend/issues/22854",
+   "state": "open",
+   "updated_at": "2026-11-26T01:56:32Z",
+   "score": 5
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 23350,
+   "kind": "pr",
+   "title": "[Performance][Attention] Optimize DeepSeek V4.1 PCP cache gather and overlap",
+   "decision": "背景/边缘/无实质活动",
+   "reason": "按 Ascend 侧代码路径与本期事件筛选；纯文档/翻译、量化精度、CI 时序与无 hidden-state 语义的算子改动不计入",
+   "url": "https://github.com/vllm-project/vllm-ascend/pull/23350",
+   "state": "open",
+   "updated_at": "2026-11-26T07:42:46Z",
+   "score": 5
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 21177,
+   "kind": "pr",
+   "title": "[Performance][DSV4.1] Project sequence shards before all-gather",
+   "decision": "背景/边缘/无实质活动",
+   "reason": "按 Ascend 侧代码路径与本期事件筛选；纯文档/翻译、量化精度、CI 时序与无 hidden-state 语义的算子改动不计入",
+   "url": "https://github.com/vllm-project/vllm-ascend/pull/21177",
+   "state": "open",
+   "updated_at": "2026-11-26T08:08:22Z",
+   "score": 5
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 23341,
+   "kind": "pr",
+   "title": "[BugFix] MooncakeHybridConnector: validate KV base address count before pairing",
+   "decision": "背景/边缘/无实质活动",
+   "reason": "按 Ascend 侧代码路径与本期事件筛选；纯文档/翻译、量化精度、CI 时序与无 hidden-state 语义的算子改动不计入",
+   "url": "https://github.com/vllm-project/vllm-ascend/pull/23341",
+   "state": "open",
+   "updated_at": "2026-11-26T11:10:04Z",
+   "score": 5
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 22785,
+   "kind": "pr",
+   "title": "[Performance][Engram] Cap the Host-UVA lookup grid on Atlas A2 prefill",
+   "decision": "背景/边缘/无实质活动",
+   "reason": "按 Ascend 侧代码路径与本期事件筛选；纯文档/翻译、量化精度、CI 时序与无 hidden-state 语义的算子改动不计入",
+   "url": "https://github.com/vllm-project/vllm-ascend/pull/22785",
+   "state": "open",
+   "updated_at": "2026-11-26T12:32:01Z",
+   "score": 5
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 23464,
+   "kind": "pr",
+   "title": "[Performance] Cap DeepSeek V4.1 SWA aux stream to 20% AIV cores with persistent 0-ULP RoPE+scatter",
+   "decision": "背景/边缘/无实质活动",
+   "reason": "按 Ascend 侧代码路径与本期事件筛选；纯文档/翻译、量化精度、CI 时序与无 hidden-state 语义的算子改动不计入",
+   "url": "https://github.com/vllm-project/vllm-ascend/pull/23464",
+   "state": "open",
+   "updated_at": "2026-11-27T01:04:23Z",
+   "score": 5
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 23324,
+   "kind": "pr",
+   "title": "[Feature][Spec Decode] Add Tree Speculative Decoding on Ascend",
+   "decision": "背景/边缘/无实质活动",
+   "reason": "按 Ascend 侧代码路径与本期事件筛选；纯文档/翻译、量化精度、CI 时序与无 hidden-state 语义的算子改动不计入",
+   "url": "https://github.com/vllm-project/vllm-ascend/pull/23324",
+   "state": "open",
+   "updated_at": "2026-11-27T01:23:50Z",
+   "score": 5
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 22341,
+   "kind": "pr",
+   "title": "[Feature][Spec Decode] Add HCCL batch-sharded DSpark sampling for DeepSeek V4.1",
+   "decision": "背景/边缘/无实质活动",
+   "reason": "按 Ascend 侧代码路径与本期事件筛选；纯文档/翻译、量化精度、CI 时序与无 hidden-state 语义的算子改动不计入",
+   "url": "https://github.com/vllm-project/vllm-ascend/pull/22341",
+   "state": "open",
+   "updated_at": "2026-11-27T01:46:26Z",
+   "score": 5
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 22485,
+   "kind": "pr",
+   "title": "[BugFix][Model] Skip unused DeepSeek V4.1 HC buffer for DSpark",
+   "decision": "纳入主代理核心判断",
+   "reason": "按 Ascend 侧代码路径与本期事件筛选；纯文档/翻译、量化精度、CI 时序与无 hidden-state 语义的算子改动不计入",
+   "url": "https://github.com/vllm-project/vllm-ascend/pull/22485",
+   "state": "closed",
+   "updated_at": "2026-11-20T08:27:44Z",
+   "score": 4
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 21831,
+   "kind": "pr",
+   "title": "[Feature][SpecDecode] Support GLM-5.3-Flash DFlash2 and PP",
+   "decision": "纳入主代理核心判断",
+   "reason": "按 Ascend 侧代码路径与本期事件筛选；纯文档/翻译、量化精度、CI 时序与无 hidden-state 语义的算子改动不计入",
+   "url": "https://github.com/vllm-project/vllm-ascend/pull/21831",
+   "state": "closed",
+   "updated_at": "2026-11-23T07:40:00Z",
+   "score": 2
+  },
+  {
+   "repository": "vllm-project/vllm-ascend",
+   "number": 22198,
+   "kind": "pr",
+   "title": "[Misc] Main2Main v0.34.0",
+   "decision": "纳入主代理核心判断",
+   "reason": "按 Ascend 侧代码路径与本期事件筛选；纯文档/翻译、量化精度、CI 时序与无 hidden-state 语义的算子改动不计入",
+   "url": "https://github.com/vllm-project/vllm-ascend/pull/22198",
+   "state": "closed",
+   "updated_at": "2026-11-24T18:32:58Z",
+   "score": -1
+  }
+ ]
+}
