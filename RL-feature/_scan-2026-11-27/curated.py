@@ -68,29 +68,35 @@ SGL_HIDDEN = [
 
 SGL_SAMPLING = [
     dict(
-        num=53418, kind="pr", cls="本期新建", prio="P0", activity="新建（深读：PD 下 mask 与发出 token 对齐）",
-        analysis=(
-            "[Fix] Match prefill sampling masks to emitted tokens。**本期深读对象**。PD 分离下 `return_sampling_mask` 有三个错位点被一起修："
-            "① `disaggregation/utils.py` 只在 `self.enable_sampling_mask` 时才申请可选 wire buffer——standalone prefill 直接把采样行返回客户端，"
-            "不需要这套缓冲，之前无条件申请让「没有真正 handoff」的路径也走两槽缓冲；"
-            "② scheduler 对 fake PD decode（首 token 由合成产生、不过 sampler）显式拒绝："
-            "`return_sampling_mask requires a real prefill result.`；"
-            "③ 在 tokenizer 会返回空行的场景（无输出 token 的捕获）直接关掉该请求的 mask，避免「有 token 无 mask / mask 行数不一致」。"
-            "测试覆盖 standalone prefill、无真实 handoff、以及 prefill+decode 混合批。"
-        ),
-        npu="需实测：Ascend 的 PD 路径同样有「合成首 token」与 standalone prefill 两种形态；关键是让 mask 行与**实际发出的 token**一一对应，"
-        "否则 trainer 侧会出现长度不匹配。",
-        validation="作者侧单测与 PD 集成测试；本期未复测。",
-    ),
-    dict(
-        num=52270, kind="pr", cls="本期新建", prio="P1", activity="合入（每步构建 mask 行）",
+        num=52270, kind="pr", cls="本期新建", prio="P0", activity="合入（深读：每步重建 seed 与 mask 行）",
         analysis=(
             "[Refactor] sampling: Build seeds and sampling-mask rows per step; drop SamplingBatchInfo filter/merge，"
-            "`2026-11-22T03:43-08:00` 合入（12 文件）。把 seed 与 mask 行的构建从批级 filter/merge 改成逐 step 构建，"
-            "去掉一层批内合并逻辑。属 mask 行归属的结构性简化。"
+            "`2026-11-22T03:43-08:00` 合入（12 文件）。**本期深读对象**。"
+            "把采样状态从「建批时一次性构建」改成「每次 launch 构建」：`SamplingBatchInfo.from_schedule_batch()` 换成空构造 + "
+            "`set_seeds_and_mask_rows(reqs)`（`scheduler.run_batch` 里紧跟 `set_plugin_state` 调用）；"
+            "`prepare_for_extend`/`prepare_for_built`/`_build_hisparse_decode_batch`/`prepare_for_idle` 都只建空壳。"
+            "同时删除 `filter_batch()`/`merge_batch()` 对采样数组的维护，以及 `rows_with_seed`、`return_sampling_masks`、"
+            "`_make_sampling_mask_batch_indices`；mask 行索引与 support 行索引改为每步从当前 reqs 重算。"
+            "未播种请求的 filler seed 改存 `req.filler_sampling_seed` 并在请求内复用（此前每次建批重抽）。"
         ),
-        npu="需实测：逐 step 构建后，Ascend 的 mask 行归属与 token 顺序需重新对齐验证。",
-        validation="合入提交自带测试；本期未复测。",
+        npu="需实测：Ascend 的 `_build_ascend_sampling_mask_capture` 读的正是 `sampling_info.sampling_mask_batch_indices`，"
+        "现在它们每步在 `run_batch` 里重建；Ascend 必须在同一步、同一位置读取（代码搜索确认没有 NPU 专用调用点，走的是公共 run_batch）。"
+        "另外任何缓存 per-row 采样参数的图路径都必须每步刷新，否则会读到上一步的索引。",
+        validation=(
+            "作者侧新增 `test_unseeded_row_keeps_its_filler_seed_across_steps` 与 `test_mask_rows`；"
+            "同时删除整个 `TestSamplingMaskBatchIndices`（filter/merge 偏移那类断言变成结构上不成立）。"
+        ),
+    ),
+    dict(
+        num=53418, kind="pr", cls="本期新建", prio="P1", activity="新建（PD 下 mask 与 token 对齐）",
+        analysis=(
+            "[Fix] Match prefill sampling masks to emitted tokens。PD 分离下三处「有人发 token 但没人产 mask」被一起修："
+            "`disaggregation/utils.py` 只在 `self.enable_sampling_mask` 时才申请可选 wire buffer（standalone prefill 不需要）；"
+            "scheduler 对 fake PD decode 显式拒绝（`return_sampling_mask requires a real prefill result.`）；"
+            "无输出 token 的捕获直接关掉该请求的 mask。与 #52270 互补：一条保证「索引每步正确」，一条保证「不该有 mask 的路径不要造 mask」。"
+        ),
+        npu="需实测：Ascend 的 PD 路径同样有 standalone prefill 与 fake decode 两种形态，mask 行数必须等于发出的 token 数。",
+        validation="作者侧单测与 PD 集成测试；本期未复测。",
     ),
     dict(
         num=50859, kind="pr", cls="前期补漏续跟", prio="P2", activity="本期合入",
@@ -106,7 +112,7 @@ SGL_SAMPLING = [
         analysis=(
             "[Feat] pd: Answer a one-token request on the prefill server without a decode，`2026-11-26` 合入（`221713687e`）。"
             "prefill 直接回答只需一个 token 的请求，不再经 decode；改到 `disaggregation/utils.py`、`scheduler.py`、`tokenizer_manager.py`。"
-            "这与 #53418 是同一片区域：一旦 prefill 自己发 token，mask 行就必须由 prefill 侧产出并对齐。"
+            "与 #52270/#53418 同一片区域：token 由 prefill 产生后，mask 行的产出点与索引基准都必须跟着走。"
         ),
         npu="需实测：Ascend 的 PD 路径若启用该直答，mask 产出点也随之改变。",
         validation="合入提交自带 PD 测试；本期未复测。",
